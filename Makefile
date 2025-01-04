@@ -1,10 +1,10 @@
 NAME = cub3D
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-SRCS = src/main.c src/game/*.c  src/input/*.c 
+SRCS = src/main.c src/game/init.c src/game/rander.c src/input/*.c 
 OBJS = $(SRCS:.c=.o)
 LIBFT = libft/libft.a
-MLX = mlx/mlx.a
+MLX = mlx/libmlx.a
 
 all: $(NAME)
 

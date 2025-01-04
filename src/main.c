@@ -4,17 +4,19 @@ int main(int argc, char **argv)
 {
     t_game game;
 
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: %s <map_file.cub>\n", argv[0]);
-        return 1;
-    }
+    (void)argc;
+    (void)argv;
+    // if (argc != 2)
+    // {
+    //     fprintf(stderr, "Usage: %s <map_file.cub>\n", argv[0]);
+    //     return 1;
+    // }
 
     // Initialize the game structure
     init_game(&game);
 
     // Parse the map file
-    parse_map(argv[1], &game);
+    //parse_map(argv[1], &game);
 
     // Start the game loop (render and input handling)
     mlx_loop_hook(game.mlx, render_frame_wrapper, &game);
@@ -24,7 +26,7 @@ int main(int argc, char **argv)
     mlx_loop(game.mlx);
 
     // Clean up resources
-    cleanup(&game);
+    //cleanup(&game);
 
     return 0;
 }
