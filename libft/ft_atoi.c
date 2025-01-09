@@ -3,39 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phartman <phartman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 14:07:02 by phartman          #+#    #+#             */
-/*   Updated: 2024/04/25 15:21:35 by phartman         ###   ########.fr       */
+/*   Created: 2024/04/23 20:12:30 by ekechedz          #+#    #+#             */
+/*   Updated: 2024/04/24 16:08:32 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+int	ft_atoi(const char *str)
 {
-	size_t	i;
-	int		sign;
-	int		result;
+	int	sign;
+	int	i;
+	int	res;
 
-	i = 0;
 	sign = 1;
-	result = 0;
-	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
-		nptr++;
-	if (*nptr == '-' || *nptr == '+')
+	i = 0;
+	res = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		if (*nptr == '-')
+		if (str[i] == '-')
 			sign = -1;
-		nptr++;
-	}
-	while (nptr[i])
-	{
-		if ((nptr[i] >= '0' && nptr[i] <= '9'))
-			result = result * 10 + (nptr[i] - '0');
-		else
-			return (result * sign);
 		i++;
 	}
-	return (result * sign);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		res = res * 10 + (str[i] - '0');
+		i++;
+	}
+	return (res * sign);
 }
+// #include <stdio.h>
+
+// int main()
+// {
+// 	const char *i = "--1";
+// 	const char *s = "++1";
+// 	size_t e = 5;
+
+// 	printf("%d", ft_atoi(i));
+// 	printf("%d", atoi(i));
+// 	printf("%d", ft_atoi(s));
+// 	printf("%d", atoi(s));
+// 	return 0;
+// }

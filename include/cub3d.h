@@ -1,13 +1,15 @@
 #ifndef CUB3D_H
-#define CUB3D_H
+# define CUB3D_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <math.h>
-#include <unistd.h>
-#include <string.h>
-#include "../mlx/mlx.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <math.h>
+# include <unistd.h>
+# include <string.h>
+# include "/home/ekechedz/minilibx/mlx.h"
+# include "X11/Xlib.h"
+# include "X11/keysym.h"
 
 // Constants
 #define WIN_WIDTH 800

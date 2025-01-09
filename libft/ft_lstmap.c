@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phartman <phartman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/24 17:46:26 by phartman          #+#    #+#             */
-/*   Updated: 2024/04/24 19:17:16 by phartman         ###   ########.fr       */
+/*   Created: 2024/05/08 18:19:08 by ekechedz          #+#    #+#             */
+/*   Updated: 2024/05/08 20:00:45 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,21 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*new_lst;
-	t_list	*new_node;
+	t_list	*node;
 
-	new_lst = NULL;
-	while (lst && lst->content)
+	if (!lst)
+		return (NULL);
+	node = ft_lstnew((*f)(lst -> content));
+	if (!node)
+		return (NULL);
+	if (lst -> next)
 	{
-		new_node = ft_lstnew(f(lst->content));
-		if (!new_node)
+		node -> next = ft_lstmap(lst -> next, f, del);
+		if (!(node -> next))
 		{
-			ft_lstclear(&new_lst, del);
+			ft_lstdelone(node, del);
 			return (NULL);
 		}
-		else if (!new_node->content)
-			ft_lstdelone(new_node, del);
-		if (new_lst == NULL)
-			new_lst = new_node;
-		else
-			ft_lstadd_back(&new_lst, new_node);
-		lst = lst->next;
 	}
-	return (new_lst);
+	return (node);
 }

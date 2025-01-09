@@ -3,17 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phartman <phartman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/17 13:15:24 by phartman          #+#    #+#             */
-/*   Updated: 2024/04/24 15:04:01 by phartman         ###   ########.fr       */
+/*   Created: 2024/04/18 13:04:49 by ekechedz          #+#    #+#             */
+/*   Updated: 2024/04/24 16:20:37 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 int	ft_isascii(int c)
 {
-	if (c >= 0 && c <= 127)
+	unsigned int	i;
+
+	i = (unsigned int) c;
+	if (i <= 127)
 		return (1);
-	else
-		return (0);
+	return (0);
 }
+
+/*#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    char ch = '5';
+
+    if (ft_isascii(ch)) {
+        printf("%c is an ASCII character.\n", ch);
+    } else {
+        printf("%c is not an ASCII character.\n", ch);
+    }
+
+    return 0;
+}*/

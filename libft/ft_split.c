@@ -3,129 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phartman <phartman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/06 15:28:04 by phartman          #+#    #+#             */
-/*   Updated: 2024/05/06 16:44:23 by phartman         ###   ########.fr       */
+/*   Created: 2024/04/28 15:36:14 by ekechedz          #+#    #+#             */
+/*   Updated: 2024/04/30 14:15:19 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_count_words(const char *str, char sep);
-static size_t	ft_wordlen(const char *str, char sep);
-static char		*ft_strndup(const char *s, size_t size);
-static char		**ft_free(char **array, int index);
-
-char	**ft_split(char const *s, char c)
+int	count_substrings(char const *s, char c)
 {
-	size_t	wordlen;
-	size_t	word_i;
-	char	**array;
-
-	array = (char **)malloc((ft_count_words(s, c) + 1) * sizeof(char *));
-	if (!array)
-		return (NULL);
-	word_i = 0;
-	while (1)
-	{
-		while (*s && *s == c)
-			s++;
-		if (!(*s))
-			break ;
-		wordlen = ft_wordlen(s, c);
-		array[word_i++] = ft_strndup(s, wordlen);
-		if (array[word_i -1] == NULL)
-			return (ft_free(array, word_i -1));
-		s = s + wordlen;
-	}
-	array[word_i] = NULL;
-	return (array);
-}
-
-static size_t	ft_count_words(const char *str, char sep)
-{
-	size_t	count;
+	int	count;
+	int	in_substring;
 
 	count = 0;
-	while (str && *str)
+	in_substring = 0;
+	while (*s)
 	{
-		if (*str != sep)
+		if (*s == c)
+			in_substring = 0;
+		else if (!in_substring)
 		{
 			count++;
-			while (*str != sep && *str)
-				str++;
+			in_substring = 1;
 		}
-		if (*str)
-			str++;
+		s++;
 	}
 	return (count);
 }
 
-static size_t	ft_wordlen(const char *str, char sep)
+char	*copy_substring(char const *start, int len)
 {
-	size_t	count;
+	char	*sub;
+	int		i;
 
-	count = 0;
-	while (*str && *str != sep)
-	{
-		count++;
-		str++;
-	}
-	return (count);
-}
-
-static char	*ft_strndup(const char *s, size_t size)
-{
-	size_t	i;
-	char	*dupstr;
-
-	dupstr = (char *)malloc((size +1) * sizeof(char));
-	if (dupstr == NULL)
+	sub = (char *) malloc((len + 1) * sizeof(char));
+	if (!sub)
 		return (NULL);
 	i = 0;
-	while (i < size)
+	while (i < len)
 	{
-		dupstr[i] = s[i];
+		sub[i] = *start;
+		start++;
 		i++;
 	}
-	dupstr[i] = '\0';
-	return (dupstr);
+	sub[i] = '\0';
+	return (sub);
 }
 
-static char	**ft_free(char **array, int index)
+char	**free_mem(char **str)
 {
-	while (index >= 0)
-		free(array[index--]);
-	free(array);
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (NULL);
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 	return (NULL);
 }
 
-/*
-#include <stdio.h>
-#include <unistd.h>
-
-int	main(void)
+char	**ft_split(char const *s, char c)
 {
-	char *str = "   Welcome   to   42   Berlin!   ";
-	char sep = ' ';
-	char **array = ft_split(str, sep);
-	int	i;
-	int	j;
-	
-	i = 0;
-	while (array[i])
+	int				num_sub;
+	char			**res;
+	const char		*start;
+	int				j;
+
+	num_sub = count_substrings(s, c);
+	res = (char **)malloc ((num_sub + 1) * sizeof(char *));
+	j = 0;
+	while (*s && j < num_sub)
 	{
-		j = 0;
-		while (array[i][j])
-		{
-			write(1, &array[i][j], 1);
-			j++;
-		}
-		free(array[i]);
-		write(1, "\n", 1);
-		i++;
+		while (*s == c)
+			s++;
+		if (!*s)
+			break ;
+		start = s;
+		while (*s && *s != c)
+			s++;
+		res[j] = copy_substring(start, s - start);
+		if (!res[j])
+			return (free_mem(res));
+		j++;
 	}
-	free(array);
+	res[j] = NULL;
+	return (res);
 }
-*/
