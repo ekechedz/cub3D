@@ -14,6 +14,10 @@
 // Constants
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
+#define MOVE_SPEED 0.05
+#define ROT_SPEED 0.03
+#define FOV 66
+#define MAX_DEPTH 20.0
 
 // Map Characters
 #define EMPTY '0'
@@ -22,6 +26,8 @@
 #define PLAYER_S 'S'
 #define PLAYER_E 'E'
 #define PLAYER_W 'W'
+#define ERROR "Memory problem"
+#define M_ERROR "Map problem"
 
 // Structs
 typedef struct s_vector
@@ -32,8 +38,8 @@ typedef struct s_vector
 
 typedef struct s_player
 {
-    t_vector pos;   // Player position
-    t_vector dir;   // Direction vector
+    t_vector pos;
+    t_vector dir;   
     t_vector plane; // Camera plane
 } t_player;
 
