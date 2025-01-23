@@ -41,7 +41,6 @@ int main(int argc, char **argv)
     t_game game;
     if (check_input(argc, argv) < 0)
 		return 1;
-    // Initialize the game structure
     init_game(&game);
 
     // Parse the map file

@@ -39,9 +39,31 @@ typedef struct s_vector
 typedef struct s_player
 {
     t_vector pos;
-    t_vector dir;   
-    t_vector plane; // Camera plane
+    t_vector dir;
+	int 	health;
 } t_player;
+
+typedef struct s_image
+{
+	void			*img_ptr;
+	char			*buff;
+	int				lstsize;
+	int				width;
+	int				height;
+}					t_image;
+
+typedef struct s_textures
+{
+	t_image			north;
+	t_image			east;
+	t_image			south;
+	t_image			west;
+	t_image			floor;
+	t_image			ceiling;
+	t_image			door;
+	t_image			gameover;
+}					t_textures;
+
 
 typedef struct s_map
 {
