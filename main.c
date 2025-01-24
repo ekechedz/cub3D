@@ -39,13 +39,12 @@ int	handle_close(t_game *data)
 int main(int argc, char **argv)
 {
     t_game *game;
+	t_config *config;
     if (check_input(argc, argv) < 0)
 		return 1;
-    init_game(game);
+    game = init_game();
 
-	t_config *config = malloc(sizeof(t_config));
-	ft_memset(config, 0, sizeof(t_config));
-	config->map = malloc(sizeof(t_map));
+	config = init_config();
 	config = parse_cub_file(argv[1], config);
     game->map = config->map;
     game->floor_color = config->floor_color;

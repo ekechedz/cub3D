@@ -7,7 +7,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "/home/ekechedz/minilibx/mlx.h"
+#include "../minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -41,8 +41,8 @@ typedef struct s_vector
 
 typedef struct s_player
 {
-	t_vector pos;
-	t_vector dir;
+	t_vector *pos;
+	t_vector *dir;
 	int health;
 } t_player;
 
@@ -88,15 +88,22 @@ typedef struct s_game
 {
 	void *mlx;		   // MiniLibX instance
 	void *win;		   // Window instance
-	t_player player;   // Player data
+	t_player *player;   // Player data
 	t_map *map;		   // Map data
 	int floor_color;   // Floor color (RGB)
 	int ceiling_color; // Ceiling color (RGB)
 	t_textures textures;
 } t_game;
 
+//Init functions
+t_game	*init_game(void);
+t_config	*init_config(void);
+t_game	*init_game(void);
+t_vector	*init_vector(double x, double y);
+t_map *init_map(void);
+t_player *init_player(void);
+
 // Function Prototypes
-void init_game(t_game *game);
 void parse_map(const char *file, t_game *game);
 void render_frame(t_game *game);
 void handle_input(int key, t_game *game);

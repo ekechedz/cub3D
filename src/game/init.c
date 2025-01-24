@@ -1,6 +1,6 @@
 #include "../../include/cub3d.h"
 
-void init_game(void)
+t_game *init_game(void)
 {
 	t_game *game;
 
@@ -20,10 +20,28 @@ void init_game(void)
 		perror("Error creating window");
 		exit(1);
 	}
-	game->floor_color = 0x00AA00;   // Green
-	game->ceiling_color = 0x0000FF; // Blue
-	game->tplayer = init_player(); //maybe we should initialize it in the map parsing
+	// game->floor_color = 0x00AA00;   // Green
+	// game->ceiling_color = 0x0000FF; // Blue
+	game->player = init_player(); //maybe we should initialize it in the map parsing
 	game->map = init_map(); //maybe we should initialize it in the map parsing
+	return (game);
+}
+
+t_config	*init_config(void)
+{
+	t_config *config;
+
+	config = malloc(sizeof(t_config));
+	if (!config)
+		return (NULL);
+	ft_memset(config, 0, sizeof(t_config));
+	config->map = malloc(sizeof(t_map));
+	if (!config->map)
+	{
+		free(config);
+		return (NULL);
+	}
+	return (config);
 }
 
 t_player *init_player(void)
@@ -82,6 +100,4 @@ t_map *init_map(void)
 	return (map);
 }
 
-t_textures	*init_textures(void)
-{
 
