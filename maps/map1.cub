@@ -2,7 +2,7 @@ NO textures/wall.xpm
 EA     textures/wall.xpm
 SO textures/wall.xpm
 WE textures/wall.xpm
-F 0,0,0
+F 0,0,1
 C 128,128,128
 
 1111111111

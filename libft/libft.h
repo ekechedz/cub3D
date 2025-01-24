@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:37:05 by ekechedz          #+#    #+#             */
-/*   Updated: 2024/11/18 20:05:24 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:46:02 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*ft_strrchr(const char *s, int c);
 int		ft_atoi(const char *str);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 void	*ft_calloc(size_t count, size_t size);
-char	*ft_strdup(char *src);
+char	*ft_strdup(const char *src);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strcat(char *dest, char *src);

@@ -2,6 +2,8 @@
 
 void init_game(t_game *game)
 {
+	game = malloc(sizeof(t_game));
+	//game->mlx = malloc(1);
     game->mlx = mlx_init();
     if (!game->mlx)
     {
@@ -15,7 +17,4 @@ void init_game(t_game *game)
         perror("Error creating window");
         exit(1);
     }
-
-    game->floor_color = 0x00AA00;   // Green
-    game->ceiling_color = 0x0000FF; // Blue
 }
