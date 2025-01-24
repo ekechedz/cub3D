@@ -1,20 +1,87 @@
 #include "../../include/cub3d.h"
 
-void init_game(t_game *game)
+void init_game(void)
 {
-	game = malloc(sizeof(t_game));
-	//game->mlx = malloc(1);
-    game->mlx = mlx_init();
-    if (!game->mlx)
-    {
-        perror("Error initializing MiniLibX");
-        exit(1);
-    }
+	t_game *game;
 
-    game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
-    if (!game->win)
-    {
-        perror("Error creating window");
-        exit(1);
-    }
+	game = malloc(sizeof(t_game));
+	if (!game)
+		return (NULL);
+	game->mlx = mlx_init();
+	if (!game->mlx)
+	{
+		perror("Error initializing MiniLibX");
+		exit(1);
+	}
+
+	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
+	if (!game->win)
+	{
+		perror("Error creating window");
+		exit(1);
+	}
+	game->floor_color = 0x00AA00;   // Green
+	game->ceiling_color = 0x0000FF; // Blue
+	game->tplayer = init_player(); //maybe we should initialize it in the map parsing
+	game->map = init_map(); //maybe we should initialize it in the map parsing
 }
+
+t_player *init_player(void)
+{
+	t_player *p;
+
+	p = malloc(sizeof(t_player));
+	if (!p)
+	{
+		printf("Error initializing player struct\n");
+		return (NULL);
+	}
+	p->pos = init_vector(0,0);  //probably we want to pass player position as arg here
+	if (!p->pos)
+	{
+		printf("Error initializing player position\n");
+		free (p);
+		return (NULL);
+	}
+	p->dir = init_vector(0,0); //probably the information of the map
+	{
+		printf("Error initializing player direction\n");
+		free (p->pos);
+		free (p);
+		return (NULL);
+	}
+	p->health = 0;
+	return (p);
+}
+
+t_vector	*init_vector(double x, double y)
+{
+	t_vector *v;
+
+	v = malloc(sizeof(t_vector));
+	if (!v)
+		return (NULL);
+	v->x = x;
+	v->y = y;
+	return (v);
+}
+
+t_map *init_map(void)
+{
+	t_map *map;
+
+	map = malloc(sizeof(t_map));
+	if (!map)
+	{
+		printf("Error allocating map in init_map");
+		return (NULL);
+	}
+	map->grid = NULL;
+	map->width = 0;
+	map->height = 0;
+	return (map);
+}
+
+t_textures	*init_textures(void)
+{
+
