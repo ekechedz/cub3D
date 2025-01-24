@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 # Source files and object files
-SRCS = main.c src/game/init.c src/game/rander.c src/input/*.c
+SRCS = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c src/game/init.c src/game/rander.c src/input/*.c src/utils/*.c src/map/finalize_map.c src/map/validate_map.c src/map/parse_map.c src/error/*.c
 OBJS = $(SRCS:.c=.o)
 
 # Include directories
