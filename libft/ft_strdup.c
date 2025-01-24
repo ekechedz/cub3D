@@ -6,13 +6,13 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:05:42 by ekechedz          #+#    #+#             */
-/*   Updated: 2024/04/24 16:03:38 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:46:08 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(char *src)
+char	*ft_strdup(const char *src)
 {
 	char	*new;
 	int		i;

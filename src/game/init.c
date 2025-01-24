@@ -84,5 +84,4 @@ t_map *init_map(void)
 
 t_textures	*init_textures(void)
 {
-	
-}
+

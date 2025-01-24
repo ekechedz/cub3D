@@ -9,7 +9,7 @@ void render_frame(t_game *game)
 	mlx_string_put(game->mlx, game->win, WIN_WIDTH / 2, WIN_HEIGHT / 2, 0xFFFFFF, "Rendering...");
 
 	// Temporary: Display map dimensions in the console
-	printf("Rendering frame with map size: %dx%d\n", game->map.width, game->map.height);
+	printf("Rendering frame with map size: %dx%d\n", game->map->width, game->map->height);
 }
 
 int render_frame_wrapper(void *param)
