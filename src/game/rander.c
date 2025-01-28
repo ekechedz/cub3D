@@ -2,11 +2,17 @@
 
 void render_frame(t_game *game)
 {
+
+	if (!game->mlx || !game->win)
+	{
+		fprintf(stderr, "Error: MLX or Window not initialized\n");
+		exit(1);
+	}
 	// Clear the window
-	mlx_clear_window(game->mlx, game->win);
+	//mlx_clear_window(game->mlx, game->win);
 
 	// Draw a simple placeholder frame
-	mlx_string_put(game->mlx, game->win, WIN_WIDTH / 2, WIN_HEIGHT / 2, 0xFFFFFF, "Rendering...");
+	//mlx_string_put(game->mlx, game->win, WIN_WIDTH / 2, WIN_HEIGHT / 2, 0xFFFFFF, "Rendering...");
 
 	// Temporary: Display map dimensions in the console
 	printf("Rendering frame with map size: %dx%d\n", game->map->width, game->map->height);

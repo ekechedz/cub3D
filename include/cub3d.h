@@ -7,7 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "../minilibx/mlx.h"
+#include "/home/ekechedz/minilibx/mlx.h"
+//#include "../minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -39,11 +40,13 @@ typedef struct s_vector
 	double y;
 } t_vector;
 
-typedef struct s_player
-{
-	t_vector *pos;
-	t_vector *dir;
-	int health;
+typedef struct s_player {
+    t_vector    *pos;
+    t_vector    *dir;
+    t_vector    *plane;
+    double      move_speed;  // Movement speed
+    double      rot_speed;   // Rotation speed
+    int         health;      // Player health
 } t_player;
 
 typedef struct s_image
@@ -57,14 +60,14 @@ typedef struct s_image
 
 typedef struct s_textures
 {
-	t_image north;
-	t_image east;
-	t_image south;
-	t_image west;
-	t_image floor;
-	t_image ceiling;
-	t_image door;
-	t_image gameover;
+	t_image *north;
+	t_image *east;
+	t_image *south;
+	t_image *west;
+	t_image *floor;
+	t_image *ceiling;
+	t_image *door;
+	t_image *gameover;
 } t_textures;
 
 
@@ -76,32 +79,33 @@ typedef struct s_map
 	int height;
 } t_map;
 
-typedef struct s_config
-{
-	t_textures textures;
-	int floor_color;
-	int ceiling_color;
-	t_map *map;
+typedef struct s_config {
+    t_map       *map;        // Map structure
+    t_textures  *textures;    // Textures for walls, floor, ceiling
+    int         floor_color; // Floor color (RGB)
+    int         ceiling_color; // Ceiling color (RGB)
+    t_player    player;      // Player settings (position, direction, etc.)
 } t_config;
 
-typedef struct s_game
-{
-	void *mlx;		   // MiniLibX instance
-	void *win;		   // Window instance
-	t_player *player;   // Player data
-	t_map *map;		   // Map data
-	int floor_color;   // Floor color (RGB)
-	int ceiling_color; // Ceiling color (RGB)
-	t_textures textures;
+
+typedef struct s_game {
+    void        *mlx;        // MiniLibX connection
+    void        *win;        // MiniLibX window
+    t_config    *config;     // Pointer to the game's configuration
+    t_player    *player;     // Pointer to the player data
+    t_map       *map;        // Pointer to the map structure
+    int         floor_color; // Floor color (RGB)
+    int         ceiling_color; // Ceiling color (RGB)
+    t_textures  *textures;    // Game textures (walls, etc.)
 } t_game;
 
+
 //Init functions
-t_game	*init_game(void);
-t_config	*init_config(void);
-t_game	*init_game(void);
+void init_game(t_game *game, t_config *config);
+void init_config(t_config *config);
 t_vector	*init_vector(double x, double y);
-t_map *init_map(void);
-t_player *init_player(void);
+t_map *init_map(int width, int height);
+void init_player(t_player *player);
 
 // Function Prototypes
 void parse_map(const char *file, t_game *game);
@@ -114,11 +118,18 @@ int handle_input_wrapper(int key, void *param);
 // Validating map
 void validate_map(char **map);
 void exit_with_error(const char *message, int use_perror);
-void finalize_map(t_config *config, char *map_buffer);
+void finalize_map(t_config *config);
 t_config *parse_cub_file(const char *file_path, t_config *config);
 
 // Utils
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char *ft_strncpy(char *dest, const char *src, size_t n);
+
+// free
+void free_game(t_game *game);
+void free_config(t_config *config);
+
+// textures
+int load_textures(t_game *game, t_config *cfg);
 
 #endif

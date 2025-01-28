@@ -1,63 +1,75 @@
 #include "../../include/cub3d.h"
 
-void calculate_map_dimensions(char *map_buffer, size_t *map_height, size_t *map_width)
+void finalize_map(t_config *config)
 {
-	if (!map_buffer)
-		exit_with_error("Map buffer is NULL", 0);
-	*map_height = 0;
-	*map_width = 0;
-	size_t i;
-	i = 0;
-	while (map_buffer[i] != '\0')
-	{
-		if (map_buffer[i] == '\n')
-			(*map_height)++;
-		else if (*map_height == 0)
-			(*map_width)++;
-		else if (map_buffer[i - 1] == '\n')
-			*map_width = 0;
-		i++;
-	}
-}
+	int x, y;
 
-void populate_map_grid(t_config *config, char *map_buffer, size_t map_height)
-{
-	if (!map_buffer)
-		exit_with_error("Map buffer is NULL", 0);
-	config->map->grid = malloc(sizeof(char *) * (map_height + 1));
-	if (!config->map->grid)
-		exit_with_error("Failed to allocate memory for map grid", 0);
-	size_t row;
-	row = 0;
-	char *line_start = map_buffer;
-	size_t i = 0;
-	while (map_buffer[i] != '\0')
+	// Ensure map is valid
+	if (!config->map || !config->map->grid)
+		exit_with_error("Map is missing or incomplete", 1);
+
+	// Validate map boundaries (surrounded by walls)
+	for (y = 0; y < config->map->height; y++)
 	{
-		if (map_buffer[i] == '\n' || map_buffer[i + 1] == '\0')
+		for (x = 0; x < config->map->width; x++)
 		{
-			size_t line_length = &map_buffer[i] - line_start;
-			config->map->grid[row] = malloc(line_length + 1);
-			if (!config->map->grid[row])
-				exit_with_error("Failed to allocate memory for map line", 0);
-			ft_strncpy(config->map->grid[row], line_start, line_length);
-			config->map->grid[row][line_length] = '\0';
-			row++;
-			line_start = &map_buffer[i + 1];
+			if (config->map->grid[y][x] == '0' || config->map->grid[y][x] == 'N' ||
+				config->map->grid[y][x] == 'S' || config->map->grid[y][x] == 'E' || config->map->grid[y][x] == 'W')
+			{
+				if (x == 0 || y == 0 || y == config->map->height - 1 || x == config->map->width - 1)
+					exit_with_error("Map is not properly enclosed by walls", 1);
+
+				// Check for open spaces around tiles
+				if (config->map->grid[y - 1][x] == ' ' || config->map->grid[y + 1][x] == ' ' ||
+					config->map->grid[y][x - 1] == ' ' || config->map->grid[y][x + 1] == ' ')
+					exit_with_error("Map contains open spaces near walls", 1);
+			}
 		}
-		i++;
 	}
-}
 
-void finalize_map(t_config *config, char *map_buffer)
-{
-	size_t map_height = 0;
-	size_t map_width = 0;
+	// Validate player start position
+	int player_count = 0;
+	for (y = 0; y < config->map->height; y++)
+	{
+		for (x = 0; x < config->map->width; x++)
+		{
+			if (config->map->grid[y][x] == 'N' || config->map->grid[y][x] == 'S' ||
+				config->map->grid[y][x] == 'E' || config->map->grid[y][x] == 'W')
+			{
+				player_count++;
 
-	calculate_map_dimensions(map_buffer, &map_height, &map_width);
-	populate_map_grid(config, map_buffer, map_height);
+				// Set player's initial position
+				config->player.pos->x = x + 0.5;
+				config->player.pos->y = y + 0.5;
 
-	validate_map(config->map->grid);
-	config->map->width = map_width;
-	config->map->height = map_height;
-	printf("are you getting out herre");
+				// Set player's initial direction based on map character
+				if (config->map->grid[y][x] == 'N')
+				{
+					config->player.dir->x = 0;
+					config->player.dir->y = -1;
+				}
+				else if (config->map->grid[y][x] == 'S')
+				{
+					config->player.dir->x = 0;
+					config->player.dir->y = 1;
+				}
+				else if (config->map->grid[y][x] == 'E')
+				{
+					config->player.dir->x = 1;
+					config->player.dir->y = 0;
+				}
+				else if (config->map->grid[y][x] == 'W')
+				{
+					config->player.dir->x = -1;
+					config->player.dir->y = 0;
+				}
+
+				// Replace player's starting position in the map with '0'
+				//config->map->grid[y][x] = '0';
+			}
+		}
+	}
+	printf("%d\n",player_count);
+	if (player_count != 1)
+		exit_with_error("Map must contain exactly one player start position", 1);
 }
