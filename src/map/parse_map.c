@@ -163,8 +163,8 @@ static void normalize_map_width(t_config *config)
 			char *padded_line = malloc(config->map->width + 1);
 			if (!padded_line)
 				exit_with_error("Memory allocation failed for padding", 1);
-			strcpy(padded_line, config->map->grid[i]);
-			memset(padded_line + line_length, ' ', config->map->width - line_length);
+			ft_strcpy(padded_line, config->map->grid[i]);
+			ft_memset(padded_line + line_length, ' ', config->map->width - line_length);
 			padded_line[config->map->width] = '\0';
 
 			free(config->map->grid[i]);

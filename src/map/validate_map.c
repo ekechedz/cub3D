@@ -18,8 +18,7 @@ static void validate_map_characters(t_config *config)
 		{
 			char c = config->map->grid[i][j];
            // printf("Validating char '%c' at position (%d, %d)\n", c, i, j);
-
-			// If the character is invalid, print the invalid character and position, then exit
+			//if(ft_strchr("01NSEW ", c))
 			if (!is_valid_map_char(c))
 			{
 				printf("Invalid char '%c' at position (%d, %d)\n", c, i, j);
