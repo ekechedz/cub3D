@@ -1,19 +1,37 @@
 #include "../../include/cub3d.h"
 
-void init_player(t_player *player)
+void init_player()
 {
-	player->pos = (t_vector *)malloc(sizeof(t_vector));
-	player->dir = (t_vector *)malloc(sizeof(t_vector));
-	player->plane = (t_vector *)malloc(sizeof(t_vector));
+	t_player *player = malloc(sizeof(t_player));
+	if (player == NULL)
+	{
+		exit_with_error("pleyer", 1);
+		return ;
+	}
 
-	player->pos->x = 0;
-	player->pos->y = 0;
-	player->dir->x = 1;
-	player->dir->y = 0;
-	player->plane->x = 0;
+	// Allocate memory for vectors and initialize
+	player->pos = malloc(sizeof(t_vector));
+	player->dir = malloc(sizeof(t_vector));
+	player->plane = malloc(sizeof(t_vector));
+
+	// Ensure memory was allocated successfully
+	if (player->pos == NULL || player->dir == NULL || player->plane == NULL)
+	{
+		// Handle memory allocation failure for vectors
+		free(player); // Free the player struct if allocation fails
+		return;
+	}
+		player->pos->x = 0.0;
+	player->pos->y = 0.0;
+
+	player->dir->x = 1.0;
+	player->dir->y = 0.0;
+
+	player->plane->x = 0.0;
 	player->plane->y = 0.66;
+
 	player->move_speed = 0.1;
-	player->rot_speed = 0.1;
+	player->rot_speed = 0.05;
 	player->health = 100;
 }
 
@@ -102,7 +120,7 @@ void init_config(t_config *config)
 {
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	init_player(&config->player);
+	init_player(config->player);
 	init_textures(config->textures);
 
 	config->floor_color = 0x000000;	  // Default black
@@ -118,7 +136,7 @@ void init_game(t_game *game, t_config *config)
 	}
 	game->win = NULL;		// Initialize window to NULL (we'll create it later)
 	game->config = config;
-	game->player = &config->player;
+	game->player = config->player;
 	game->map = config->map;
 	game->textures = config->textures; // Set textures from config
 
