@@ -32,12 +32,14 @@ static void parse_color(const char *str, int *color)
 static char *trim_trailing_spaces(const char *line)
 {
 	int len = ft_strlen(line);
-	while (len > 0 && (line[len - 1] == ' ' || line[len - 1] == '\n'))		  // Loop to find the last non-space character
-		len--;									  // Decrease the length
-	 if (len == 0)
-        return ft_strdup("");  // Assuming ft_strdup duplicates a string (including empty string)
-	char *trimmed_line = ft_substr(line, 0, len); // Create a new string without the trailing spaces
-	return trimmed_line;
+
+	while (len > 0 && (line[len - 1] == ' ' || line[len - 1] == '\n'))
+		len--;
+
+	if (len == 0)
+		return ft_strdup("");
+
+	return ft_substr(line, 0, len);
 }
 
 void parse_map_line(t_config *config, const char *line)
@@ -47,21 +49,21 @@ void parse_map_line(t_config *config, const char *line)
 		config->map = malloc(sizeof(t_map));
 		if (!config->map)
 			exit_with_error("Failed to allocate memory for map", 1);
-
 		config->map->height = 0;
 		config->map->width = 0;
 		config->map->grid = NULL;
 	}
-	config->map->height++;
-	char *trimmed_line = trim_trailing_spaces(line);
-	char **new_grid = realloc(config->map->grid, sizeof(char *) * config->map->height);
+	char *clean_line = trim_trailing_spaces(line);
+	char **new_grid = realloc(config->map->grid, sizeof(char *) * (config->map->height + 1));
 	if (!new_grid)
 		exit_with_error("Failed to reallocate memory for map grid", 1);
 	config->map->grid = new_grid;
-	config->map->grid[config->map->height - 1] = trimmed_line;
-	int original_line_width = ft_strlen(line); // Get the original length, not the trimmed length
-	if (original_line_width > config->map->width)
-		config->map->width = original_line_width;
+
+	int line_length = ft_strlen(clean_line);
+	if (line_length > config->map->width)
+		config->map->width = line_length;
+	config->map->grid[config->map->height] = clean_line;
+	config->map->height++;
 
 	printf("Parsed map line [%d]: %s\n", config->map->height, config->map->grid[config->map->height - 1]);
 }
@@ -151,6 +153,26 @@ static void parse_line(t_config *config, const char *line)
 	}
 }
 
+static void normalize_map_width(t_config *config)
+{
+	for (int i = 0; i < config->map->height; i++)
+	{
+		int line_length = ft_strlen(config->map->grid[i]);
+		if (line_length < config->map->width)
+		{
+			char *padded_line = malloc(config->map->width + 1);
+			if (!padded_line)
+				exit_with_error("Memory allocation failed for padding", 1);
+			strcpy(padded_line, config->map->grid[i]);
+			memset(padded_line + line_length, ' ', config->map->width - line_length);
+			padded_line[config->map->width] = '\0';
+
+			free(config->map->grid[i]);
+			config->map->grid[i] = padded_line;
+		}
+	}
+}
+
 t_config *parse_cub_file(const char *file_path, t_config *config)
 {
 	char *line = NULL;
@@ -165,6 +187,9 @@ t_config *parse_cub_file(const char *file_path, t_config *config)
 		free(line);
 	}
 	close(fd);
+	if (config->map)
+		normalize_map_width(config);
+
 	validate_map(config);
 	if (!config->map || config->map->width <= 0 || config->map->height <= 0)
 	{

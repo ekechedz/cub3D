@@ -17,7 +17,7 @@ static void validate_map_characters(t_config *config)
 		while (j < config->map->width)
 		{
 			char c = config->map->grid[i][j];
-            printf("Validating char '%c' at position (%d, %d)\n", c, i, j);
+           // printf("Validating char '%c' at position (%d, %d)\n", c, i, j);
 
 			// If the character is invalid, print the invalid character and position, then exit
 			if (!is_valid_map_char(c))
@@ -33,26 +33,46 @@ static void validate_map_characters(t_config *config)
 
 static int is_map_surrounded_by_walls(t_config *config)
 {
-	int i = 0;
-	int j = 0;
-
-	while (i < config->map->height)
+	int i, j;
+	j = 0;
+	while (j < config->map->width)
+	{
+		if (config->map->grid[0][j] != '1' && config->map->grid[0][j] != ' ')
+		{
+			printf("Error: Top row not surrounded by walls at (%d, %d)\n", 0, j);
+			return 0;
+		}
+		if (config->map->grid[config->map->height - 1][j] != '1' && config->map->grid[config->map->height - 1][j] != ' ')
+		{
+			printf("Error: Bottom row not surrounded by walls at (%d, %d)\n", config->map->height - 1, j);
+			return 0;
+		}
+		j++;
+	}
+	i = 0;
+	while(i < config->map->height)
 	{
 		j = 0;
-		while (j < config->map->width)
-		{
-			// Check if the top and bottom rows are completely walls
-			if ((i == 0 || i == config->map->height - 1) && config->map->grid[i][j] != '1')
-				return 0; // Invalid if there is no wall
-			// Check if the left and right columns are completely walls
-			if ((j == 0 || j == config->map->width - 1) && config->map->grid[i][j] != '1')
-				return 0; // Invalid if there is no wall
+		while (config->map->grid[i][j] == ' ')
 			j++;
+		if (config->map->grid[i][j] != '1')
+		{
+			printf("Error: Left side not enclosed at (%d, %d)\n", i, j);
+			return 0;
+		}
+		j = config->map->width - 1;
+		while (j > 0 && config->map->grid[i][j] == ' ')
+			j--;
+		if (config->map->grid[i][j] != '1')
+		{
+			printf("Error: Right side not enclosed at (%d, %d)\n", i, j);
+			return 0;
 		}
 		i++;
 	}
-	return 1; // Map is surrounded by walls
+	return 1;
 }
+
 
 static int check_player_start(t_config *config)
 {
@@ -60,7 +80,6 @@ static int check_player_start(t_config *config)
 	int i = 0;
 	int j = 0;
 
-	// Scan the map to count player start positions (N, S, E, W)
 	while (i < config->map->height)
 	{
 		j = 0;
@@ -70,7 +89,7 @@ static int check_player_start(t_config *config)
 				config->map->grid[i][j] == 'E' || config->map->grid[i][j] == 'W')
 			{
 				player_count++;
-				if (player_count > 1) // If more than one player start, return false
+				if (player_count > 1)
 					return 0;
 			}
 			j++;
@@ -83,9 +102,9 @@ static int check_player_start(t_config *config)
 
 void validate_map(t_config *config)
 {
-	validate_map_characters(config);		 // Validate each character in the map
-	if (!is_map_surrounded_by_walls(config)) // Ensure the map is surrounded by walls
+	validate_map_characters(config);
+	if (!is_map_surrounded_by_walls(config))
 		exit_with_error("Error: Map is not surrounded by walls", 1);
-	if (!check_player_start(config)) // Ensure exactly one player start position exists
+	if (!check_player_start(config))
 		exit_with_error("Error: Invalid or multiple player start positions", 1);
 }
