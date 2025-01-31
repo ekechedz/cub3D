@@ -1,20 +1,29 @@
 #include "../../include/cub3d.h"
 
-void init_player(t_player *player)
+t_player *player init_player(double x, double i, char NSEW)
 {
 	player->pos = (t_vector *)malloc(sizeof(t_vector));
 	player->dir = (t_vector *)malloc(sizeof(t_vector));
 	player->plane = (t_vector *)malloc(sizeof(t_vector));
 
-	player->pos->x = 0;
-	player->pos->y = 0;
-	player->dir->x = 1;
+	player->pos->x = x + 0.5; //this 0.5 is so the player is in the middle of the tile
+    player->pos->y = y + 0.5;
+    player->dir->x = 0;
 	player->dir->y = 0;
-	player->plane->x = 0;
+    if (NSEW == 'E')
+        player->dir->x = 1;
+    else if (NSEW == 'E')
+        player->dir->x = -1;
+    else if (NSEW == 'N')
+        player->dir->y = -1;
+    else if (NSEW == 'S')
+        player->dir->x = 1;
+    player->plane->x = 0;
 	player->plane->y = 0.66;
 	player->move_speed = 0.1;
 	player->rot_speed = 0.1;
 	player->health = 100;
+    return (player);
 }
 
 t_map *init_map(int width, int height)
