@@ -118,7 +118,7 @@ void print_game(t_game *game)
 int main(int argc, char **argv)
 {
 	t_game *game = (t_game *)malloc(sizeof(t_game));
-	t_config *config = (t_config *)malloc(sizeof(t_config));
+	t_config *config;
 
 	char cwd[1024];
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
@@ -130,19 +130,14 @@ int main(int argc, char **argv)
 		perror("getcwd error");
 	}
 
-	// Check input validity
 	if (check_input(argc, argv) < 0)
 		return 1;
-
-	// Initialize the configuration
-	init_config(config); // Initialize the configuration structure
+	config = init_config();
 	if (!config)
 	{
 		write(2, "Failed to initialize configuration\n", 35);
 		return 1;
 	}
-
-	// Initialize the map structure
 	config->map = init_map(0, 0);
 	if (!config->map)
 	{
@@ -150,8 +145,6 @@ int main(int argc, char **argv)
 		free_config(config);
 		return 1;
 	}
-
-	// Parse the .cub file
 	if (!parse_cub_file(argv[1], config))
 	{
 		write(2, "Failed to parse .cub file\n", 26);
@@ -159,7 +152,6 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	print_config(config);
-	// Initialize the game structure
 	init_game(game, config);
 	if (!game)
 	{

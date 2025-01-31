@@ -101,9 +101,14 @@ void init_textures(t_textures *textures)
     //improvements still to be made, in case one fails we need to free the others that were allocated before
 }
 
-void init_config(t_config *config)
+t_config *init_config(void)
 {
-	config->map = (t_map *)malloc(sizeof(t_map));
+    t_config *config;
+
+    config = (t_config *)malloc(sizeof(t_config));
+    if (!config)
+        return (NULL);
+    config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
 	config->player = NULL; //initialize later, like described in issue #4
 	init_textures(config->textures);
@@ -114,6 +119,7 @@ void init_config(t_config *config)
 
 void init_game(t_game *game, t_config *config)
 {
+
 	game->mlx = mlx_init();
 	if (game->mlx == NULL) {
 		exit_with_error("MLX initialization failed\n", 1);
