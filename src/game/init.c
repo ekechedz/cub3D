@@ -57,7 +57,6 @@ t_map *init_map(int width, int height)
 	return map;
 }
 
-// Function to initialize textures
 void init_textures(t_textures *textures)
 {
 	textures->north = (t_image *)malloc(sizeof(t_image));
@@ -106,32 +105,29 @@ void init_textures(t_textures *textures)
 	textures->ceiling->height = 0;
 }
 
-// Function to initialize config
 void init_config(t_config *config)
 {
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	init_player(&config->player);
+	config->player = NULL; //initialize later, like described in issue #4
 	init_textures(config->textures);
 
 	config->floor_color = 0x000000;	  // Default black
 	config->ceiling_color = 0xFFFFFF; // Default white
 }
 
-// Function to initialize game
 void init_game(t_game *game, t_config *config)
 {
 	game->mlx = mlx_init();
 	if (game->mlx == NULL) {
 		exit_with_error("MLX initialization failed\n", 1);
 	}
-	game->win = NULL;		// Initialize window to NULL (we'll create it later)
+	game->win = NULL;
 	game->config = config;
 	game->player = &config->player;
 	game->map = config->map;
-	game->textures = config->textures; // Set textures from config
+	game->textures = config->textures;
 
-	// You can initialize floor and ceiling color here as well
 	game->floor_color = config->floor_color;
 	game->ceiling_color = config->ceiling_color;
 }
