@@ -25,7 +25,7 @@
 // Map Characters
 #define EMPTY '0'
 #define WALL '1'
-#define PLAYER_N 'N'
+#define PLAYER_N 'N' //are you using this?
 #define PLAYER_S 'S'
 #define PLAYER_E 'E'
 #define PLAYER_W 'W'
@@ -44,8 +44,8 @@ typedef struct s_player {
 	t_vector    *pos;
 	t_vector    *dir;
 	t_vector    *plane;
-	double      move_speed;  // Movement speed
-	double      rot_speed;   // Rotation speed
+	double      move_speed;  // Movement speed -- why do we need this if you already defined it it line 20
+	double      rot_speed;   // Rotation speed -- same
 	int         health;      // Player health
 } t_player;
 
@@ -110,12 +110,13 @@ t_map		*init_map(int width, int height);
 t_player	*init_player(double x, double i, char NSEW);
 
 // Function Prototypes
-void parse_map(const char *file, t_game *game);
-void render_frame(t_game *game);
-void handle_input(int key, t_game *game);
-void cleanup(t_game *game);
-int render_frame_wrapper(void *param);
-int handle_input_wrapper(int key, void *param);
+void	parse_map(const char *file, t_game *game);
+void	render_frame(t_game *game);
+void	handle_input(int key, t_game *game);
+void	cleanup(t_game *game);
+int		render_frame_wrapper(void *param);
+int		handle_input_wrapper(int key, void *param);
+void	raycasting(void);
 
 // Validating map
 void validate_map(char **map);
