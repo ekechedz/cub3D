@@ -101,7 +101,7 @@ typedef struct s_game {
 
 
 //Init functions
-t_game		init_game(t_config *config);
+t_game		*init_game(t_config *config);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);
@@ -116,7 +116,7 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-void	raycasting(void);
+void	raycasting(t_player *player);
 
 // Validating map
 void validate_map(char **map);
