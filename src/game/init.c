@@ -117,19 +117,22 @@ t_config *init_config(void)
 	config->ceiling_color = 0xFFFFFF; // Default white
 }
 
-void init_game(t_game *game, t_config *config)
+t_game *init_game(t_config *config)
 {
+    t_game *game;
 
-	game->mlx = mlx_init();
+    game = (t_game *)malloc(sizeof(t_game));
+    if (!game)
+        return (NULL);
+    game->mlx = mlx_init();
 	if (game->mlx == NULL) {
 		exit_with_error("MLX initialization failed\n", 1);
 	}
 	game->win = NULL;
 	game->config = config;
-	game->player = &config->player;
+	game->player = NULL; //its not initialized anyway
 	game->map = config->map;
 	game->textures = config->textures;
-
 	game->floor_color = config->floor_color;
 	game->ceiling_color = config->ceiling_color;
 }

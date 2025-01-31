@@ -117,7 +117,7 @@ void print_game(t_game *game)
 
 int main(int argc, char **argv)
 {
-	t_game *game = (t_game *)malloc(sizeof(t_game));
+	t_game *game;
 	t_config *config;
 
 	char cwd[1024];
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 		write(2, "Failed to initialize configuration\n", 35);
 		return 1;
 	}
-	config->map = init_map(0, 0);
+	config->map = init_map(0, 0); //i think this should be inside of init_config
 	if (!config->map)
 	{
 		write(2, "Failed to initialize map\n", 25);
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	print_config(config);
-	init_game(game, config);
+	game = init_game(config);
 	if (!game)
 	{
 		write(2, "Failed to initialize game\n", 26);
