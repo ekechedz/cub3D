@@ -27,7 +27,7 @@ cameraX = 0 at center column.
 cameraX = 1 at rightmost column.
 
 */
-void raycasting(void)
+void raycasting(t_player *player)
 {
 	int		x;
 	double	cameraX;
