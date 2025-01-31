@@ -35,3 +35,19 @@ void free_game(t_game *game)
 	free_config(game->config);
 	free(game);
 }
+
+int	free_player(t_player *player)
+{
+	if (player)
+	{
+		if (player->dir)
+			free(player->dir);
+		if (player->plane)
+			free(player->plane);
+		if (player->pos)
+			free(player->pos);
+		free(player);
+		return (0);
+	}
+	return (1);
+}
