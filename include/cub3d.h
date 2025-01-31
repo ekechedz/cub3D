@@ -103,6 +103,7 @@ typedef struct s_game {
 //Init functions
 void init_game(t_game *game, t_config *config);
 void init_config(t_config *config);
+t_image *init_t_image(void);
 //t_vector	*init_vector(double x, double y); ---- not sure if we need it, leave it for now
 t_map *init_map(int width, int height);
 t_player *player init_player(double x, double i, char NSEW);

@@ -57,52 +57,48 @@ t_map *init_map(int width, int height)
 	return map;
 }
 
+t_image *init_t_image(void)
+{
+    t_image *new;
+
+    new = malloc(sizeof(t_image));
+    if (!new)
+        return (NULL);
+    new->img_ptr = NULL;
+    new->buff = NULL;
+    new->lstsize = 0;
+    new->width = 0;
+    new->height = 0;
+    return (new);
+}
+
 void init_textures(t_textures *textures)
 {
-	textures->north = (t_image *)malloc(sizeof(t_image));
-	textures->east = (t_image *)malloc(sizeof(t_image));
-	textures->south = (t_image *)malloc(sizeof(t_image));
-	textures->west = (t_image *)malloc(sizeof(t_image));
-	textures->floor = (t_image *)malloc(sizeof(t_image));
-	textures->ceiling = (t_image *)malloc(sizeof(t_image));
-	textures->door = (t_image *)malloc(sizeof(t_image));
-	textures->gameover = (t_image *)malloc(sizeof(t_image));
-
-	textures->north->img_ptr = NULL;
-	textures->north->buff = NULL;
-	textures->north->lstsize = 0;
-	textures->north->width = 0;
-	textures->north->height = 0;
-
-	textures->east->img_ptr = NULL;
-	textures->east->buff = NULL;
-	textures->east->lstsize = 0;
-	textures->east->width = 0;
-	textures->east->height = 0;
-
-	textures->south->img_ptr = NULL;
-	textures->south->buff = NULL;
-	textures->south->lstsize = 0;
-	textures->south->width = 0;
-	textures->south->height = 0;
-
-	textures->west->img_ptr = NULL;
-	textures->west->buff = NULL;
-	textures->west->lstsize = 0;
-	textures->west->width = 0;
-	textures->west->height = 0;
-
-	textures->floor->img_ptr = NULL;
-	textures->floor->buff = NULL;
-	textures->floor->lstsize = 0;
-	textures->floor->width = 0;
-	textures->floor->height = 0;
-
-	textures->ceiling->img_ptr = NULL;
-	textures->ceiling->buff = NULL;
-	textures->ceiling->lstsize = 0;
-	textures->ceiling->width = 0;
-	textures->ceiling->height = 0;
+	textures->north = init_t_image();
+    if (!textures->north)
+        exit_with_error(1);
+    textures->east = init_t_image();
+    if (!textures->east)
+        exit_with_error(1);
+    textures->south = init_t_image();
+    if (!textures->south)
+        exit_with_error(1);
+    textures->west = init_t_image();
+    if (!textures->west)
+        exit_with_error(1);
+    textures->floor = init_t_image();
+    if (!textures->floor)
+        exit_with_error(1);
+    textures->ceiling = init_t_image();
+    if (!textures->ceiling)
+        exit_with_error(1);
+    textures->door = init_t_image();
+    if (!textures->door)
+        exit_with_error(1);
+    textures->gameover = init_t_image();
+    if (!textures->gameover)
+        exit_with_error(1);
+    //improvements still to be made, in case one fails we need to free the others that were allocated before
 }
 
 void init_config(t_config *config)
