@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-//#include "/home/ekechedz/minilibx/mlx.h"
-#include "/home/natalia/Repositories/minilibx/mlx.h"
+#include "/home/ekechedz/minilibx/mlx.h"
+//#include "/home/natalia/Repositories/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -100,6 +100,8 @@ typedef struct s_game {
 	int         floor_color; // Floor color (RGB)
 	int         ceiling_color; // Ceiling color (RGB)
 	t_textures  *textures;    // Game textures (walls, etc.)
+	int *screen_data;  // Make sure it's modifiable
+
 } t_game;
 
 typedef struct s_ray
@@ -153,5 +155,9 @@ int		free_player(t_player *player);
 int load_textures(t_game *game, t_config *cfg);
 void trim_whitespace(char *str);
 char *trim_line(const char *line);
+
+//render
+
+int render_scene(t_game *game, t_player *player);
 
 #endif

@@ -75,23 +75,23 @@ int main(int argc, char **argv)
 	t_game *game;
 	t_config *config;
 
-	if (!game || !config) // Check malloc success
-	{
-		write(2, "Failed to allocate memory\n", 25);
-		return 1;
-	}
+	// if (!game || !config) // Check malloc success
+	// {
+	// 	write(2, "Failed to allocate memory\n", 25);
+	// 	return 1;
+	// }
 
 	// Check input validity
 	if (check_input(argc, argv) < 0)
 	{
-		free_config(config);
-		free(game);
+		//free_config(config);
+		//free(game);
 		return 1;
 	}
 	config = init_config();
 	if (!config)
 	{
-		free(game);
+		//free(game);
 		write(2, "Failed to initialize configuration\n", 35);
 		return 1;
 	}
@@ -99,15 +99,15 @@ int main(int argc, char **argv)
 	if (!config->map)
 	{
 		write(2, "Failed to initialize map\n", 25);
-        free(game);
-		free_config(config);
+        //free(game);
+		//free_config(config);
 		return 1;
 	}
 	if (!parse_cub_file(argv[1], config))
 	{
 		write(2, "Failed to parse .cub file\n", 26);
-		free(game);
-		free_config(config);
+		//free(game);
+		//free_config(config);
 		return 1;
 	}
 	print_config(config);
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 	if (!game)
 	{
 		write(2, "Failed to initialize game\n", 26);
-		free_config(config);
+		//free_config(config);
 		//free(game);
 		return 1;
 	}
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 	if (load_textures(game, config) < 0)
 	{
 		fprintf(stderr, "Error: Failed to load textures\n");
-		free_config(config);
+		//free_config(config);
         //free(game);
 		return (1);
 	}
@@ -138,6 +138,7 @@ int main(int argc, char **argv)
 
 	mlx_clear_window(game->mlx, game->win);
 	mlx_string_put(game->mlx, game->win, 200, 200, 0xFFFFFF, "Hello, MiniLibX!");
+	mlx_loop_hook(game->mlx, render_scene, game);
 	mlx_hook(game->win, 17, 0L, close_window, game->mlx);
 
 	// Start the game loop
