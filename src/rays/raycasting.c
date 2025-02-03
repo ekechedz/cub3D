@@ -122,3 +122,34 @@ void raycasting(t_player *player, t_game *game)
 	}
 }
 
+6. How to Proceed (Drawing the Line)
+
+To render the raycast results to the screen, you need to:
+
+    Use your graphics library (such as SDL, or whatever you're using) to draw the wall slice.
+    Loop through all the rays and draw them with the drawStart and drawEnd values.
+
+Here's a basic structure to draw the line in a graphics window:
+
+for (x = 0; x < WIN_WIDTH; x++) {
+    // 1. Camera transformation and ray direction calculation as before...
+    
+    // 2. DDA loop to find where the ray hits a wall
+    
+    // 3. Perpendicular distance and wall height calculation
+    
+    // 4. Drawing the vertical line for the ray:
+    int color = getWallColor(side);  // You can color walls differently depending on side
+    for (int y = drawStart; y < drawEnd; y++) {
+        drawPixel(x, y, color);  // Draw pixel at (x, y) with the appropriate color
+    }
+}
+
+    getWallColor(side) can vary the color depending on which side (X or Y) the ray hits.
+    drawPixel(x, y, color) would be your graphics API function for drawing a pixel.
+
+Final Steps:
+
+    Integrate this rendering code into your game loop where you handle the screen buffer.
+    Test your raycasting with simple maps and ensure the walls are drawn correctly.
+    Adjust the FOV and other parameters to refine the visual effect.
