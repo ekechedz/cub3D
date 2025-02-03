@@ -75,12 +75,23 @@ int main(int argc, char **argv)
 	t_game *game;
 	t_config *config;
 
+	if (!game || !config) // Check malloc success
+	{
+		write(2, "Failed to allocate memory\n", 25);
+		return 1;
+	}
+
 	// Check input validity
 	if (check_input(argc, argv) < 0)
+	{
+		free_config(config);
+		free(game);
 		return 1;
+	}
 	config = init_config();
 	if (!config)
 	{
+		free(game);
 		write(2, "Failed to initialize configuration\n", 35);
 		return 1;
 	}
@@ -88,12 +99,14 @@ int main(int argc, char **argv)
 	if (!config->map)
 	{
 		write(2, "Failed to initialize map\n", 25);
+        free(game);
 		free_config(config);
 		return 1;
 	}
 	if (!parse_cub_file(argv[1], config))
 	{
 		write(2, "Failed to parse .cub file\n", 26);
+		free(game);
 		free_config(config);
 		return 1;
 	}
@@ -103,19 +116,23 @@ int main(int argc, char **argv)
 	{
 		write(2, "Failed to initialize game\n", 26);
 		free_config(config);
+		//free(game);
 		return 1;
 	}
 	print_game(game);
 	if (load_textures(game, config) < 0)
 	{
 		fprintf(stderr, "Error: Failed to load textures\n");
+		free_config(config);
+        //free(game);
 		return (1);
 	}
+	//free_config(config);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3D Test Window");
 	if (!game->win)
 	{
 		write(2, "Window creation failed\n", 23);
-		free_game(game);
+		//free_game(game);
 		return 1;
 	}
 
