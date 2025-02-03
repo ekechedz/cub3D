@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "/home/ekechedz/minilibx/mlx.h"
-//#include "../minilibx/mlx.h"
+//#include "/home/ekechedz/minilibx/mlx.h"
+#include "/home/natalia/Repositories/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -25,7 +25,7 @@
 // Map Characters
 #define EMPTY '0'
 #define WALL '1'
-#define PLAYER_N 'N'
+#define PLAYER_N 'N' //are you using this?
 #define PLAYER_S 'S'
 #define PLAYER_E 'E'
 #define PLAYER_W 'W'
@@ -42,12 +42,12 @@ typedef struct s_vector
 } t_vector;
 
 typedef struct s_player {
-    t_vector    *pos;
-    t_vector    *dir;
-    t_vector    *plane;
-    double      move_speed;  // Movement speed
-    double      rot_speed;   // Rotation speed
-    int         health;      // Player health
+	t_vector    *pos;
+	t_vector    *dir;
+	t_vector    *plane;
+	double      move_speed;  // Movement speed -- why do we need this if you already defined it it line 20
+	double      rot_speed;   // Rotation speed -- same
+	int         health;      // Player health
 } t_player;
 
 typedef struct s_image
@@ -88,36 +88,42 @@ typedef struct s_config {
     int         floor_color; // Floor color (RGB)
     int         ceiling_color; // Ceiling color (RGB)
     t_player    *player;      // Player settings (position, direction, etc.)
-
 } t_config;
 
 
 typedef struct s_game {
-    void        *mlx;        // MiniLibX connection
-    void        *win;        // MiniLibX window
-    t_config    *config;     // Pointer to the game's configuration
-    t_player    *player;     // Pointer to the player data
-    t_map       *map;        // Pointer to the map structure
-    int         floor_color; // Floor color (RGB)
-    int         ceiling_color; // Ceiling color (RGB)
-    t_textures  *textures;    // Game textures (walls, etc.)
+	void        *mlx;        // MiniLibX connection
+	void        *win;        // MiniLibX window
+	t_config    *config;     // Pointer to the game's configuration
+	t_player    *player;     // Pointer to the player data
+	t_map       *map;        // Pointer to the map structure
+	int         floor_color; // Floor color (RGB)
+	int         ceiling_color; // Ceiling color (RGB)
+	t_textures  *textures;    // Game textures (walls, etc.)
 } t_game;
 
 
 //Init functions
+
+
+t_config	*init_config(void);
+t_image		*init_t_image(void);
+t_vector	*init_vector(double x, double y);
+int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
+t_map		*init_map(int width, int height);
+t_player	*init_player(double x, double i, char NSEW);
 void init_game(t_game *game, t_config *config);
-void init_config(t_config *config);
-//t_vector	*init_vector(double x, double y); ---- not sure if we need it, leave it for now
-t_map *init_map(int width, int height);
-t_player init_player(double x, double i, char NSEW);
+
+
 
 // Function Prototypes
-void parse_map(const char *file, t_game *game);
-void render_frame(t_game *game);
-void handle_input(int key, t_game *game);
-void cleanup(t_game *game);
-int render_frame_wrapper(void *param);
-int handle_input_wrapper(int key, void *param);
+void	parse_map(const char *file, t_game *game);
+void	render_frame(t_game *game);
+void	handle_input(int key, t_game *game);
+void	cleanup(t_game *game);
+int		render_frame_wrapper(void *param);
+int		handle_input_wrapper(int key, void *param);
+void	raycasting(t_player *player);
 
 // Validating map
 
@@ -132,8 +138,9 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char *ft_strncpy(char *dest, const char *src, size_t n);
 
 // free
-void free_game(t_game *game);
-void free_config(t_config *config);
+void	free_game(t_game *game);
+void	free_config(t_config *config);
+int		free_player(t_player *player);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);

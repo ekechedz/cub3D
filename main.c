@@ -72,31 +72,25 @@ void print_game(t_game *game)
 
 int main(int argc, char **argv)
 {
-	t_game *game = (t_game *)malloc(sizeof(t_game));
-	t_config *config = (t_config *)malloc(sizeof(t_config));
+	t_game *game;
+	t_config *config;
 
 	// Check input validity
 	if (check_input(argc, argv) < 0)
 		return 1;
-
-	// Initialize the configuration
-	init_config(config); // Initialize the configuration structure
+	config = init_config();
 	if (!config)
 	{
 		write(2, "Failed to initialize configuration\n", 35);
 		return 1;
 	}
-
-	// Initialize the map structure
-	config->map = init_map(0, 0);
+	config->map = init_map(0, 0); //i think this should be inside of init_config
 	if (!config->map)
 	{
 		write(2, "Failed to initialize map\n", 25);
 		free_config(config);
 		return 1;
 	}
-
-	// Parse the .cub file
 	if (!parse_cub_file(argv[1], config))
 	{
 		write(2, "Failed to parse .cub file\n", 26);
@@ -104,8 +98,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	print_config(config);
-	// Initialize the game structure
-	init_game(game, config);
+	game = init_game(config);
 	if (!game)
 	{
 		write(2, "Failed to initialize game\n", 26);

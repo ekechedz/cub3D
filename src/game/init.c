@@ -1,30 +1,59 @@
 #include "../../include/cub3d.h"
 
-// t_player init_player(double x, double i, char NSEW)
-// {
-// 	player->pos = (t_vector *)malloc(sizeof(t_vector));
-// 	player->dir = (t_vector *)malloc(sizeof(t_vector));
-// 	player->plane = (t_vector *)malloc(sizeof(t_vector));
+t_vector	*init_vector(double x, double y)
+{
+	t_vector	*vector;
 
-// 	player->pos->x = x + 0.5; //this 0.5 is so the player is in the middle of the tile
-//     player->pos->y = y + 0.5;
-//     player->dir->x = 0;
-// 	player->dir->y = 0;
-//     if (NSEW == 'E')
-//         player->dir->x = 1;
-//     else if (NSEW == 'E')
-//         player->dir->x = -1;
-//     else if (NSEW == 'N')
-//         player->dir->y = -1;
-//     else if (NSEW == 'S')
-//         player->dir->x = 1;
-//     player->plane->x = 0;
-// 	player->plane->y = 0.66;
+	vector = (t_vector *)malloc(sizeof(t_vector));
+	if (!vector)
+		return (NULL);
+	vector->x = x;
+	vector->y = y;
+	return (vector);
+}
 
-// 	player->move_speed = 0.1;
-// 	player->rot_speed = 0.05;
-//     return (player);
-// }
+t_player	*init_player(double x, double y, char NSEW)
+{
+	t_player	*player;
+
+	player = malloc(sizeof(t_player));
+	if (!player)
+		return (NULL);
+	if (!init_pos_dir_plane(player, NSEW, x , y))
+		return (NULL);
+	player->move_speed = 0.1;
+	player->rot_speed = 0.1;
+	player->health = 100;
+	return (player);
+}
+
+int	init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
+{
+	player->pos = init_vector(x + 0.5, y + 0.5);
+	if (NSEW == 'E')
+	{
+		player->dir = init_vector(1.0, 0.0);
+		player->plane = init_vector(0.0, 0.66);
+	}
+	else if (NSEW == 'W')
+	{
+		player->dir = init_vector(-1.0, 0.0);
+		player->plane = init_vector(0.0, -0.66);
+	}
+	else if (NSEW == 'N')
+	{
+		player->dir = init_vector(0.0, -1.0);
+		player->plane = init_vector(0.66, 0.0);
+	}
+	else if (NSEW == 'S')
+	{
+		player->dir = init_vector(0.0, 1.0);
+		player->plane = init_vector(-0.66, 0.0);
+	}
+	if (!player->dir || !player->plane || !player->pos)
+		return (free_player(player));
+	return (1);
+}
 
 t_map *init_map(int width, int height)
 {
@@ -57,81 +86,85 @@ t_map *init_map(int width, int height)
 	return map;
 }
 
-// Function to initialize textures
-void init_textures(t_textures *textures)
+t_image *init_t_image(void)
 {
-	textures->north = (t_image *)malloc(sizeof(t_image));
-	textures->east = (t_image *)malloc(sizeof(t_image));
-	textures->south = (t_image *)malloc(sizeof(t_image));
-	textures->west = (t_image *)malloc(sizeof(t_image));
-	textures->floor = (t_image *)malloc(sizeof(t_image));
-	textures->ceiling = (t_image *)malloc(sizeof(t_image));
-	textures->door = (t_image *)malloc(sizeof(t_image));
-	textures->gameover = (t_image *)malloc(sizeof(t_image));
+	t_image *new;
 
-	textures->north->img_ptr = NULL;
-	textures->north->buff = NULL;
-	textures->north->lstsize = 0;
-	textures->north->width = 0;
-	textures->north->height = 0;
-
-	textures->east->img_ptr = NULL;
-	textures->east->buff = NULL;
-	textures->east->lstsize = 0;
-	textures->east->width = 0;
-	textures->east->height = 0;
-
-	textures->south->img_ptr = NULL;
-	textures->south->buff = NULL;
-	textures->south->lstsize = 0;
-	textures->south->width = 0;
-	textures->south->height = 0;
-
-	textures->west->img_ptr = NULL;
-	textures->west->buff = NULL;
-	textures->west->lstsize = 0;
-	textures->west->width = 0;
-	textures->west->height = 0;
-
-	textures->floor->img_ptr = NULL;
-	textures->floor->buff = NULL;
-	textures->floor->lstsize = 0;
-	textures->floor->width = 0;
-	textures->floor->height = 0;
-
-	textures->ceiling->img_ptr = NULL;
-	textures->ceiling->buff = NULL;
-	textures->ceiling->lstsize = 0;
-	textures->ceiling->width = 0;
-	textures->ceiling->height = 0;
+	new = malloc(sizeof(t_image));
+	if (!new)
+		return (NULL);
+	new->img_ptr = NULL;
+	new->buff = NULL;
+	new->lstsize = 0;
+	new->width = 0;
+	new->height = 0;
+	return (new);
 }
 
-// Function to initialize config
-void init_config(t_config *config)
+void init_textures(t_textures *textures)
 {
+	textures->north = init_t_image();
+	if (!textures->north)
+		exit_with_error("Error loading textures", 1);
+	textures->east = init_t_image();
+	if (!textures->east)
+		exit_with_error("Error loading textures", 1);
+	textures->south = init_t_image();
+	if (!textures->south)
+		exit_with_error("Error loading textures", 1);
+	textures->west = init_t_image();
+	if (!textures->west)
+		exit_with_error("Error loading textures", 1);
+	textures->floor = init_t_image();
+	if (!textures->floor)
+		exit_with_error("Error loading textures", 1);
+	textures->ceiling = init_t_image();
+	if (!textures->ceiling)
+		exit_with_error("Error loading textures", 1);
+	textures->door = init_t_image();
+	if (!textures->door)
+		exit_with_error("Error loading textures", 1);
+	textures->gameover = init_t_image();
+	if (!textures->gameover)
+		exit_with_error("Error loading textures", 1);
+	//improvements still to be made, in case one fails we need to free the others that were allocated before
+}
+
+t_config *init_config(void)
+{
+	t_config *config;
+
+	config = (t_config *)malloc(sizeof(t_config));
+	if (!config)
+		return (NULL);
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	//init_player(config->player);
+	config->player = NULL; //initialize later, like described in issue #4
+
 	init_textures(config->textures);
 
 	config->floor_color = 0x000000;	  // Default black
 	config->ceiling_color = 0xFFFFFF; // Default white
+	return (config);
 }
 
-// Function to initialize game
-void init_game(t_game *game, t_config *config)
+t_game *init_game(t_config *config)
 {
+	t_game *game;
+
+	game = (t_game *)malloc(sizeof(t_game));
+	if (!game)
+		return (NULL);
 	game->mlx = mlx_init();
 	if (game->mlx == NULL) {
 		exit_with_error("MLX initialization failed\n", 1);
 	}
-	game->win = NULL;		// Initialize window to NULL (we'll create it later)
+	game->win = NULL;
 	game->config = config;
-	game->player = config->player;
+	game->player = NULL; //its not initialized anyway
 	game->map = config->map;
-	game->textures = config->textures; // Set textures from config
-
-	// You can initialize floor and ceiling color here as well
+	game->textures = config->textures;
 	game->floor_color = config->floor_color;
 	game->ceiling_color = config->ceiling_color;
+	return (game);
 }
