@@ -123,7 +123,7 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-void	raycasting(t_player *player, char **map);
+void	raycasting(t_player *player, t_game *game);
 
 // Validating map
 

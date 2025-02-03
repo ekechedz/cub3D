@@ -27,9 +27,9 @@ cameraX = 0 at center column.
 cameraX = 1 at rightmost column.
 
 */
-void raycasting(t_player *player, char **map)
+void raycasting(t_player *player, t_game *game)
 {
-	 int x;
+	int x;
 	double cameraX, rayDirX, rayDirY;
 	double deltaDistX, deltaDistY;
 	double sideDistX, sideDistY;
@@ -37,6 +37,7 @@ void raycasting(t_player *player, char **map)
 	int stepX, stepY;
 	int hit = 0;
 	int side; // 0 for x-axis, 1 for y-axis
+	char **map = game->map->grid; //for now
 
 	// Loop through all columns on the screen
 	for (x = 0; x < WIN_WIDTH; x++) 
