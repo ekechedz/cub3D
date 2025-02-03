@@ -27,17 +27,6 @@ void free_map(t_map *map)
     free(map);
 }
 
-// Function to free the player (if dynamically allocated)
-void free_player(t_player *player)
-{
-    if (player)
-    {
-        free(player->pos);
-        free(player->dir);
-        free(player->plane);
-        free(player);
-    }
-}
 
 // Function to free config
 void free_config(t_config *config)
@@ -52,5 +41,21 @@ void free_config(t_config *config)
 
     // Finally, free the config structure itself
     free(config);
+}
+
+int	free_player(t_player *player)
+{
+	if (player)
+	{
+		if (player->dir)
+			free(player->dir);
+		if (player->plane)
+			free(player->plane);
+		if (player->pos)
+			free(player->pos);
+		free(player);
+		return (0);
+	}
+	return (1);
 }
 
