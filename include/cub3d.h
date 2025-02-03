@@ -112,7 +112,7 @@ t_vector	*init_vector(double x, double y);
 int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
 t_map		*init_map(int width, int height);
 t_player	*init_player(double x, double i, char NSEW);
-void init_game(t_game *game, t_config *config);
+t_game *init_game(t_config *config);
 
 
 
@@ -123,7 +123,7 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-void	raycasting(t_player *player);
+void	raycasting(t_player *player, char **map);
 
 // Validating map
 

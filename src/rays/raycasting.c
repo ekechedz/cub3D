@@ -27,7 +27,7 @@ cameraX = 0 at center column.
 cameraX = 1 at rightmost column.
 
 */
-void raycasting(t_player *player)
+void raycasting(t_player *player, char **map)
 {
 	 int x;
 	double cameraX, rayDirX, rayDirY;
@@ -121,21 +121,3 @@ void raycasting(t_player *player)
 	}
 }
 
-
-
-void raycasting(t_player *player, char **map)
-{
-	double rayX, rayY;
-
-	rayX = player->pos->x;
-	rayY = player->pos->y;
-
-	while (1)
-	{
-		rayX += player->dir->x;
-		rayY += player->dir->y;
-		if (map[(int)rayX][(int)rayY] == '1')
-			break;
-
-	}
-}
