@@ -12,14 +12,14 @@ t_vector	*init_vector(double x, double y)
 	return (vector);
 }
 
-t_player	*init_player(double x, double i, char NSEW)
+t_player	*init_player(double x, double y, char NSEW)
 {
 	t_player	*player;
 
 	player = malloc(sizeof(t_player));
 	if (!player)
 		return (NULL);
-	if (!init_pos_dir_plane(player, NSEW))
+	if (!init_pos_dir_plane(player, NSEW, x , y))
 		return (NULL);
 	player->move_speed = 0.1;
 	player->rot_speed = 0.1;
@@ -27,7 +27,7 @@ t_player	*init_player(double x, double i, char NSEW)
 	return (player);
 }
 
-int	init_pos_dir_plane(t_player *player, char NSEW)
+int	init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
 {
 	player->pos = init_vector(x + 0.5, y + 0.5);
 	if (NSEW == 'E')
@@ -105,28 +105,28 @@ void init_textures(t_textures *textures)
 {
 	textures->north = init_t_image();
 	if (!textures->north)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->east = init_t_image();
 	if (!textures->east)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->south = init_t_image();
 	if (!textures->south)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->west = init_t_image();
 	if (!textures->west)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->floor = init_t_image();
 	if (!textures->floor)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->ceiling = init_t_image();
 	if (!textures->ceiling)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->door = init_t_image();
 	if (!textures->door)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	textures->gameover = init_t_image();
 	if (!textures->gameover)
-		exit_with_error(1);
+		exit_with_error("Error loading textures", 1);
 	//improvements still to be made, in case one fails we need to free the others that were allocated before
 }
 
@@ -144,6 +144,7 @@ t_config *init_config(void)
 
 	config->floor_color = 0x000000;	  // Default black
 	config->ceiling_color = 0xFFFFFF; // Default white
+	return (config);
 }
 
 t_game *init_game(t_config *config)
@@ -164,4 +165,5 @@ t_game *init_game(t_config *config)
 	game->textures = config->textures;
 	game->floor_color = config->floor_color;
 	game->ceiling_color = config->ceiling_color;
+	return (game);
 }

@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "/home/ekechedz/minilibx/mlx.h"
-//#include "../minilibx/mlx.h"
+//#include "/home/ekechedz/minilibx/mlx.h"
+#include "/home/natalia/Repositories/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -84,7 +84,7 @@ typedef struct s_config {
 	t_textures  *textures;    // Textures for walls, floor, ceiling
 	int         floor_color; // Floor color (RGB)
 	int         ceiling_color; // Ceiling color (RGB)
-	t_player    player;      // Player settings (position, direction, etc.)
+	t_player    *player;      // Player settings (position, direction, etc.)
 } t_config;
 
 
@@ -105,7 +105,7 @@ t_game		*init_game(t_config *config);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);
-int			init_pos_dir_plane(t_player *player, char NSEW);
+int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
 t_map		*init_map(int width, int height);
 t_player	*init_player(double x, double i, char NSEW);
 

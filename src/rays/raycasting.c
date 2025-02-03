@@ -29,22 +29,113 @@ cameraX = 1 at rightmost column.
 */
 void raycasting(t_player *player)
 {
-	int		x;
-	double	cameraX;
-	double	rayDirX;
-	double	rayDirY;
+	 int x;
+	double cameraX, rayDirX, rayDirY;
+	double deltaDistX, deltaDistY;
+	double sideDistX, sideDistY;
+	int mapX, mapY;
+	int stepX, stepY;
+	int hit = 0;
+	int side; // 0 for x-axis, 1 for y-axis
 
-	x = 0;
-	while (x < WIN_WIDTH)
+	// Loop through all columns on the screen
+	for (x = 0; x < WIN_WIDTH; x++) 
 	{
-		// Calculate camera space X for this column (from -1 to 1)
+		// 1. Calculate camera space X for this column
 		cameraX = 2 * (double)x / WIN_WIDTH - 1;
-
-		// Calculate the ray direction based on the player's direction and the camera plane
 		rayDirX = player->dir->x + player->plane->x * cameraX;
 		rayDirY = player->dir->y + player->plane->y * cameraX;
 
-		// Move to the next column
-		x++;
+		// 2. Initialize DDA variables
+		// Initial map position (current grid cell)
+		mapX = (int)player->pos->x;
+		mapY = (int)player->pos->y;
+
+		// Calculate the deltaDistX and deltaDistY
+		deltaDistX = fabs(1 / rayDirX);
+		deltaDistY = fabs(1 / rayDirY);
+
+		// Calculate step and sideDist
+		if (rayDirX < 0) 
+		{
+			stepX = -1;
+			sideDistX = (player->pos->x - mapX) * deltaDistX;
+		}
+		else 
+		{
+			stepX = 1;
+			sideDistX = (mapX + 1.0 - player->pos->x) * deltaDistX;
+		}
+		
+		if (rayDirY < 0) 
+		{
+			stepY = -1;
+			sideDistY = (player->pos->y - mapY) * deltaDistY;
+		}
+		else 
+		{
+			stepY = 1;
+			sideDistY = (mapY + 1.0 - player->pos->y) * deltaDistY;
+		}
+
+		// 3. DDA loop to step through grid cells until a wall is hit
+		while (hit == 0)
+		{
+			// Move to the next grid cell
+			if (sideDistX < sideDistY) 
+			{
+				sideDistX += deltaDistX;
+				mapX += stepX;
+				side = 0;
+			}
+			else 
+			{
+				sideDistY += deltaDistY;
+				mapY += stepY;
+				side = 1;
+			}
+
+			// Check if we've hit a wall
+			if (map[mapX][mapY] == '1')  // Wall is represented by '1'
+				hit = 1;
+		}
+
+		// 4. Calculate the distance to the wall and draw the line
+		double perpWallDist;
+		if (side == 0) 
+			perpWallDist = (sideDistX - deltaDistX);  // Distance along the X-axis
+		else 
+			perpWallDist = (sideDistY - deltaDistY);  // Distance along the Y-axis
+
+		// Draw the vertical line corresponding to this ray
+		int lineHeight = (int)(WIN_HEIGHT / perpWallDist);
+		int drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
+		int drawEnd = lineHeight / 2 + WIN_HEIGHT / 2;
+
+		// Ensure we don't draw out of bounds
+		if (drawStart < 0) drawStart = 0;
+		if (drawEnd >= WIN_HEIGHT) drawEnd = WIN_HEIGHT - 1;
+
+		// Now you can draw the line here with `drawStart` and `drawEnd` 
+		// You can use these to color the line based on the wall type
+	}
+}
+
+
+
+void raycasting(t_player *player, char **map)
+{
+	double rayX, rayY;
+
+	rayX = player->pos->x;
+	rayY = player->pos->y;
+
+	while (1)
+	{
+		rayX += player->dir->x;
+		rayY += player->dir->y;
+		if (map[(int)rayX][(int)rayY] == '1')
+			break;
+
 	}
 }
