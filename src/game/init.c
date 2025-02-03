@@ -1,31 +1,30 @@
 #include "../../include/cub3d.h"
 
-t_player *player init_player(double x, double i, char NSEW)
-{
-	player->pos = (t_vector *)malloc(sizeof(t_vector));
-	player->dir = (t_vector *)malloc(sizeof(t_vector));
-	player->plane = (t_vector *)malloc(sizeof(t_vector));
+// t_player init_player(double x, double i, char NSEW)
+// {
+// 	player->pos = (t_vector *)malloc(sizeof(t_vector));
+// 	player->dir = (t_vector *)malloc(sizeof(t_vector));
+// 	player->plane = (t_vector *)malloc(sizeof(t_vector));
 
-	player->pos->x = x + 0.5; //this 0.5 is so the player is in the middle of the tile
-    player->pos->y = y + 0.5;
-    player->dir->x = 0;
-	player->dir->y = 0;
-    if (NSEW == 'E')
-        player->dir->x = 1;
-    else if (NSEW == 'E')
-        player->dir->x = -1;
-    else if (NSEW == 'N')
-        player->dir->y = -1;
-    else if (NSEW == 'S')
-        player->dir->x = 1;
-    player->plane->x = 0;
-	player->plane->y = 0.66;
+// 	player->pos->x = x + 0.5; //this 0.5 is so the player is in the middle of the tile
+//     player->pos->y = y + 0.5;
+//     player->dir->x = 0;
+// 	player->dir->y = 0;
+//     if (NSEW == 'E')
+//         player->dir->x = 1;
+//     else if (NSEW == 'E')
+//         player->dir->x = -1;
+//     else if (NSEW == 'N')
+//         player->dir->y = -1;
+//     else if (NSEW == 'S')
+//         player->dir->x = 1;
+//     player->plane->x = 0;
+// 	player->plane->y = 0.66;
 
-	player->move_speed = 0.1;
-	player->rot_speed = 0.05;
-	player->health = 100;
-    return (player);
-}
+// 	player->move_speed = 0.1;
+// 	player->rot_speed = 0.05;
+//     return (player);
+// }
 
 t_map *init_map(int width, int height)
 {
@@ -112,7 +111,7 @@ void init_config(t_config *config)
 {
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	init_player(config->player);
+	//init_player(config->player);
 	init_textures(config->textures);
 
 	config->floor_color = 0x000000;	  // Default black

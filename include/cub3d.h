@@ -87,7 +87,7 @@ typedef struct s_config {
     t_textures  *textures;    // Textures for walls, floor, ceiling
     int         floor_color; // Floor color (RGB)
     int         ceiling_color; // Ceiling color (RGB)
-    t_player    player;      // Player settings (position, direction, etc.)
+    t_player    *player;      // Player settings (position, direction, etc.)
 
 } t_config;
 
@@ -109,7 +109,7 @@ void init_game(t_game *game, t_config *config);
 void init_config(t_config *config);
 //t_vector	*init_vector(double x, double y); ---- not sure if we need it, leave it for now
 t_map *init_map(int width, int height);
-t_player *player init_player(double x, double i, char NSEW);
+t_player init_player(double x, double i, char NSEW);
 
 // Function Prototypes
 void parse_map(const char *file, t_game *game);
@@ -121,7 +121,8 @@ int handle_input_wrapper(int key, void *param);
 
 // Validating map
 
-void validate_map(t_config *config);
+//void validate_map(t_config *config);
+void validate_map(t_map *map);
 void exit_with_error(const char *message, int use_perror);
 void finalize_map(t_config *config);
 t_config *parse_cub_file(const char *file_path, t_config *config);

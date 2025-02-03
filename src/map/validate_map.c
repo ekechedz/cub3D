@@ -1,109 +1,56 @@
 #include "../../include/cub3d.h"
 
-static int is_valid_map_char(char c)
+int	is_open_to_space(t_map *map, int x, int y)
 {
-	// Valid characters inside the map: '0', '1', 'N', 'S', 'E', 'W'
-	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ');
+	int	directions[4][2];
+	int	nx;
+	int	ny;
+	int	d;
+
+	directions[0][0] = 1;
+	directions[0][1] = 0;
+	directions[1][0] = -1;
+	directions[1][1] = 0;
+	directions[2][0] = 0;
+	directions[2][1] = 1;
+	directions[3][0] = 0;
+	directions[3][1] = -1;
+	d = 0;
+	while (d < 4)
+	{
+		nx = x + directions[d][0];
+		ny = y + directions[d][1];
+		if (nx >= 0 && nx < map->height && ny >= 0 && ny < map->width && map->grid[nx][ny] == ' ')
+			return (1);
+		d++;
+	}
+	return (0);
 }
 
-static void validate_map_characters(t_config *config)
-{
-	int i = 0;
-	int j = 0;
 
-	while (i < config->map->height)
+void print_map(char **grid, int height)
+{
+	for (int i = 0; i < height; i++)
+		printf("[%d]: %s\n", i, grid[i]);
+}
+
+void validate_map(t_map *map)
+{
+	print_map(map->grid, map->height);
+	int i;
+	int j;
+
+	i = 0 ;
+
+	while (i < map->height)
 	{
 		j = 0;
-		while (j < config->map->width)
+		while (j < map->width)
 		{
-			char c = config->map->grid[i][j];
-           // printf("Validating char '%c' at position (%d, %d)\n", c, i, j);
-			//if(ft_strchr("01NSEW ", c))
-			if (!is_valid_map_char(c))
-			{
-				printf("Invalid char '%c' at position (%d, %d)\n", c, i, j);
-				exit_with_error("Error: Invalid character in the map", 1);
-			}
+			if (map->grid[i][j] == '0' && is_open_to_space(map, i, j))
+				exit_with_error("Walkable area next to open space!", 0);
 			j++;
 		}
 		i++;
 	}
-}
-
-static int is_map_surrounded_by_walls(t_config *config)
-{
-	int i, j;
-	j = 0;
-	while (j < config->map->width)
-	{
-		if (config->map->grid[0][j] != '1' && config->map->grid[0][j] != ' ')
-		{
-			printf("Error: Top row not surrounded by walls at (%d, %d)\n", 0, j);
-			return 0;
-		}
-		if (config->map->grid[config->map->height - 1][j] != '1' && config->map->grid[config->map->height - 1][j] != ' ')
-		{
-			printf("Error: Bottom row not surrounded by walls at (%d, %d)\n", config->map->height - 1, j);
-			return 0;
-		}
-		j++;
-	}
-	i = 0;
-	while(i < config->map->height)
-	{
-		j = 0;
-		while (config->map->grid[i][j] == ' ')
-			j++;
-		if (config->map->grid[i][j] != '1')
-		{
-			printf("Error: Left side not enclosed at (%d, %d)\n", i, j);
-			return 0;
-		}
-		j = config->map->width - 1;
-		while (j > 0 && config->map->grid[i][j] == ' ')
-			j--;
-		if (config->map->grid[i][j] != '1')
-		{
-			printf("Error: Right side not enclosed at (%d, %d)\n", i, j);
-			return 0;
-		}
-		i++;
-	}
-	return 1;
-}
-
-
-static int check_player_start(t_config *config)
-{
-	int player_count = 0;
-	int i = 0;
-	int j = 0;
-
-	while (i < config->map->height)
-	{
-		j = 0;
-		while (j < config->map->width)
-		{
-			if (config->map->grid[i][j] == 'N' || config->map->grid[i][j] == 'S' ||
-				config->map->grid[i][j] == 'E' || config->map->grid[i][j] == 'W')
-			{
-				player_count++;
-				if (player_count > 1)
-					return 0;
-			}
-			j++;
-		}
-		i++;
-	}
-
-	return (player_count == 1); // Return true if exactly one player start is found
-}
-
-void validate_map(t_config *config)
-{
-	validate_map_characters(config);
-	if (!is_map_surrounded_by_walls(config))
-		exit_with_error("Error: Map is not surrounded by walls", 1);
-	if (!check_player_start(config))
-		exit_with_error("Error: Invalid or multiple player start positions", 1);
 }

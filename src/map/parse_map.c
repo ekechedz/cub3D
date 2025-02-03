@@ -32,16 +32,19 @@ static void parse_color(const char *str, int *color)
 static char *trim_trailing_spaces(const char *line)
 {
 	int len = ft_strlen(line);
+	int start = 0;
+
+	if (line[0] == '\n')
+		exit_with_error("Error: Line contains only whitespace or newline.", 1);
 
 	while (len > 0 && (line[len - 1] == ' ' || line[len - 1] == '\n'))
 		len--;
 
-	if (len == 0)
+	if (start == len)
 		return ft_strdup("");
 
 	return ft_substr(line, 0, len);
 }
-
 void parse_map_line(t_config *config, const char *line)
 {
 	if (!config->map)
@@ -54,18 +57,24 @@ void parse_map_line(t_config *config, const char *line)
 		config->map->grid = NULL;
 	}
 	char *clean_line = trim_trailing_spaces(line);
+	int i = 0;
+	while( clean_line[i] != '\0')
+	{
+		if (clean_line[i] != '0' && clean_line[i] != '1' && clean_line[i] != 'N' && clean_line[i] != 'S' && clean_line[i] != 'E' && clean_line[i] != 'W' && clean_line[i] != ' ')
+			exit_with_error("Error: Invalid character in the map", 1);
+		if(clean_line[i] == '\n')
+			exit_with_error("New line in the map", 0);
+		i++;
+	}
 	char **new_grid = realloc(config->map->grid, sizeof(char *) * (config->map->height + 1));
 	if (!new_grid)
 		exit_with_error("Failed to reallocate memory for map grid", 1);
 	config->map->grid = new_grid;
-
 	int line_length = ft_strlen(clean_line);
 	if (line_length > config->map->width)
 		config->map->width = line_length;
 	config->map->grid[config->map->height] = clean_line;
 	config->map->height++;
-
-	printf("Parsed map line [%d]: %s\n", config->map->height, config->map->grid[config->map->height - 1]);
 }
 
 static int key_already_used(const char *key, char *used_keys[MAX_KEYS])
@@ -101,10 +110,18 @@ static void add_used_key(const char *key, char *used_keys[MAX_KEYS])
 static void parse_line(t_config *config, const char *line)
 {
 	static char *used_keys[MAX_KEYS] = {0};
+	static int map_started = 0;
 
-	if (*line == '\0' || *line == '\n')
-		return;
-
+	if(map_started == 0)
+	{
+		if (*line == '\0' || *line == '\n' )
+			return ;
+	}
+	else
+	{
+		if (*line == '\0')
+			return ;
+	}
 	if (ft_strncmp(line, "NO ", 3) == 0)
 	{
 		if (key_already_used("NO", used_keys))
@@ -149,29 +166,12 @@ static void parse_line(t_config *config, const char *line)
 	}
 	else
 	{
+		map_started = 1;
 		parse_map_line(config, line);
 	}
 }
 
-static void normalize_map_width(t_config *config)
-{
-	for (int i = 0; i < config->map->height; i++)
-	{
-		int line_length = ft_strlen(config->map->grid[i]);
-		if (line_length < config->map->width)
-		{
-			char *padded_line = malloc(config->map->width + 1);
-			if (!padded_line)
-				exit_with_error("Memory allocation failed for padding", 1);
-			ft_strcpy(padded_line, config->map->grid[i]);
-			ft_memset(padded_line + line_length, ' ', config->map->width - line_length);
-			padded_line[config->map->width] = '\0';
 
-			free(config->map->grid[i]);
-			config->map->grid[i] = padded_line;
-		}
-	}
-}
 
 t_config *parse_cub_file(const char *file_path, t_config *config)
 {
@@ -187,10 +187,7 @@ t_config *parse_cub_file(const char *file_path, t_config *config)
 		free(line);
 	}
 	close(fd);
-	if (config->map)
-		normalize_map_width(config);
-
-	validate_map(config);
+	validate_map(config->map);
 	if (!config->map || config->map->width <= 0 || config->map->height <= 0)
 	{
 		fprintf(stderr, "Error: Invalid map in .cub file\n");
