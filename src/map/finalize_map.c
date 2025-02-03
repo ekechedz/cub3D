@@ -38,31 +38,31 @@
 // 			{
 // 				player_count++;
 
-				// Set player's initial position
-				config->player->pos->x = x + 0.5;
-				config->player->pos->y = y + 0.5;
+				// // Set player's initial position
+				// config->player->pos->x = x + 0.5;
+				// config->player->pos->y = y + 0.5;
 
-				// Set player's initial direction based on map character
-				if (config->map->grid[y][x] == 'N')
-				{
-					config->player->dir->x = 0;
-					config->player->dir->y = -1;
-				}
-				else if (config->map->grid[y][x] == 'S')
-				{
-					config->player->dir->x = 0;
-					config->player->dir->y = 1;
-				}
-				else if (config->map->grid[y][x] == 'E')
-				{
-					config->player->dir->x = 1;
-					config->player->dir->y = 0;
-				}
-				else if (config->map->grid[y][x] == 'W')
-				{
-					config->player->dir->x = -1;
-					config->player->dir->y = 0;
-				}
+				// // Set player's initial direction based on map character
+				// if (config->map->grid[y][x] == 'N')
+				// {
+				// 	config->player->dir->x = 0;
+				// 	config->player->dir->y = -1;
+				// }
+				// else if (config->map->grid[y][x] == 'S')
+				// {
+				// 	config->player->dir->x = 0;
+				// 	config->player->dir->y = 1;
+				// }
+				// else if (config->map->grid[y][x] == 'E')
+				// {
+				// 	config->player->dir->x = 1;
+				// 	config->player->dir->y = 0;
+				// }
+				// else if (config->map->grid[y][x] == 'W')
+				// {
+				// 	config->player->dir->x = -1;
+				// 	config->player->dir->y = 0;
+				// }
 
 
 // 				// Replace player's starting position in the map with '0'
