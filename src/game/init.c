@@ -20,8 +20,9 @@ t_player *player init_player(double x, double i, char NSEW)
         player->dir->x = 1;
     player->plane->x = 0;
 	player->plane->y = 0.66;
+
 	player->move_speed = 0.1;
-	player->rot_speed = 0.1;
+	player->rot_speed = 0.05;
 	player->health = 100;
     return (player);
 }
@@ -111,7 +112,7 @@ void init_config(t_config *config)
 {
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	init_player(&config->player);
+	init_player(config->player);
 	init_textures(config->textures);
 
 	config->floor_color = 0x000000;	  // Default black
@@ -127,7 +128,7 @@ void init_game(t_game *game, t_config *config)
 	}
 	game->win = NULL;		// Initialize window to NULL (we'll create it later)
 	game->config = config;
-	game->player = &config->player;
+	game->player = config->player;
 	game->map = config->map;
 	game->textures = config->textures; // Set textures from config
 

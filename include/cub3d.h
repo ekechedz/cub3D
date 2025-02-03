@@ -29,6 +29,7 @@
 #define PLAYER_S 'S'
 #define PLAYER_E 'E'
 #define PLAYER_W 'W'
+#define MAX_KEYS 6
 
 #define ERROR "Memory problem"
 #define M_ERROR "Map problem"
@@ -54,6 +55,8 @@ typedef struct s_image
 	void *img_ptr;
 	char *buff;
 	int lstsize;
+	int				bpp;
+	int				endian;
 	int width;
 	int height;
 } t_image;
@@ -85,6 +88,7 @@ typedef struct s_config {
     int         floor_color; // Floor color (RGB)
     int         ceiling_color; // Ceiling color (RGB)
     t_player    player;      // Player settings (position, direction, etc.)
+
 } t_config;
 
 
@@ -116,7 +120,8 @@ int render_frame_wrapper(void *param);
 int handle_input_wrapper(int key, void *param);
 
 // Validating map
-void validate_map(char **map);
+
+void validate_map(t_config *config);
 void exit_with_error(const char *message, int use_perror);
 void finalize_map(t_config *config);
 t_config *parse_cub_file(const char *file_path, t_config *config);
@@ -131,5 +136,7 @@ void free_config(t_config *config);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);
+void trim_whitespace(char *str);
+char *trim_line(const char *line);
 
 #endif
