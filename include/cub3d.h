@@ -102,6 +102,13 @@ typedef struct s_game {
 	t_textures  *textures;    // Game textures (walls, etc.)
 } t_game;
 
+typedef struct s_ray
+{
+	double dist;    // Distance to the wall
+	t_vector *hit;   // Exact hit position on the wall
+	int side;       // Which side of the wall was hit (e.g., 0 = vertical, 1 = horizontal)
+	int tex_x;      // X-coordinate on the texture
+} t_ray;
 
 //Init functions
 
@@ -113,7 +120,7 @@ int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
 t_map		*init_map(int width, int height);
 t_player	*init_player(double x, double i, char NSEW);
 t_game *init_game(t_config *config);
-
+t_ray	*init_ray(void);
 
 
 // Function Prototypes
@@ -123,7 +130,7 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-void	raycasting(t_player *player, char **map);
+t_ray	*raycasting(t_player *player, t_game *game);
 
 // Validating map
 
