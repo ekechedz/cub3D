@@ -140,6 +140,7 @@ t_config *init_config(void)
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
 	config->player = NULL; //initialize later, like described in issue #4
+
 	init_textures(config->textures);
 
 	config->floor_color = 0x000000;	  // Default black

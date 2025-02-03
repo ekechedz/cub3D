@@ -1,82 +1,62 @@
 #include "../../include/cub3d.h"
+#include <ctype.h>
+
+void trim_whitespace(char *str)
+{
+	if (str == NULL)
+    {
+        return; // Handle NULL input gracefully.
+    }
+	int start = 0;
+	int end = ft_strlen(str) - 1;
+
+	// Trim leading spaces
+	while (isspace((unsigned char)str[start]))
+		start++;
+
+	// Trim trailing spaces
+	while (end > start && isspace((unsigned char)str[end]))
+		end--;
+
+	// Shift characters forward and null-terminate
+	int i;
+	for (i = 0; start <= end; start++, i++)
+		str[i] = str[start];
+	str[i] = '\0';
+}
+
+int load_image(void *mlx_ptr, t_image *img, char *fname)
+{
+	trim_whitespace(fname);
+	img->img_ptr = mlx_xpm_file_to_image(mlx_ptr, fname, &img->width,
+										 &img->height);
+	printf("Config: Trying to load texture from: %p (File: %s)\n", img->img_ptr, fname);
+	if (img->img_ptr == NULL)
+		return (-1);
+	img->buff = mlx_get_data_addr(img->img_ptr, &img->bpp, &img->lstsize,
+								  &img->endian);
+	return (0);
+}
 
 int load_textures(t_game *game, t_config *config)
 {
-	printf("Trying to load texture from: %s\n", game->config->textures->north->buff);
-	char cwd[1024];
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	{
-		printf("Current working directory: %s\n", cwd);
-	}
-	else
-	{
-		perror("getcwd error");
-	}
 
-	char abs_path[1024];
-	realpath(game->config->textures->north->buff, abs_path);
-	printf("Absolute path to texture: %s\n", abs_path);
-	void *img = mlx_xpm_file_to_image(game->mlx, game->config->textures->north->buff, &game->textures->north->width, &game->textures->north->height);
-	if (img == NULL)
-	{
-    	perror("mlx_xpm_file_to_image failed");
-		printf("Check if the file exists: %s\n", game->config->textures->north->buff);
-    	exit_with_error("Failed to load north texture\n", 1);
-	}
-	
+	trim_whitespace(config->textures->north->img_ptr);
+	trim_whitespace(config->textures->south->img_ptr);
+	trim_whitespace(config->textures->east->img_ptr);
+	trim_whitespace(config->textures->west->img_ptr);
 
-	if (access(game->config->textures->north->buff, F_OK) != 0) {
-		perror("Error checking texture file");
-		exit_with_error("Texture file does not exist\n", 1);
-	}
 
-	//Load wall textures (north, south, east, west)
-	if ((game->textures->north->img_ptr = mlx_xpm_file_to_image(game->mlx, game->config->textures->north->buff,
-															  &game->textures->north->width, &game->textures->north->height)) == NULL ||
-		(game->textures->south->img_ptr = mlx_xpm_file_to_image(game->mlx, game->config->textures->south->buff,
-															  &game->textures->south->width, &game->textures->south->height)) == NULL ||
-		(game->textures->east->img_ptr = mlx_xpm_file_to_image(game->mlx, game->config->textures->east->buff,
-															 &game->textures->east->width, &game->textures->east->height)) == NULL ||
-		(game->textures->west->img_ptr = mlx_xpm_file_to_image(game->mlx, game->config->textures->west->buff,
-															 &game->textures->west->width, &game->textures->west->height)) == NULL)
+	if (load_image(game->mlx, game->textures->north, config->textures->north->img_ptr) == -1 ||
+			 load_image(game->mlx, game->textures->east, config->textures->east->img_ptr) == -1 ||
+			 load_image(game->mlx, game->textures->west, config->textures->west->img_ptr) == -1 ||
+			 load_image(game->mlx, game->textures->south, config->textures->south->img_ptr) == -1)
 		exit_with_error("Failed to load wall textures\n", 1);
-	// config->textures->north->buff = "/home/ekechedz/cub3D/textures/wall.xpm";
-	// config->textures->south->buff = "/home/ekechedz/cub3D/textures/wall.xpm";
-	// config->textures->east->buff = "/home/ekechedz/cub3D/textures/wall.xpm";
-	// config->textures->west->buff = "/home/ekechedz/cub3D/textures/wall.xpm";
-	//printf("Trying to load texture from: %s\n", config->textures->north->buff);
-	// if ((game->textures->north->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->north->buff,
-	// 														  &game->textures->north->width, &game->textures->north->height)) == NULL)
-	// {
-	// 	printf("Failed to load north texture: %s\n", config->textures->north->buff);
-	// 	exit_with_error("Failed to load north texture\n", 1);
-	// }
-
-	// if ((game->textures->south->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->south->buff,
-	// 															&game->textures->south->width, &game->textures->south->height)) == NULL)
-	// {
-	// 	printf("Failed to load south texture: %s\n", config->textures->south->buff);
-	// 	exit_with_error("Failed to load south texture\n", 1);
-	// }
-
-	// if ((game->textures->east->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->east->buff,
-	// 															&game->textures->east->width, &game->textures->east->height)) == NULL)
-	// {
-	// 	printf("Failed to load east texture: %s\n", config->textures->east->buff);
-	// 	exit_with_error("Failed to load east texture\n", 1);
-	// }
-
-	// if ((game->textures->west->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->west->buff,
-	// 															&game->textures->west->width, &game->textures->west->height)) == NULL)
-	// {
-	// 	printf("Failed to load west texture: %s\n", config->textures->west->buff);
-	// 	exit_with_error("Failed to load west texture\n", 1);
-	// }
 
 	if (config->textures->floor->buff)
 	{
 		if ((game->textures->floor->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->floor->buff,
-																  &game->textures->floor->width, &game->textures->floor->height)) == NULL)
+																	&game->textures->floor->width, &game->textures->floor->height)) == NULL)
 			exit_with_error("Failed to load floor textures\n", 1);
 	}
 	else
@@ -85,7 +65,7 @@ int load_textures(t_game *game, t_config *config)
 	if (config->textures->ceiling->buff)
 	{
 		if ((game->textures->ceiling->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->ceiling->buff,
-																	&game->textures->ceiling->width, &game->textures->ceiling->height)) == NULL)
+																	  &game->textures->ceiling->width, &game->textures->ceiling->height)) == NULL)
 			exit_with_error("Failed to load ceiling textures\n", 1);
 	}
 	else

@@ -29,6 +29,7 @@
 #define PLAYER_S 'S'
 #define PLAYER_E 'E'
 #define PLAYER_W 'W'
+#define MAX_KEYS 6
 
 #define ERROR "Memory problem"
 #define M_ERROR "Map problem"
@@ -54,6 +55,8 @@ typedef struct s_image
 	void *img_ptr;
 	char *buff;
 	int lstsize;
+	int				bpp;
+	int				endian;
 	int width;
 	int height;
 } t_image;
@@ -80,11 +83,11 @@ typedef struct s_map
 } t_map;
 
 typedef struct s_config {
-	t_map       *map;        // Map structure
-	t_textures  *textures;    // Textures for walls, floor, ceiling
-	int         floor_color; // Floor color (RGB)
-	int         ceiling_color; // Ceiling color (RGB)
-	t_player    *player;      // Player settings (position, direction, etc.)
+    t_map       *map;        // Map structure
+    t_textures  *textures;    // Textures for walls, floor, ceiling
+    int         floor_color; // Floor color (RGB)
+    int         ceiling_color; // Ceiling color (RGB)
+    t_player    *player;      // Player settings (position, direction, etc.)
 } t_config;
 
 
@@ -101,13 +104,17 @@ typedef struct s_game {
 
 
 //Init functions
-t_game		*init_game(t_config *config);
+
+
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);
 int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
 t_map		*init_map(int width, int height);
 t_player	*init_player(double x, double i, char NSEW);
+void init_game(t_game *game, t_config *config);
+
+
 
 // Function Prototypes
 void	parse_map(const char *file, t_game *game);
@@ -119,7 +126,9 @@ int		handle_input_wrapper(int key, void *param);
 void	raycasting(t_player *player);
 
 // Validating map
-void validate_map(char **map);
+
+//void validate_map(t_config *config);
+void validate_map(t_map *map);
 void exit_with_error(const char *message, int use_perror);
 void finalize_map(t_config *config);
 t_config *parse_cub_file(const char *file_path, t_config *config);
@@ -135,5 +144,7 @@ int		free_player(t_player *player);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);
+void trim_whitespace(char *str);
+char *trim_line(const char *line);
 
 #endif
