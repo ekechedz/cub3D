@@ -85,8 +85,8 @@ typedef struct s_map
 typedef struct s_config {
     t_map       *map;        // Map structure
     t_textures  *textures;    // Textures for walls, floor, ceiling
-    int         floor_color; // Floor color (RGB)
-    int         ceiling_color; // Ceiling color (RGB)
+    int         *floor_color; // Floor color (RGB)
+    int         *ceiling_color; // Ceiling color (RGB)
     t_player    *player;      // Player settings (position, direction, etc.)
 } t_config;
 
@@ -97,8 +97,8 @@ typedef struct s_game {
 	t_config    *config;     // Pointer to the game's configuration
 	t_player    *player;     // Pointer to the player data
 	t_map       *map;        // Pointer to the map structure
-	int         floor_color; // Floor color (RGB)
-	int         ceiling_color; // Ceiling color (RGB)
+	int         *floor_color; // Floor color (RGB)
+	int         *ceiling_color; // Ceiling color (RGB)
 	t_textures  *textures;    // Game textures (walls, etc.)
 	int *screen_data;  // Make sure it's modifiable
 
@@ -132,12 +132,12 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-t_ray	*raycasting(t_player *player, t_game *game);
+t_ray	*raycasting(t_game *game);
 
 // Validating map
 
 //void validate_map(t_config *config);
-void validate_map(t_map *map);
+void validate_map(t_map *map, t_config *config);
 void exit_with_error(const char *message, int use_perror);
 void finalize_map(t_config *config);
 t_config *parse_cub_file(const char *file_path, t_config *config);

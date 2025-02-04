@@ -34,7 +34,7 @@ void print_map(char **grid, int height)
 		printf("[%d]: %s\n", i, grid[i]);
 }
 
-void validate_map(t_map *map)
+void validate_map(t_map *map, t_config *config)
 {
 	print_map(map->grid, map->height);
 	int i;
@@ -49,6 +49,11 @@ void validate_map(t_map *map)
 		{
 			if (map->grid[i][j] == '0' && is_open_to_space(map, i, j))
 				exit_with_error("Walkable area next to open space!", 0);
+			if (ft_strchr("NSEW", map->grid[i][j]))
+			{
+				config->player->pos->x = (double)i;
+				config->player->pos->y = (double)j;
+			}
 			j++;
 		}
 		i++;

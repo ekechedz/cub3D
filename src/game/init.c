@@ -1,10 +1,8 @@
 #include "../../include/cub3d.h"
 
-t_vector	*init_vector(double x, double y)
+t_vector *init_vector(double x, double y)
 {
-	t_vector	*vector;
-
-	vector = (t_vector *)malloc(sizeof(t_vector));
+	t_vector *vector = (t_vector *)malloc(sizeof(t_vector));
 	if (!vector)
 		return (NULL);
 	vector->x = x;
@@ -12,24 +10,30 @@ t_vector	*init_vector(double x, double y)
 	return (vector);
 }
 
-t_player	*init_player(double x, double y, char NSEW)
+t_player *init_player(double x, double y, char NSEW)
 {
-	t_player	*player;
-
-	player = malloc(sizeof(t_player));
+	t_player *player = (t_player *)malloc(sizeof(t_player));
 	if (!player)
 		return (NULL);
-	if (!init_pos_dir_plane(player, NSEW, x , y))
+
+	if (!init_pos_dir_plane(player, NSEW, x, y))
+	{
+		free(player); // Free `player` before returning NULL
 		return (NULL);
+	}
+
 	player->move_speed = 0.1;
 	player->rot_speed = 0.1;
 	player->health = 100;
 	return (player);
 }
 
-int	init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
+int init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
 {
 	player->pos = init_vector(x + 0.5, y + 0.5);
+	if (!player->pos)
+		return (0); // Return failure if `player->pos` allocation fails
+
 	if (NSEW == 'E')
 	{
 		player->dir = init_vector(1.0, 0.0);
@@ -50,8 +54,23 @@ int	init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
 		player->dir = init_vector(0.0, 1.0);
 		player->plane = init_vector(-0.66, 0.0);
 	}
-	if (!player->dir || !player->plane || !player->pos)
-		return (free_player(player));
+	else
+	{
+		free(player->pos); // Free `player->pos` if an invalid NSEW direction is given
+		return (0);
+	}
+
+	// Check if `dir` or `plane` allocation failed
+	if (!player->dir || !player->plane)
+	{
+		free(player->pos);
+		if (player->dir)
+			free(player->dir);
+		if (player->plane)
+			free(player->plane);
+		return (0);
+	}
+
 	return (1);
 }
 
@@ -139,12 +158,15 @@ t_config *init_config(void)
 		return (NULL);
 	config->map = (t_map *)malloc(sizeof(t_map));
 	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	config->player = NULL; //initialize later, like described in issue #4
+	config->player = init_player(0, 0, 'N');
 
 	init_textures(config->textures);
-
-	config->floor_color = 0x000000;	  // Default black
-	config->ceiling_color = 0xFFFFFF; // Default white
+	config->ceiling_color = malloc(3 * sizeof(int));
+	if (!config->ceiling_color)
+		exit_with_error("Memory allocation failed", 0);
+	config->floor_color = malloc(3 * sizeof(int));
+	if (!config->floor_color)
+		exit_with_error("Memory allocation failed", 0);
 	return (config);
 }
 
@@ -161,7 +183,7 @@ t_game *init_game(t_config *config)
 	}
 	game->win = NULL;
 	game->config = config;
-	game->player = NULL; //its not initialized anyway
+	game->player = config->player;
 	game->map = config->map;
 	game->textures = config->textures;
 	game->floor_color = config->floor_color;

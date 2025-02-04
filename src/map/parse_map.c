@@ -1,31 +1,74 @@
 #include "../../include/cub3d.h"
 
+// static int parse_int(const char **str)
+// {
+// 	int value = 0;
+
+// 	while (**str && ft_isdigit(**str))
+// 	{
+// 		value = value * 10 + (**str - '0');
+// 		(*str)++;
+// 	}
+// 	if (value < 0 || value > 255)
+// 		exit_with_error("Invalid color value", 1);
+// 	return value;
+// }
+
 static int parse_int(const char **str)
 {
-	int value = 0;
+	int num = 0;
 
+	// Skip leading spaces
+	while (**str == ' ')
+		(*str)++;
+
+	// Check if character is a digit
+	if (!ft_isdigit(**str))
+		exit_with_error("Invalid number in color format", 0);
+
+	// Parse integer
 	while (**str && ft_isdigit(**str))
 	{
-		value = value * 10 + (**str - '0');
+		num = num * 10 + (**str - '0');
 		(*str)++;
 	}
-	if (value < 0 || value > 255)
-		exit_with_error("Invalid color value", 1);
-	return value;
+
+	// Return parsed integer
+	return num;
 }
 
 static void parse_color(const char *str, int *color)
 {
 	int i = 0;
 
+	if (!color) // Ensure the pointer is valid
+		exit_with_error("Null color pointer", 0);
+
 	while (*str && i < 3)
 	{
+		while (*str == ' ') // Skip spaces
+			str++;
+
+		if (!ft_isdigit(*str)) // Ensure valid input
+			exit_with_error("Invalid color format", 0);
+
+		color[i] = parse_int(&str);
+
+		// Ensure the value is in the valid RGB range
+		if (color[i] < 0 || color[i] > 255)
+			exit_with_error("RGB values must be between 0 and 255", 0);
+
+		i++;
+
+		// Skip optional spaces and check for comma
 		while (*str == ' ')
 			str++;
-		color[i++] = parse_int(&str);
+
 		if (*str == ',')
-			str++;
+			str++; // Move past comma
 	}
+
+	// Ensure exactly 3 values were read
 	if (i != 3)
 		exit_with_error("Error in color format", 0);
 }
@@ -154,14 +197,14 @@ static void parse_line(t_config *config, const char *line)
 	{
 		if (key_already_used("F", used_keys))
 			exit_with_error("Error: Duplicate 'F' floor color", 1);
-		parse_color(line + 2, &config->floor_color);
+		parse_color(line + 2, config->floor_color);
 		add_used_key("F", used_keys);
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0)
 	{
 		if (key_already_used("C", used_keys))
 			exit_with_error("Error: Duplicate 'C' ceiling color", 1);
-		parse_color(line + 2, &config->ceiling_color);
+		parse_color(line + 2, config->ceiling_color);
 		add_used_key("C", used_keys);
 	}
 	else
@@ -187,7 +230,7 @@ t_config *parse_cub_file(const char *file_path, t_config *config)
 		free(line);
 	}
 	close(fd);
-	validate_map(config->map);
+	validate_map(config->map, config);
 	if (!config->map || config->map->width <= 0 || config->map->height <= 0)
 	{
 		fprintf(stderr, "Error: Invalid map in .cub file\n");

@@ -53,8 +53,8 @@ void print_config(t_config *config)
 
 
 	// Print the floor and ceiling color values
-	printf("Floor Color: %d\n", config->floor_color);
-	printf("Ceiling Color: %d\n", config->ceiling_color);
+	printf("Floor Color: %ls\n", config->floor_color);
+	printf("Ceiling Color: %ls\n", config->ceiling_color);
 }
 
 void print_game(t_game *game)
@@ -66,8 +66,8 @@ void print_game(t_game *game)
 	printf("Map Width: %d\n", game->config->map->width);
 
 	// Print the floor and ceiling color values
-	printf("Floor Color: %d\n", game->config->floor_color);
-	printf("Ceiling Color: %d\n", game->config->ceiling_color);
+	printf("Floor Color: %ls\n", game->config->floor_color);
+	printf("Ceiling Color: %ls\n", game->config->ceiling_color);
 }
 
 int main(int argc, char **argv)

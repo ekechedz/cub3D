@@ -52,7 +52,7 @@ void render_walls(t_game *game, t_ray *rays, t_player *player)
 	{
 		// Calculate the height of the wall line based on the ray distance
 		lineHeight = (int)(WIN_HEIGHT / rays[x].dist);
-
+		//printf("Ray %d distance: %f\n", x, rays[x].dist);  //
 		// Calculate where to start and end drawing the wall
 		drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
 		drawEnd = lineHeight / 2 + WIN_HEIGHT / 2;
@@ -80,35 +80,36 @@ void render_walls(t_game *game, t_ray *rays, t_player *player)
 	}
 }
 
-void render_floor_and_ceiling(t_game *game, t_ray *rays, t_player *player)
+void put_pixel(t_game *game, int x, int y, int color)
+{
+    mlx_pixel_put(game->mlx, game->win, x, y, color);
+}
+
+
+void render_floor_and_ceiling(t_game *game, t_player *player)
 {
 	int x, y;
-	t_vector tex;
-	t_image *floor_texture, *ceiling_texture;
+	int floor_color, ceiling_color;
 	(void)player;
 
-	floor_texture = game->textures->floor;	   // Assuming the floor texture is set
-	ceiling_texture = game->textures->ceiling; // Same for ceiling
+	// Dereference the color pointers to get the actual color values
+	floor_color = *game->floor_color;
+	ceiling_color = *game->ceiling_color;
 
+	// Loop through the screen pixels
 	for (x = 0; x < WIN_WIDTH; x++)
 	{
 		for (y = 0; y < WIN_HEIGHT; y++)
 		{
 			if (y < WIN_HEIGHT / 2) // If it's above the wall, render the ceiling
 			{
-				// Calculate texture coordinates for the ceiling
-				tex.x = (int)(rays->hit->x * ceiling_texture->width) % ceiling_texture->width;
-				tex.y = (int)(rays->hit->y * ceiling_texture->height) % ceiling_texture->height;
-
-				put_pixel_from_texture(game, ceiling_texture, tex, (t_vector){x, y});
+				// Render the ceiling as a solid color
+				put_pixel(game, x, y, ceiling_color); // put_pixel is a function to draw pixels
 			}
 			else // If it's below the wall, render the floor
 			{
-				// Calculate texture coordinates for the floor
-				tex.x = (int)(rays->hit->x * floor_texture->width) % floor_texture->width;
-				tex.y = (int)(rays->hit->y * floor_texture->height) % floor_texture->height;
-
-				put_pixel_from_texture(game, floor_texture, tex, (t_vector){x, y});
+				// Render the floor as a solid color
+				put_pixel(game, x, y, floor_color); // put_pixel is a function to draw pixels
 			}
 		}
 	}
@@ -119,12 +120,12 @@ int render_scene(t_game *game, t_player *player)
 	t_ray *rays;
 	(void)player;
 	// Cast rays
-	rays = raycasting(player, game);
+	rays = raycasting(game);
     mlx_clear_window(game->mlx, game->win);  // Clear the window
 
     // Now render the actual game scene
     render_walls(game, rays, player);
-    render_floor_and_ceiling(game, rays, player);
+   	render_floor_and_ceiling(game, player);
 
 	// Refresh the screen with new frame
 	// Use the appropriate library or framework function to refresh the screen
