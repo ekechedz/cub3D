@@ -214,8 +214,6 @@ static void parse_line(t_config *config, const char *line)
 	}
 }
 
-
-
 t_config *parse_cub_file(const char *file_path, t_config *config)
 {
 	char *line = NULL;

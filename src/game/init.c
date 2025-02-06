@@ -181,6 +181,14 @@ t_game *init_game(t_config *config)
 	if (game->mlx == NULL) {
 		exit_with_error("MLX initialization failed\n", 1);
 	}
+	game->screen_data = malloc(sizeof(int) * WIN_WIDTH * WIN_HEIGHT);
+	if (!game->screen_data)
+	{
+		fprintf(stderr, "Error: Failed to allocate screen buffer\n");
+		exit(1);
+	}
+	game->img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
+    game->screen_data = (int *)mlx_get_data_addr(game->img, &game->bpp, &game->line_length, &game->endian);
 	game->win = NULL;
 	game->config = config;
 	game->player = config->player;
@@ -191,16 +199,17 @@ t_game *init_game(t_config *config)
 	return (game);
 }
 
-t_ray	*init_ray(void)
-{
-	t_ray	*ray;
+// t_ray	*init_ray(void)
+// {
+// 	t_ray	*ray;
 
-	ray = malloc(sizeof(t_ray));
-	if (!ray)
-		return (NULL);
-	ray->dist = 0.0;
-	ray->hit = NULL;
-	ray->side = 0;
-	ray->tex_x = 0;
-	return (ray);
-}
+// 	ray = malloc(sizeof(t_ray));
+// 	if (!ray)
+// 		return (NULL);
+// 	ray->dist = 0.0;
+// 	ray->hit = NULL;
+// 	ray->side = 0;
+// 	ray->tex_x = 0;
+// 	ray->lineHeight = 0.0;
+// 	return (ray);
+// }

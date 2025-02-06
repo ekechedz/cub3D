@@ -55,6 +55,7 @@ void print_config(t_config *config)
 	// Print the floor and ceiling color values
 	printf("Floor Color: %ls\n", config->floor_color);
 	printf("Ceiling Color: %ls\n", config->ceiling_color);
+
 }
 
 void print_game(t_game *game)
@@ -68,7 +69,10 @@ void print_game(t_game *game)
 	// Print the floor and ceiling color values
 	printf("Floor Color: %ls\n", game->config->floor_color);
 	printf("Ceiling Color: %ls\n", game->config->ceiling_color);
+	printf("Floor color: 0x%06X\n", *game->floor_color); // Dereferencing to get the color value
+    printf("Ceiling color: 0x%06X\n", *game->ceiling_color);
 }
+
 
 int main(int argc, char **argv)
 {
@@ -137,8 +141,11 @@ int main(int argc, char **argv)
 	}
 
 	mlx_clear_window(game->mlx, game->win);
-	mlx_string_put(game->mlx, game->win, 200, 200, 0xFFFFFF, "Hello, MiniLibX!");
-	mlx_loop_hook(game->mlx, render_scene, game);
+	//mlx_string_put(game->mlx, game->win, 200, 200, 0xFFFFFF, "Hello, MiniLibX!");
+
+
+	mlx_loop_hook(game->mlx, main_loop, game);
+
 	mlx_hook(game->win, 17, 0L, close_window, game->mlx);
 
 	// Start the game loop

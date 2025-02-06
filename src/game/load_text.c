@@ -53,30 +53,8 @@ int load_textures(t_game *game, t_config *config)
 			 load_image(game->mlx, game->textures->south, config->textures->south->img_ptr) == -1)
 		exit_with_error("Failed to load wall textures\n", 1);
 
-	if (config->textures->floor->buff)
-	{
-		if ((game->textures->floor->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->floor->buff,
-																	&game->textures->floor->width, &game->textures->floor->height)) == NULL)
-			exit_with_error("Failed to load floor textures\n", 1);
-	}
-	else
-		game->floor_color = config->floor_color; // Assign RGB floor color
-
-	if (config->textures->ceiling->buff)
-	{
-		if ((game->textures->ceiling->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->ceiling->buff,
-																	  &game->textures->ceiling->width, &game->textures->ceiling->height)) == NULL)
-			exit_with_error("Failed to load ceiling textures\n", 1);
-	}
-	else
-		game->ceiling_color = config->ceiling_color;
-
-	// if (config->textures->door->buff)
-	// {
-	// 	if ((game->textures->door->img_ptr = mlx_xpm_file_to_image(game->mlx, config->textures->door->buff,
-	// 															 &game->textures->door.width, &game->textures->door.height)) == NULL)
-	// 	exit_with_error("Failed to load door textures\n", 1);
-	// }
+	game->floor_color = config->floor_color; // Assign RGB floor color
+	game->ceiling_color = config->ceiling_color;
 
 	return (0);
 }
