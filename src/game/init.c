@@ -22,8 +22,8 @@ t_player *init_player(double x, double y, char NSEW)
 		return (NULL);
 	}
 
-	player->move_speed = 0.3;
-	player->rot_speed = 0.3;
+	player->move_speed = 0.1;
+	player->rot_speed = 0.1;
 	player->health = 100;
 	return (player);
 }

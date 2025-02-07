@@ -138,11 +138,11 @@ void render_texture(t_game *game, t_ray *ray, int x)
 		int color;
 		if (ray->side == 0)
 		{
-			color = *(int *)(game->textures->north->buff + (texY * game->textures->north->line_length + texX * (game->textures->north->bpp / 8)));
+			color = get_texture_color(game->textures->north, texX, texY);
 		}
 		else
 		{
-			color = *(int *)(game->textures->east->buff + (texY * game->textures->east->line_length + texX * (game->textures->east->bpp / 8)));
+			color = get_texture_color(game->textures->north, texX, texY);
 		}
 
 		game->screen_data[y * WIN_WIDTH + x] = color; // Draw pixel
