@@ -13,6 +13,7 @@
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
 #include "X11/keysym.h"
+#include <sys/time.h>
 
 // Constants
 #define WIN_WIDTH 800
@@ -164,7 +165,7 @@ typedef struct s_ray
 int main_loop(t_game *game);
 int key_hook(int keycode, t_game *game);
 int key_release_hook(int keycode, t_game *game);
-void rotate_player(t_game *game, int direction, double delta_time);
+void rotate_player(t_player *player, int direction, double delta_time);
 void move_player(t_game *game, int direction, double delta_time);
 void strafe_player(t_game *game, int direction, double delta_time);
 t_config	*init_config(void);
@@ -174,7 +175,7 @@ int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
 t_map		*init_map(int width, int height);
 t_player	*init_player(double x, double i, char NSEW);
 t_game *init_game(t_config *config);
-//t_ray	*init_ray(void);
+t_ray	*init_ray(void);
 void	render(t_game *game);
 void render_minimap(void *mlx, void *win, t_config *config);
 
@@ -186,14 +187,13 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-t_ray raycasting(t_game *game, double ray_angle);
+void draw_floor_ceiling(t_game *game);
 
 // Validating map
 
 //void validate_map(t_config *config);
 void validate_map(t_map *map, t_config *config);
 void exit_with_error(const char *message, int use_perror);
-void finalize_map(t_config *config);
 t_config *parse_cub_file(const char *file_path, t_config *config);
 
 // Utils
@@ -201,7 +201,6 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char *ft_strncpy(char *dest, const char *src, size_t n);
 
 // free
-void	free_game(t_game *game);
 void	free_config(t_config *config);
 int		free_player(t_player *player);
 
@@ -209,11 +208,15 @@ int		free_player(t_player *player);
 int load_textures(t_game *game, t_config *cfg);
 void trim_whitespace(char *str);
 t_image	*choose_texture(t_ray *ray, t_game *game);
-char *trim_line(const char *line);
+int	get_txt_color(t_image *txt, int x, int y);
 
 //render
 
-int render_scene(t_game *game, t_player *player);
 int	render_slice(t_ray *ray, int texX, int x, t_game *game);
+void render_texture(t_game *game, t_ray *ray, int x);
+
+//rays
+
+t_ray	*cast_rays(t_game *game);
 
 #endif

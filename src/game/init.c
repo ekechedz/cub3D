@@ -199,17 +199,17 @@ t_game *init_game(t_config *config)
 	return (game);
 }
 
-// t_ray	*init_ray(void)
-// {
-// 	t_ray	*ray;
+t_ray	*init_ray(void)
+{
+	t_ray	*ray;
 
-// 	ray = malloc(sizeof(t_ray));
-// 	if (!ray)
-// 		return (NULL);
-// 	ray->dist = 0.0;
-// 	ray->hit = NULL;
-// 	ray->side = 0;
-// 	ray->tex_x = 0;
-// 	ray->lineHeight = 0.0;
-// 	return (ray);
-// }
+	ray = malloc(sizeof(t_ray));
+	if (!ray)
+		return (NULL);
+	ray->dist = 0.0;
+	ray->hit = NULL;
+	ray->side = 0;
+	ray->tex_x = 0;
+	ray->lineHeight = 0.0;
+	return (ray);
+}

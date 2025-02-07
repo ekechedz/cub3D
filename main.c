@@ -70,22 +70,15 @@ void print_game(t_game *game)
 	printf("Floor Color: %ls\n", game->config->floor_color);
 	printf("Ceiling Color: %ls\n", game->config->ceiling_color);
 	printf("Floor color: 0x%06X\n", *game->floor_color); // Dereferencing to get the color value
-    printf("Ceiling color: 0x%06X\n", *game->ceiling_color);
+	printf("Ceiling color: 0x%06X\n", *game->ceiling_color);
 }
 
 
 int main(int argc, char **argv)
 {
-	t_game *game;
-	t_config *config;
+	t_game		*game;
+	t_config	*config;
 
-	// if (!game || !config) // Check malloc success
-	// {
-	// 	write(2, "Failed to allocate memory\n", 25);
-	// 	return 1;
-	// }
-
-	// Check input validity
 	if (check_input(argc, argv) < 0)
 	{
 		//free_config(config);
@@ -103,7 +96,7 @@ int main(int argc, char **argv)
 	if (!config->map)
 	{
 		write(2, "Failed to initialize map\n", 25);
-        //free(game);
+		//free(game);
 		//free_config(config);
 		return 1;
 	}
@@ -128,7 +121,7 @@ int main(int argc, char **argv)
 	{
 		fprintf(stderr, "Error: Failed to load textures\n");
 		//free_config(config);
-        //free(game);
+		//free(game);
 		return (1);
 	}
 	//free_config(config);
