@@ -11,7 +11,8 @@ INCLUDE_DIR = include
 
 # Libraries
 LIBFT = libft/libft.a
-MLX_DIR = /home/ekechedz/minilibx
+#MLX_DIR = /home/ekechedz/minilibx
+MLX_DIR = /home/natalia/Repositories/minilibx
 MLX = $(MLX_DIR)/libmlx.a
 
 # Linker flags for MiniLibX
