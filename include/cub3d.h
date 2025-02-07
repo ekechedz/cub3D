@@ -29,6 +29,14 @@
 #define TEXTURE_HEIGHT 64
 #define MINI_MAP_SCALE 1
 
+//move
+#define KEY_W 13
+#define KEY_A 0
+#define KEY_S 1
+#define KEY_D 2
+#define KEY_LEFT 123
+#define KEY_RIGHT 124
+#define KEY_ESC 53
 
 // Map Characters
 #define EMPTY '0'
@@ -100,6 +108,7 @@ typedef struct s_config {
 } t_config;
 
 
+
 typedef struct s_game {
 	void        *mlx;        // MiniLibX connection
 	void        *win;        // MiniLibX window
@@ -123,7 +132,7 @@ typedef struct s_ray
     t_vector *hit;        // Exact hit position on the wall
     int side;             // Which side of the wall was hit (0 = vertical, 1 = horizontal)
     int tex_x;            // X-coordinate on the texture
-    double lineHeight;    // Height of the line to draw (based on distance to the wall)
+    int lineHeight;    // Height of the line to draw (based on distance to the wall)
     int drawStart;        // Y-coordinate to start drawing (top of the wall)
     int drawEnd;          // Y-coordinate to end drawing (bottom of the wall)
     double dirX;          // Direction vector X component
@@ -147,8 +156,8 @@ typedef struct s_ray
 
 
 //Init functions
-
 int main_loop(t_game *game);
+int key_hook(int keycode, t_game *game);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);

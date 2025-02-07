@@ -42,7 +42,7 @@ void render_minimap(void *mlx, void *win, t_config *config)
     int player_color = 0x0000FF;  // Blue for player
     int fov_color = 0xFFFF00;     // Yellow for FOV lines
 
-    int player_x = 0, player_y = 0;
+    int player_x = config->player->pos->x, player_y = 0;
     double player_angle = 0;
 
     // Iterate over each tile in the map
@@ -89,5 +89,3 @@ void render_minimap(void *mlx, void *win, t_config *config)
         cast_ray(mlx, win, config, ray_angle, player_x, player_y, fov_color);
     }
 }
-
-

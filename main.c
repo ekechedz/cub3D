@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 
 
 	mlx_loop_hook(game->mlx, main_loop, game);
-
+	mlx_key_hook(game->win, key_hook, game);
 	mlx_hook(game->win, 17, 0L, close_window, game->mlx);
 
 	// Start the game loop
