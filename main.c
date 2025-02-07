@@ -142,11 +142,13 @@ int main(int argc, char **argv)
 
 	mlx_clear_window(game->mlx, game->win);
 	//mlx_string_put(game->mlx, game->win, 200, 200, 0xFFFFFF, "Hello, MiniLibX!");
+	memset(game->key_state, 0, sizeof(game->key_state));
 
 
-	mlx_loop_hook(game->mlx, main_loop, game);
-	mlx_key_hook(game->win, key_hook, game);
-	mlx_hook(game->win, 17, 0L, close_window, game->mlx);
+	mlx_hook(game->win, 2, 1L << 0, key_hook, game);         // Key press event
+	mlx_hook(game->win, 3, 1L << 1, key_release_hook, game);  // Key release event
+	mlx_loop_hook(game->mlx, main_loop, game);               // Main game loop
+
 
 	// Start the game loop
 	mlx_loop(game->mlx);

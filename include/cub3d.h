@@ -17,8 +17,8 @@
 // Constants
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-#define MOVE_SPEED 0.05
-#define ROT_SPEED 0.03
+#define MOVE_SPEED 0.5
+#define ROT_SPEED 5
 #define FOV 66
 #define MAX_DEPTH 20.0
 #define M_PI 3.14159265358979323846
@@ -37,6 +37,8 @@
 #define KEY_LEFT 123
 #define KEY_RIGHT 124
 #define KEY_ESC 53
+#define KEY_COUNT 65536
+
 
 // Map Characters
 #define EMPTY '0'
@@ -124,6 +126,9 @@ typedef struct s_game {
 	int     bpp;
 	int     line_length;
 	int     endian;
+	struct timeval last_time;
+	int      key_state[KEY_COUNT];  // Array to store key states (now inside the game struct)
+
 } t_game;
 
 typedef struct s_ray
@@ -158,6 +163,10 @@ typedef struct s_ray
 //Init functions
 int main_loop(t_game *game);
 int key_hook(int keycode, t_game *game);
+int key_release_hook(int keycode, t_game *game);
+void rotate_player(t_game *game, int direction, double delta_time);
+void move_player(t_game *game, int direction, double delta_time);
+void strafe_player(t_game *game, int direction, double delta_time);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);

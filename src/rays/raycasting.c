@@ -17,16 +17,15 @@ int get_texture_color(t_image *texture, int x, int y)
 	if (!texture || x < 0 || y < 0 || x >= texture->width || y >= texture->height)
 		return 0; // Return a default color (black) or handle the error
 
-	// printf("lstsize %d, bpp %d and buff %p\n", texture->lstsize, texture->bpp, texture->buff);
-
-	int i = (y * texture->lstsize) + x * (texture->bpp / 8);
+	// Calculate the byte offset based on the texture's line size (lstsize)
+int i = (y * texture->width + x) * (texture->bpp / 8);
 
 	// Ensure we are not reading out of bounds
 	if (i + (texture->bpp / 8) > texture->width * texture->height * (texture->bpp / 8))
 		return 0;
 
-	// Copy memory safely
-	ft_memcpy(&color, texture->buff + i, sizeof(int));
+	// Directly read the color value at the pixel (x, y) from the buffer
+	color = *(int *)(texture->buff + i); // Assuming the texture buffer is in 32-bit color format (RGBA or RGB)
 
 	return color;
 }
@@ -123,9 +122,7 @@ void render_texture(t_game *game, t_ray *ray, int x)
 	// Calculate texture coordinates (x and y)
 	int texX = (int)(ray->hit->x * TEXTURE_WIDTH) % TEXTURE_WIDTH;
 	if (ray->side == 1)
-	{
 		texX = (int)(ray->hit->y * TEXTURE_WIDTH) % TEXTURE_WIDTH;
-	}
 
 	for (int y = ray->drawStart; y < ray->drawEnd; y++)
 	{
@@ -137,13 +134,9 @@ void render_texture(t_game *game, t_ray *ray, int x)
 
 		int color;
 		if (ray->side == 0)
-		{
 			color = get_texture_color(game->textures->north, texX, texY);
-		}
 		else
-		{
 			color = get_texture_color(game->textures->north, texX, texY);
-		}
 
 		game->screen_data[y * WIN_WIDTH + x] = color; // Draw pixel
 	}
@@ -157,9 +150,7 @@ void cast_rays(t_game *game)
 	{
 		initialize_ray(game, &ray, x);
 		if (perform_dda(game, &ray))
-		{
 			render_texture(game, &ray, x);
-		}
 	}
 }
 
@@ -168,7 +159,8 @@ void render(t_game *game)
 	// Clear the screen (you can fill the screen with a color like the sky color or black)
 	// clear_screen(game);
 	mlx_clear_window(game->mlx, game->win);
-	// Draw floor and ceiling (optional but necessary for full rendering)
+
+	// Rotate the player based on key pressesonal but necessary for full rendering)
 	draw_floor_ceiling(game);
 	// Raycasting to calculate and draw the walls
 	cast_rays(game);
@@ -215,9 +207,45 @@ void draw_floor_ceiling(t_game *game)
 		}
 	}
 }
+#include <sys/time.h>
 // Main function to run the game loop and handle events
 int main_loop(t_game *game)
 {
+	struct timeval current_time;
+	gettimeofday(&current_time, NULL); // Get the current time
+
+	// Calculate delta_time in seconds
+	double delta_time = (current_time.tv_sec - game->last_time.tv_sec) +
+						(current_time.tv_usec - game->last_time.tv_usec) / 1000000.0;
+
+	// Update last_time for the next frame
+	game->last_time = current_time;
+
+	// Handle continuous movement based on key state
+	if (game->key_state[119])
+	{									  // W key (move forward)
+		move_player(game, 1, delta_time); // Move forward
+	}
+	if (game->key_state[115])
+	{									   // S key (move backward)
+		move_player(game, -1, delta_time); // Move backward
+	}
+	if (game->key_state[97])
+	{										 // A key (strafe left)
+		strafe_player(game, -1, delta_time); // Strafe left
+	}
+	if (game->key_state[100])
+	{										// D key (strafe right)
+		strafe_player(game, 1, delta_time); // Strafe right
+	}
+	if (game->key_state[65361])
+	{										 // Left arrow key (rotate left)
+		rotate_player(game, -1, delta_time); // Rotate left
+	}
+	if (game->key_state[65363])
+	{										// Right arrow key (rotate right)
+		rotate_player(game, 1, delta_time); // Rotate right
+	}
 	// In the game loop, render the frame
 	render(game);
 	// render_minimap(game->mlx, game->win, game->config);
