@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "/home/ekechedz/minilibx/mlx.h"
-//#include "/home/natalia/Repositories/minilibx/mlx.h"
+//#include "/home/ekechedz/minilibx/mlx.h"
+#include "/home/natalia/Repositories/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -208,10 +208,12 @@ int		free_player(t_player *player);
 // textures
 int load_textures(t_game *game, t_config *cfg);
 void trim_whitespace(char *str);
+t_image	*choose_texture(t_ray *ray, t_game *game);
 char *trim_line(const char *line);
 
 //render
 
 int render_scene(t_game *game, t_player *player);
+int	render_slice(t_ray *ray, int texX, int x, t_game *game);
 
 #endif

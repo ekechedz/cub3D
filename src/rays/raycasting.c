@@ -101,15 +101,13 @@ int perform_dda(t_game *game, t_ray *ray)
 
 void render_texture(t_game *game, t_ray *ray, int x)
 {
-	// Calculate the perpendicular distance to the wall (used for texture mapping)
+	double	wallX;
+	int		texX;
+
 	if (ray->side == 0)
-	{
 		ray->perpWallDist = (ray->hit->x - ray->posX + (1 - ray->stepX) / 2) / ray->dirX;
-	}
 	else
-	{
 		ray->perpWallDist = (ray->hit->y - ray->posY + (1 - ray->stepY) / 2) / ray->dirY;
-	}
 
 	ray->lineHeight = (int)(WIN_HEIGHT / ray->perpWallDist);
 	ray->drawStart = -ray->lineHeight / 2 + WIN_HEIGHT / 2;
@@ -118,29 +116,58 @@ void render_texture(t_game *game, t_ray *ray, int x)
 	ray->drawEnd = ray->lineHeight / 2 + WIN_HEIGHT / 2;
 	if (ray->drawEnd >= WIN_HEIGHT)
 		ray->drawEnd = WIN_HEIGHT - 1;
+	if (ray->side == 0)
+		wallX = ray->posY + ray->perpWallDist * ray->dirY;
+	else
+		wallX = ray->posX + ray->perpWallDist * ray->dirX;
+	wallX -= floor(wallX);
+	texX = (int)(wallX * (double)TEXTURE_WIDTH);
+	if ((ray->side == 0 && ray->dirX > 0) || (ray->side == 1 && ray->dirY < 0))
+		texX = TEXTURE_WIDTH - texX - 1;
+	render_slice(ray, texX, x, game);
+}
 
-	// Calculate texture coordinates (x and y)
-	int texX = (int)(ray->hit->x * TEXTURE_WIDTH) % TEXTURE_WIDTH;
-	if (ray->side == 1)
-		texX = (int)(ray->hit->y * TEXTURE_WIDTH) % TEXTURE_WIDTH;
+int	render_slice(t_ray *ray, int texX, int x, t_game *game)
+{
+	int		y;
+	int		texY;
+	int		color;
+	t_image	*texture;
 
-	for (int y = ray->drawStart; y < ray->drawEnd; y++)
+	y = ray->drawStart;
+	texture = choose_texture(ray, game);
+	while (y < ray->drawEnd)
 	{
-		int texY = (int)((y - WIN_HEIGHT / 2 + ray->lineHeight / 2) * TEXTURE_HEIGHT / ray->lineHeight);
+		texY = (((y - WIN_HEIGHT / 2 + ray->lineHeight / 2) * TEXTURE_HEIGHT) / ray->lineHeight);
 		if (texY < 0)
 			texY = 0;
 		if (texY >= TEXTURE_HEIGHT)
 			texY = TEXTURE_HEIGHT - 1;
+		color = get_texture_color(texture, texX, texY);
+		game->screen_data[y * WIN_WIDTH + x] = color;
+		y ++;
+	}
+	return (0);
+}
 
-		int color;
-		if (ray->side == 0)
-			color = get_texture_color(game->textures->north, texX, texY);
+t_image	*choose_texture(t_ray *ray, t_game *game)
+{
+	if (ray->side == 0)
+	{
+		if (ray->dirX > 0)
+			return (game->textures->east);
 		else
-			color = get_texture_color(game->textures->north, texX, texY);
-
-		game->screen_data[y * WIN_WIDTH + x] = color; // Draw pixel
+			return (game->textures->west);
+	}
+	else
+	{
+		if (ray->dirY > 0)
+			return (game->textures->south);
+		else
+			return (game->textures->north);
 	}
 }
+
 void cast_rays(t_game *game)
 {
 	int x;
@@ -156,16 +183,9 @@ void cast_rays(t_game *game)
 
 void render(t_game *game)
 {
-	// Clear the screen (you can fill the screen with a color like the sky color or black)
-	// clear_screen(game);
 	mlx_clear_window(game->mlx, game->win);
-
-	// Rotate the player based on key pressesonal but necessary for full rendering)
 	draw_floor_ceiling(game);
-	// Raycasting to calculate and draw the walls
 	cast_rays(game);
-
-	// Update the display
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 
