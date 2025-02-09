@@ -38,6 +38,7 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 	}
 }
 
+
 int perform_dda(t_game *game, t_ray *ray)
 {
 	int hit = 0;

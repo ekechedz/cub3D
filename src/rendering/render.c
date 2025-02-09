@@ -5,6 +5,7 @@ static void put_pixel(t_game *game, int x, int y, int color);
 void	render(t_game *game)
 {
 	mlx_clear_window(game->mlx, game->win);
+	memset(game->screen_data, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 	draw_floor_ceiling(game);
 	cast_rays(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);

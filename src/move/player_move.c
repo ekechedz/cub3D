@@ -16,18 +16,21 @@ int key_release_hook(int keycode, t_game *game)
 
 void	strafe_player(t_game *game, int dir, double delta_time)
 {
-	t_player	*player;
-	double		strafeSpeed;
+	double	strafeSpeed;
+	double	newX;
+	double	newY;
 	
-	player = game->player;
 	strafeSpeed = MOVE_SPEED * delta_time * dir;
-	player->pos->x += player->plane->x * strafeSpeed;
-	player->pos->y += player->plane->y * strafeSpeed;
-	if (game->map->grid[(int)player->pos->y][(int)player->pos->x] == WALL)
+	newX = game->player->pos->x + game->player->plane->x * strafeSpeed;
+	newY = game->player->pos->y + game->player->plane->y * strafeSpeed;
+	if (game->map->grid[(int)newX][(int)newY] == WALL)
 	{
-		player->pos->x -= player->plane->x * strafeSpeed;
-		player->pos->y -= player->plane->y * strafeSpeed;
+		newX = game->player->pos->x - game->player->plane->x * strafeSpeed;
+		newY = game->player->pos->y - game->player->plane->y * strafeSpeed;
 	}
+	game->player->pos->x = newX;
+	game->player->pos->y = newY;
+	printf("player x: %lf, player y: %lf\n", game->player->pos->x, game->player->pos->y);
 }
 
 void	rotate_player(t_player *p, int dir, double delta_time)
