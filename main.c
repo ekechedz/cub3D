@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 
 	mlx_clear_window(game->mlx, game->win);
 	//mlx_string_put(game->mlx, game->win, 200, 200, 0xFFFFFF, "Hello, MiniLibX!");
-	memset(game->key_state, 0, sizeof(game->key_state));
+	memset(game->key_st, 0, sizeof(game->key_st));
 
 
 	mlx_hook(game->win, 2, 1L << 0, key_hook, game);         // Key press event

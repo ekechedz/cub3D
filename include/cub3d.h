@@ -15,6 +15,7 @@
 #include "X11/keysym.h"
 #include <sys/time.h>
 
+
 // Constants
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
@@ -128,7 +129,7 @@ typedef struct s_game {
 	int     line_length;
 	int     endian;
 	struct timeval last_time;
-	int      key_state[KEY_COUNT];  // Array to store key states (now inside the game struct)
+	int      key_st[KEY_COUNT];  // Array to store key states (now inside the game struct)
 
 } t_game;
 
@@ -138,7 +139,7 @@ typedef struct s_ray
     t_vector *hit;        // Exact hit position on the wall
     int side;             // Which side of the wall was hit (0 = vertical, 1 = horizontal)
     int tex_x;            // X-coordinate on the texture
-    int lineHeight;    // Height of the line to draw (based on distance to the wall)
+    double lineHeight;    // Height of the line to draw (based on distance to the wall)
     int drawStart;        // Y-coordinate to start drawing (top of the wall)
     int drawEnd;          // Y-coordinate to end drawing (bottom of the wall)
     double dirX;          // Direction vector X component
