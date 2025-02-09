@@ -2,15 +2,15 @@
 
 int	key_hook(int keycode, t_game *game)
 {
-	game->key_state[keycode] = 1;
-	if (keycode == 65307)
+	game->key_st[keycode] = 1;
+	if (keycode == XK_Escape)
 		exit(0);
 	return (0);
 }
 
 int key_release_hook(int keycode, t_game *game)
 {
-	game->key_state[keycode] = 0;
+	game->key_st[keycode] = 0;
 	return (0);
 }
 

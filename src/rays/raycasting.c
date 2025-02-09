@@ -86,23 +86,22 @@ int	main_loop(t_game *game)
 {
 	struct timeval	current_time;
 	double			delta_time;
-	gettimeofday(&current_time, NULL);
 
+	gettimeofday(&current_time, NULL);
 	delta_time = (current_time.tv_sec - game->last_time.tv_sec) +
 						(current_time.tv_usec - game->last_time.tv_usec) / 1000000.0;
-
 	game->last_time = current_time;
-	if (game->key_state[119])
+	if (game->key_st[XK_W] || game->key_st[XK_w])
 		move_player(game, 1, delta_time); // Move forward
-	if (game->key_state[115])
+	if (game->key_st[XK_S] || game->key_st[XK_s])
 		move_player(game, -1, delta_time); // Move backward
-	if (game->key_state[97])
+	if (game->key_st[XK_A] || game->key_st[XK_a])
 		strafe_player(game, -1, delta_time); // Strafe left
-	if (game->key_state[100])
+	if (game->key_st[XK_D] || game->key_st[XK_d])
 		strafe_player(game, 1, delta_time); // Strafe right
-	if (game->key_state[65361])
+	if (game->key_st[XK_Left])
 		rotate_player(game->player, -1, delta_time); // Rotate left
-	if (game->key_state[65363])
+	if (game->key_st[XK_Right])
 		rotate_player(game->player, 1, delta_time); // Rotate right
 	render(game);
 	render_minimap(game->mlx, game->win, game->config);
