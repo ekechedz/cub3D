@@ -7,8 +7,8 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 	ray->dirX = game->player->dir->x + game->player->plane->x * cameraX;
 	ray->dirY = game->player->dir->y + game->player->plane->y * cameraX;
 
-	ray->deltaDistX = fabs(1 / ray->dirX);
-	ray->deltaDistY = fabs(1 / ray->dirY);
+	ray->deltaDistX = fabs(1.0 / ray->dirX);
+	ray->deltaDistY = fabs(1.0 / ray->dirY);
 
 	ray->hit = (t_vector *)malloc(sizeof(t_vector));
 	ray->hit->x = ray->posX;
@@ -57,7 +57,7 @@ int perform_dda(t_game *game, t_ray *ray)
 			ray->side = 1;
 		}
 
-		if (game->map->grid[(int)ray->hit->y][(int)ray->hit->x] == WALL)
+		if (game->map->grid[(int)ray->hit->x][(int)ray->hit->y] == WALL)
 			hit = 1;
 	}
 	return (hit);
@@ -104,7 +104,7 @@ int	main_loop(t_game *game)
 	if (game->key_st[XK_Right])
 		rotate_player(game->player, 1, delta_time); // Rotate right
 	render(game);
-	render_minimap(game->mlx, game->win, game->config);
+	//render_minimap(game->mlx, game->win, game->config);
 	return (0);
 }
 

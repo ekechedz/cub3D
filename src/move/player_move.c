@@ -52,11 +52,12 @@ void move_player(t_game *game, int dir, double delta_time)
 	moveSpeed = MOVE_SPEED * delta_time;
 	newX = game->player->pos->x + game->player->dir->x * moveSpeed * dir;
 	newY = game->player->pos->y + game->player->dir->y * moveSpeed * dir;
-	if (game->map->grid[(int)game->player->pos->y][(int)game->player->pos->x] == WALL)
+	if (game->map->grid[(int)newX][(int)newY] == WALL)
 	{
 		newX = game->player->pos->x - game->player->dir->x * moveSpeed * dir;
 		newY = game->player->pos->y -game->player->dir->y * moveSpeed * dir;
 	}
 	game->player->pos->x = newX;
 	game->player->pos->y = newY;
+	printf("player x: %lf, player y: %lf\n", game->player->pos->x, game->player->pos->y);
 }
