@@ -51,6 +51,10 @@
 #define PLAYER_W 'W'
 #define MAX_KEYS 6
 
+//Draw constants
+#define CEILING 1
+#define FLOOR 2
+
 #define ERROR "Memory problem"
 #define M_ERROR "Map problem"
 
@@ -179,6 +183,7 @@ t_game *init_game(t_config *config);
 t_ray	*init_ray(void);
 void	render(t_game *game);
 void render_minimap(void *mlx, void *win, t_config *config);
+void	init_events(t_game *game);
 
 
 // Function Prototypes
@@ -188,7 +193,6 @@ void	handle_input(int key, t_game *game);
 void	cleanup(t_game *game);
 int		render_frame_wrapper(void *param);
 int		handle_input_wrapper(int key, void *param);
-void draw_floor_ceiling(t_game *game);
 
 // Validating map
 

@@ -4,9 +4,8 @@ static void put_pixel(t_game *game, int x, int y, int color);
 
 void	render(t_game *game)
 {
-	mlx_clear_window(game->mlx, game->win);
+	//mlx_clear_window(game->mlx, game->win);
 	memset(game->screen_data, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-	draw_floor_ceiling(game);
 	cast_rays(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
@@ -29,7 +28,7 @@ void render_texture(t_game *game, t_ray *ray, int x)
 		ray->drawStart = 0;
 	ray->drawEnd = ray->lineHeight / 2 + WIN_HEIGHT / 2;
 	if (ray->drawEnd >= WIN_HEIGHT)
-		ray->drawEnd = WIN_HEIGHT - 1;
+		ray->drawEnd = WIN_HEIGHT;
 	if (ray->side == 0)
 		wallX = ray->posY + ray->perpWallDist * ray->dirY;
 	else
@@ -48,8 +47,10 @@ int	render_slice(t_ray *ray, int texX, int x, t_game *game)
 	int		color;
 	t_image	*texture;
 
-	y = ray->drawStart;
+	y = 0;
 	texture = choose_texture(ray, game);
+	while (y++ < ray->drawStart)
+		game->screen_data[y * WIN_WIDTH + x] = *game->ceiling_color;
 	while (y < ray->drawEnd)
 	{
 		texY = (((y - WIN_HEIGHT / 2 + ray->lineHeight / 2) * TEXTURE_HEIGHT) / ray->lineHeight);
@@ -61,38 +62,7 @@ int	render_slice(t_ray *ray, int texX, int x, t_game *game)
 		game->screen_data[y * WIN_WIDTH + x] = color;
 		y ++;
 	}
+	while (y++ < WIN_HEIGHT)
+		game->screen_data[y * WIN_WIDTH + x] = *game->floor_color;
 	return (0);
-}
-
-void draw_floor_ceiling(t_game *game)
-{
-	int color;
-
-	// Draw the ceiling (assuming ceiling_color is assigned)
-	color = *game->ceiling_color;
-	for (int y = 0; y < WIN_HEIGHT / 2; y++)
-	{
-		for (int x = 0; x < WIN_WIDTH; x++)
-		{
-			put_pixel(game, x, y, color); // Draw the ceiling (top half)
-		}
-	}
-
-	// Draw the floor (assuming floor_color is assigned)
-	color = *game->floor_color;
-	for (int y = WIN_HEIGHT / 2; y < WIN_HEIGHT; y++)
-	{
-		for (int x = 0; x < WIN_WIDTH; x++)
-		{
-			put_pixel(game, x, y, color); // Draw the floor (bottom half)
-		}
-	}
-}
-
-static void put_pixel(t_game *game, int x, int y, int color)
-{
-	int	*pixel;
-	
-	pixel = game->screen_data + y * WIN_WIDTH + x;
-	*pixel = color;
 }

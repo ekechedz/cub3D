@@ -133,19 +133,29 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	mlx_clear_window(game->mlx, game->win);
-	//mlx_string_put(game->mlx, game->win, 200, 200, 0xFFFFFF, "Hello, MiniLibX!");
-	memset(game->key_st, 0, sizeof(game->key_st));
+	
 
 
-	mlx_hook(game->win, 2, 1L << 0, key_hook, game);         // Key press event
-	mlx_hook(game->win, 3, 1L << 1, key_release_hook, game);  // Key release event
-	mlx_loop_hook(game->mlx, main_loop, game);               // Main game loop
 
 
-	// Start the game loop
+	init_events(game);
 	mlx_loop(game->mlx);
 
 	// Clean up resources if necessary
 	return 0;
+}
+
+void	init_events(t_game *game)
+{
+	mlx_clear_window(game->mlx, game->win);
+	memset(game->key_st, 0, sizeof(game->key_st)); //maybe in init_game is better
+	
+	mlx_hook(game->win, 2, 1L << 0, key_hook, game);
+	mlx_hook(game->win, 3, 1L << 1, key_release_hook, game);
+	//then theres a mlx_hook with a handle_close function 
+	//then a mlx_hook with a handle_mouse_move that im not sure we need for mandatory
+	//then a mlx_hook with a handle_mouse_click
+	mlx_loop_hook(game->mlx, main_loop, game);
+	//then mlx_mouse_move
+	//then mlx_mouse_hide
 }
