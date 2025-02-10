@@ -1,6 +1,5 @@
 #include "../../include/cub3d.h"
 
-static void put_pixel(t_game *game, int x, int y, int color);
 
 void	render(t_game *game)
 {
@@ -19,10 +18,11 @@ void render_texture(t_game *game, t_ray *ray, int x)
 		ray->perpWallDist = (ray->hit->x - ray->posX + (1 - ray->stepX) / 2) / ray->dirX;
 	else
 		ray->perpWallDist = (ray->hit->y - ray->posY + (1 - ray->stepY) / 2) / ray->dirY;
-	
+	//printf("this is x: %d and side: %d, and this is hitx,y: (%lf, %lf), ray->posX,Y: (%lf, %lf), stepX, y: (%lf, %lf)\n", x, ray->side, ray->hit->x, ray->hit->y, ray->posX, ray->posY, ray->stepX, ray->stepY);
 	if (ray->perpWallDist <= 0) 
     	ray->perpWallDist = 0.01; // Avoid division by zero
 	ray->lineHeight = (int)(WIN_HEIGHT / ray->perpWallDist);
+	//printf("column x: %d, lineheight: %d, perpwalldist: %lf\n", x, ray->lineHeight, ray->perpWallDist);
 	ray->drawStart = -ray->lineHeight / 2 + WIN_HEIGHT / 2;
 	if (ray->drawStart < 0)
 		ray->drawStart = 0;

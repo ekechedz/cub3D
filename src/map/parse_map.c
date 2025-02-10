@@ -1,77 +1,50 @@
 #include "../../include/cub3d.h"
 
-// static int parse_int(const char **str)
-// {
-// 	int value = 0;
-
-// 	while (**str && ft_isdigit(**str))
-// 	{
-// 		value = value * 10 + (**str - '0');
-// 		(*str)++;
-// 	}
-// 	if (value < 0 || value > 255)
-// 		exit_with_error("Invalid color value", 1);
-// 	return value;
-// }
-
-static int parse_int(const char **str)
+static int	parse_int(const char **str)
 {
-	int num = 0;
-
-	// Skip leading spaces
+	int	num;
+	
+	num = 0;
 	while (**str == ' ')
 		(*str)++;
-
-	// Check if character is a digit
 	if (!ft_isdigit(**str))
 		exit_with_error("Invalid number in color format", 0);
-
-	// Parse integer
 	while (**str && ft_isdigit(**str))
 	{
 		num = num * 10 + (**str - '0');
 		(*str)++;
 	}
-
-	// Return parsed integer
 	return num;
 }
 
-static void parse_color(const char *str, int *color)
+static void	parse_color(const char *str, int *color)
 {
-	int i = 0;
+	int	i;
 
-	if (!color) // Ensure the pointer is valid
+	i = 0;
+	if (!color)
 		exit_with_error("Null color pointer", 0);
-
 	while (*str && i < 3)
 	{
-		while (*str == ' ') // Skip spaces
-			str++;
-
-		if (!ft_isdigit(*str)) // Ensure valid input
-			exit_with_error("Invalid color format", 0);
-
-		color[i] = parse_int(&str);
-
-		// Ensure the value is in the valid RGB range
-		if (color[i] < 0 || color[i] > 255)
-			exit_with_error("RGB values must be between 0 and 255", 0);
-
-		i++;
-
-		// Skip optional spaces and check for comma
 		while (*str == ' ')
 			str++;
 
-		if (*str == ',')
-			str++; // Move past comma
-	}
+		if (!ft_isdigit(*str))
+			exit_with_error("Invalid color format", 0);
 
-	// Ensure exactly 3 values were read
+		color[i] = parse_int(&str);
+		if (color[i] < 0 || color[i] > 255)
+			exit_with_error("RGB values must be between 0 and 255", 0);
+		i++;
+		while (*str == ' ')
+			str++;
+		if (*str == ',')
+			str++; 
+	}
 	if (i != 3)
 		exit_with_error("Error in color format", 0);
 }
+
 static char *trim_trailing_spaces(const char *line)
 {
 	int len = ft_strlen(line);
@@ -88,6 +61,7 @@ static char *trim_trailing_spaces(const char *line)
 
 	return ft_substr(line, 0, len);
 }
+
 void parse_map_line(t_config *config, const char *line)
 {
 	if (!config->map)

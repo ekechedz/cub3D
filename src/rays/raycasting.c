@@ -6,15 +6,12 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 	ray->posY = game->player->pos->y;
 	ray->dirX = game->player->dir->x + game->player->plane->x * cameraX;
 	ray->dirY = game->player->dir->y + game->player->plane->y * cameraX;
-
 	ray->deltaDistX = fabs(1.0 / ray->dirX);
 	ray->deltaDistY = fabs(1.0 / ray->dirY);
 
 	ray->hit = (t_vector *)malloc(sizeof(t_vector));
 	ray->hit->x = ray->posX;
 	ray->hit->y = ray->posY;
-
-	// Set up DDA step and side distance
 	if (ray->dirX < 0)
 	{
 		ray->stepX = -1;
@@ -42,25 +39,29 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 int perform_dda(t_game *game, t_ray *ray)
 {
 	int hit = 0;
+	int	hitx = (int)game->player->pos->x;
+	int hity = (int)game->player->pos->y;
 
 	while (hit == 0)
 	{
 		if (ray->sideDistX < ray->sideDistY)
 		{
 			ray->sideDistX += ray->deltaDistX;
-			ray->hit->x += ray->stepX;
+			hitx += ray->stepX;
 			ray->side = 0;
 		}
 		else
 		{
 			ray->sideDistY += ray->deltaDistY;
-			ray->hit->y += ray->stepY;
+			hity += ray->stepY;
 			ray->side = 1;
 		}
 
-		if (game->map->grid[(int)ray->hit->x][(int)ray->hit->y] == WALL)
+		if (game->map->grid[hitx][hity] == WALL)
 			hit = 1;
 	}
+	ray->hit->x = hitx;
+	ray->hit->y = hity;
 	return (hit);
 }
 
@@ -93,17 +94,17 @@ int	main_loop(t_game *game)
 						(current_time.tv_usec - game->last_time.tv_usec) / 1000000.0;
 	game->last_time = current_time;
 	if (game->key_st[XK_W] || game->key_st[XK_w])
-		move_player(game, 1, delta_time); // Move forward
+		move_player(game, 1, delta_time);
 	if (game->key_st[XK_S] || game->key_st[XK_s])
-		move_player(game, -1, delta_time); // Move backward
+		move_player(game, -1, delta_time);
 	if (game->key_st[XK_A] || game->key_st[XK_a])
-		strafe_player(game, -1, delta_time); // Strafe left
+		strafe_player(game, -1, delta_time);
 	if (game->key_st[XK_D] || game->key_st[XK_d])
-		strafe_player(game, 1, delta_time); // Strafe right
+		strafe_player(game, 1, delta_time);
 	if (game->key_st[XK_Left])
-		rotate_player(game->player, -1, delta_time); // Rotate left
+		rotate_player(game->player, 1, delta_time);
 	if (game->key_st[XK_Right])
-		rotate_player(game->player, 1, delta_time); // Rotate right
+		rotate_player(game->player, -1, delta_time);
 	render(game);
 	//render_minimap(game->mlx, game->win, game->config);
 	return (0);

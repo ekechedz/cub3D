@@ -30,7 +30,7 @@ void	strafe_player(t_game *game, int dir, double delta_time)
 	}
 	game->player->pos->x = newX;
 	game->player->pos->y = newY;
-	printf("player x: %lf, player y: %lf\n", game->player->pos->x, game->player->pos->y);
+	//printf("player x: %lf, player y: %lf\n", game->player->pos->x, game->player->pos->y);
 }
 
 void	rotate_player(t_player *p, int dir, double delta_time)
@@ -62,5 +62,6 @@ void move_player(t_game *game, int dir, double delta_time)
 	}
 	game->player->pos->x = newX;
 	game->player->pos->y = newY;
-	printf("player x: %lf, player y: %lf\n", game->player->pos->x, game->player->pos->y);
+	//printf("player x: %lf, player y: %lf\n", game->player->pos->x, game->player->pos->y);
+	
 }

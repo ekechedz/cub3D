@@ -19,7 +19,7 @@
 // Constants
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-#define MOVE_SPEED 0.5
+#define MOVE_SPEED 2
 #define ROT_SPEED 5
 #define FOV 66
 #define MAX_DEPTH 20.0
