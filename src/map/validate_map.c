@@ -1,11 +1,11 @@
 #include "../../include/cub3d.h"
 
-int	is_open_to_space(t_map *map, int x, int y)
+int is_open_to_space(t_map *map, int x, int y)
 {
-	int	directions[4][2];
-	int	nx;
-	int	ny;
-	int	d;
+	int directions[4][2];
+	int nx;
+	int ny;
+	int d;
 
 	directions[0][0] = 1;
 	directions[0][1] = 0;
@@ -27,7 +27,6 @@ int	is_open_to_space(t_map *map, int x, int y)
 	return (0);
 }
 
-
 void print_map(char **grid, int height)
 {
 	for (int i = 0; i < height; i++)
@@ -40,7 +39,7 @@ void validate_map(t_map *map, t_config *config)
 	int i;
 	int j;
 
-	i = 0 ;
+	i = 0;
 
 	while (i < map->height)
 	{
@@ -53,6 +52,26 @@ void validate_map(t_map *map, t_config *config)
 			{
 				config->player->pos->x = (double)i + 0.5;
 				config->player->pos->y = (double)j + 0.5;
+				if (map->grid[i][j]== 'E')
+				{
+					config->player->dir = init_vector(1.0, 0.0);
+					config->player->plane = init_vector(0.0, 0.66);
+				}
+				else if (map->grid[i][j] == 'W')
+				{
+					config->player->dir = init_vector(-1.0, 0.0);
+					config->player->plane = init_vector(0.0, -0.66);
+				}
+				else if (map->grid[i][j] == 'N')
+				{
+					config->player->dir = init_vector(0.0, -1.0);
+					config->player->plane = init_vector(0.66, 0.0);
+				}
+				else if (map->grid[i][j] == 'S')
+				{
+					config->player->dir = init_vector(0.0, 1.0);
+					config->player->plane = init_vector(-0.66, 0.0);
+				}
 			}
 			j++;
 		}

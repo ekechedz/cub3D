@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-//#include "/home/ekechedz/minilibx/mlx.h"
-#include "/home/natalia/Repositories/minilibx/mlx.h"
+#include "/home/ekechedz/minilibx/mlx.h"
+//include "/home/natalia/Repositories/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -182,7 +182,7 @@ t_player	*init_player(double x, double i, char NSEW);
 t_game *init_game(t_config *config);
 t_ray	*init_ray(void);
 void	render(t_game *game);
-void render_minimap(void *mlx, void *win, t_config *config);
+void render_minimap(t_game *game);
 void	init_events(t_game *game);
 
 

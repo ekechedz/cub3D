@@ -6,6 +6,7 @@ void	render(t_game *game)
 	//mlx_clear_window(game->mlx, game->win);
 	memset(game->screen_data, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 	cast_rays(game);
+	render_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 
@@ -19,7 +20,7 @@ void render_texture(t_game *game, t_ray *ray, int x)
 	else
 		ray->perpWallDist = (ray->hit->y - ray->posY + (1 - ray->stepY) / 2) / ray->dirY;
 	//printf("this is x: %d and side: %d, and this is hitx,y: (%lf, %lf), ray->posX,Y: (%lf, %lf), stepX, y: (%lf, %lf)\n", x, ray->side, ray->hit->x, ray->hit->y, ray->posX, ray->posY, ray->stepX, ray->stepY);
-	if (ray->perpWallDist < 0) 
+	if (ray->perpWallDist < 0)
     	ray->perpWallDist = 0.1; // Avoid division by zero
 	ray->lineHeight = (int)(WIN_HEIGHT / ray->perpWallDist);
 	//printf("column x: %d, lineheight: %d, perpwalldist: %lf\n", x, ray->lineHeight, ray->perpWallDist);

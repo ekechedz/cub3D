@@ -113,11 +113,10 @@ int	main_loop(t_game *game)
 	if (game->key_st[XK_D] || game->key_st[XK_d])
 		strafe_player(game, 1, delta_time);
 	if (game->key_st[XK_Left])
-		rotate_player(game->player, 1, delta_time);
-	if (game->key_st[XK_Right])
 		rotate_player(game->player, -1, delta_time);
+	if (game->key_st[XK_Right])
+		rotate_player(game->player, 1, delta_time);
 	render(game);
 	//render_minimap(game->mlx, game->win, game->config);
 	return (0);
 }
-
