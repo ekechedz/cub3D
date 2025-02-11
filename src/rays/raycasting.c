@@ -4,8 +4,8 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 {
 	ray->posX = game->player->pos->x;
 	ray->posY = game->player->pos->y;
-	ray->dirX = game->player->dir->x + game->player->plane->x * cameraX;
-	ray->dirY = game->player->dir->y + game->player->plane->y * cameraX;
+	ray->dirX = game->player->dir->x - game->player->plane->x * cameraX;
+	ray->dirY = game->player->dir->y - game->player->plane->y * cameraX;
 	ray->deltaDistX = fabs(1.0 / ray->dirX);
 	ray->deltaDistY = fabs(1.0 / ray->dirY);
 
@@ -61,12 +61,6 @@ int perform_dda(t_game *game, t_ray *ray)
 			//printf("Error: Ray hit out of bounds! (hity=%d, hitx=%d)\n", hity, hitx);
 			return -1;  // Handle error
 		}
-		// if (hitx < 0 || hitx >= game->map->width)
-		// {
-		// 	//printf("Error: Ray hit out of bounds! (hity=%d, hitx=%d)\n", hity, hitx);
-		// 	return -1;  // Handle error
-		// }
-
         if (game->map->grid[hitx][hity] == WALL)
             hit = 1;
     }
@@ -118,5 +112,6 @@ int	main_loop(t_game *game)
 		rotate_player(game->player, 1, delta_time);
 	render(game);
 	//render_minimap(game->mlx, game->win, game->config);
+	printf("player dir: (%lf, %lf), player pos: (%lf, %lf)\n", game->player->dir->x, game->player->dir->y, game->player->pos->x, game->player->pos->y);
 	return (0);
 }

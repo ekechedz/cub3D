@@ -16,12 +16,14 @@ t_player *init_player(double x, double y, char NSEW)
 	if (!player)
 		return (NULL);
 
-	if (!init_pos_dir_plane(player, NSEW, x, y))
-	{
-		free(player); // Free `player` before returning NULL
-		return (NULL);
-	}
-
+	// if (!init_pos_dir_plane(player, NSEW, x, y))
+	// {
+	// 	free(player); // Free `player` before returning NULL
+	// 	return (NULL);
+	// }
+	(void) x;
+	(void) y;
+	(void) NSEW;
 	player->move_speed = 0.1;
 	player->rot_speed = 0.1;
 	player->health = 100;
@@ -70,6 +72,8 @@ int init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
 			free(player->plane);
 		return (0);
 	}
+	printf("Player initialized at (%.2f, %.2f) facing dir(%.2f, %.2f) with plane(%.2f, %.2f)\n",
+    player->pos->x, player->pos->y, player->dir->x, player->dir->y, player->plane->x, player->plane->y);
 
 	return (1);
 }

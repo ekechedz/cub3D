@@ -133,11 +133,6 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	
-
-
-
-
 	init_events(game);
 	mlx_loop(game->mlx);
 

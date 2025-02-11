@@ -50,27 +50,12 @@ void validate_map(t_map *map, t_config *config)
 				exit_with_error("Walkable area next to open space!", 0);
 			if (map->grid[i][j] && ft_strchr("NSEW", map->grid[i][j]))
 			{
-				config->player->pos->x = (double)i + 0.5;
-				config->player->pos->y = (double)j + 0.5;
-				if (map->grid[i][j]== 'E')
+				// config->player->pos->x = (double)i + 0.5;
+				// config->player->pos->y = (double)j + 0.5;
+				if (!init_pos_dir_plane(config->player, map->grid[i][j], i, j))
 				{
-					config->player->dir = init_vector(1.0, 0.0);
-					config->player->plane = init_vector(0.0, 0.66);
-				}
-				else if (map->grid[i][j] == 'W')
-				{
-					config->player->dir = init_vector(-1.0, 0.0);
-					config->player->plane = init_vector(0.0, -0.66);
-				}
-				else if (map->grid[i][j] == 'N')
-				{
-					config->player->dir = init_vector(0.0, -1.0);
-					config->player->plane = init_vector(0.66, 0.0);
-				}
-				else if (map->grid[i][j] == 'S')
-				{
-					config->player->dir = init_vector(0.0, 1.0);
-					config->player->plane = init_vector(-0.66, 0.0);
+					//free(player); // Free `player` before returning NULL
+					return ;
 				}
 			}
 			j++;
