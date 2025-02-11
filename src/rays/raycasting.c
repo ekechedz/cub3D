@@ -38,32 +38,43 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 
 int perform_dda(t_game *game, t_ray *ray)
 {
-	int hit = 0;
-	int	hitx = (int)game->player->pos->x;
-	int hity = (int)game->player->pos->y;
+    int hit = 0;
+    int hitx = (int)game->player->pos->x;  // Corrected: X (column)
+    int hity = (int)game->player->pos->y;  // Corrected: Y (row)
 
-	while (hit == 0)
-	{
-		if (ray->sideDistX < ray->sideDistY)
+    while (hit == 0)
+    {
+        if (ray->sideDistX < ray->sideDistY)
+        {
+            ray->sideDistX += ray->deltaDistX;
+            hitx += ray->stepX;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->sideDistY += ray->deltaDistY;
+            hity += ray->stepY;
+            ray->side = 1;
+        }
+		if (hity < 0 || hity >= game->map->width || hitx < 0 || hitx >= game->map->height)
 		{
-			ray->sideDistX += ray->deltaDistX;
-			hitx += ray->stepX;
-			ray->side = 0;
+			//printf("Error: Ray hit out of bounds! (hity=%d, hitx=%d)\n", hity, hitx);
+			return -1;  // Handle error
 		}
-		else
-		{
-			ray->sideDistY += ray->deltaDistY;
-			hity += ray->stepY;
-			ray->side = 1;
-		}
+		// if (hitx < 0 || hitx >= game->map->width)
+		// {
+		// 	//printf("Error: Ray hit out of bounds! (hity=%d, hitx=%d)\n", hity, hitx);
+		// 	return -1;  // Handle error
+		// }
 
-		if (game->map->grid[hitx][hity] == WALL)
-			hit = 1;
-	}
-	ray->hit->x = hitx;
-	ray->hit->y = hity;
-	return (hit);
+        if (game->map->grid[hitx][hity] == WALL)
+            hit = 1;
+    }
+    ray->hit->x = hitx;
+    ray->hit->y = hity;
+    return (hit);
 }
+
 
 t_ray *cast_rays(t_game *game)
 {

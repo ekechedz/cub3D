@@ -47,12 +47,12 @@ int init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
 	else if (NSEW == 'N')
 	{
 		player->dir = init_vector(0.0, -1.0);
-		player->plane = init_vector(-0.66, 0.0);
+		player->plane = init_vector(0.66, 0.0);
 	}
 	else if (NSEW == 'S')
 	{
 		player->dir = init_vector(0.0, 1.0);
-		player->plane = init_vector(0.66, 0.0);
+		player->plane = init_vector(-0.66, 0.0);
 	}
 	else
 	{

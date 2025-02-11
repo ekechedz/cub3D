@@ -14,7 +14,7 @@ static int	parse_int(const char **str)
 		num = num * 10 + (**str - '0');
 		(*str)++;
 	}
-	return num;
+	return (num);
 }
 
 static void	parse_color(const char *str, int *color)
@@ -28,10 +28,8 @@ static void	parse_color(const char *str, int *color)
 	{
 		while (*str == ' ')
 			str++;
-
 		if (!ft_isdigit(*str))
 			exit_with_error("Invalid color format", 0);
-
 		color[i] = parse_int(&str);
 		if (color[i] < 0 || color[i] > 255)
 			exit_with_error("RGB values must be between 0 and 255", 0);

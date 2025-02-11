@@ -49,10 +49,10 @@ void validate_map(t_map *map, t_config *config)
 		{
 			if (map->grid[i][j] == '0' && is_open_to_space(map, i, j))
 				exit_with_error("Walkable area next to open space!", 0);
-			if (ft_strchr("NSEW", map->grid[i][j]))
+			if (map->grid[i][j] && ft_strchr("NSEW", map->grid[i][j]))
 			{
-				config->player->pos->x = (double)i;
-				config->player->pos->y = (double)j;
+				config->player->pos->x = (double)i + 0.5;
+				config->player->pos->y = (double)j + 0.5;
 			}
 			j++;
 		}
