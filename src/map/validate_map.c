@@ -27,20 +27,19 @@ int is_open_to_space(t_map *map, int x, int y)
 	return (0);
 }
 
-void print_map(char **grid, int height)
+void	print_map(char **grid, int height)
 {
 	for (int i = 0; i < height; i++)
 		printf("[%d]: %s\n", i, grid[i]);
 }
 
-void validate_map(t_map *map, t_config *config)
+void	validate_map(t_map *map, t_config *config)
 {
+	int	i;
+	int	j;
+
 	print_map(map->grid, map->height);
-	int i;
-	int j;
-
 	i = 0;
-
 	while (i < map->height)
 	{
 		j = 0;
@@ -50,9 +49,8 @@ void validate_map(t_map *map, t_config *config)
 				exit_with_error("Walkable area next to open space!", 0);
 			if (map->grid[i][j] && ft_strchr("NSEW", map->grid[i][j]))
 			{
-				// config->player->pos->x = (double)i + 0.5;
-				// config->player->pos->y = (double)j + 0.5;
-				if (!init_pos_dir_plane(config->player, map->grid[i][j], i, j))
+				config->player = init_player(i, j);
+				if (!init_pos_dir_plane(config->player, map->grid[i][j]))
 				{
 					//free(player); // Free `player` before returning NULL
 					return ;

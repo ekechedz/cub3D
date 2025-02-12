@@ -18,7 +18,7 @@ int check_input(int ac, char **av)
 	if (ac != 2 || ft_strncmp(check_file(av[1]), ".cub", 5) != 0)
 	{
 		ft_putendl_fd("Usage: ./cub3d file.cub", 2);
-		return (-1);
+		exit (1);
 	}
 	return (0);
 }
@@ -74,54 +74,37 @@ void print_game(t_game *game)
 }
 
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_game		*game;
 	t_config	*config;
 
-	if (check_input(argc, argv) < 0)
-	{
-		//free_config(config);
-		//free(game);
-		return 1;
-	}
+	check_input(argc, argv);
+
 	config = init_config();
 	if (!config)
 	{
-		//free(game);
 		write(2, "Failed to initialize configuration\n", 35);
-		return 1;
+		return (1);
 	}
-	config->map = init_map(0, 0); //i think this should be inside of init_config
-	if (!config->map)
+	if (!parse_cub_file(argv[1], config)) //in case of error, i already free config inside
 	{
-		write(2, "Failed to initialize map\n", 25);
-		//free(game);
-		//free_config(config);
-		return 1;
-	}
-	if (!parse_cub_file(argv[1], config))
-	{
-		write(2, "Failed to parse .cub file\n", 26);
-		//free(game);
-		//free_config(config);
-		return 1;
+		write(2, "Failed to parse .cub file\n", 26); 
+		return (1);
 	}
 	print_config(config);
 	game = init_game(config);
 	if (!game)
 	{
 		write(2, "Failed to initialize game\n", 26);
-		//free_config(config);
-		//free(game);
-		return 1;
+		free_game(game);
+		return (1);
 	}
 	print_game(game);
 	if (load_textures(game, config) < 0)
 	{
 		fprintf(stderr, "Error: Failed to load textures\n");
-		//free_config(config);
-		//free(game);
+		free_game(game);
 		return (1);
 	}
 	//free_config(config);
@@ -129,7 +112,7 @@ int main(int argc, char **argv)
 	if (!game->win)
 	{
 		write(2, "Window creation failed\n", 23);
-		//free_game(game);
+		free_game(game);
 		return 1;
 	}
 

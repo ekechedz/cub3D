@@ -1,49 +1,55 @@
 #include "../../include/cub3d.h"
 
-// Function to free textures
-void free_textures(t_textures *textures)
+t_textures	*free_textures(t_textures *t) 
 {
-    // Free individual texture components if they are dynamically allocated
-    free(textures->north);
-    free(textures->east);
-    free(textures->south);
-    free(textures->west);
-    free(textures->floor);
-    free(textures->ceiling);
-    free(textures->door);
-    free(textures->gameover);
+	if (t->north)
+		free (t->north);
+	if (t->south)
+		free (t->south);
+	if (t->east)
+		free (t->east);
+	if (t->west)
+		free (t->west);
+	if (t->floor)
+		free (t->floor);
+	if (t->ceiling)
+		free (t->ceiling);
+	free (t);
+	return (NULL);
 }
 
-// Function to free the map
-void free_map(t_map *map)
+void	*free_map(t_map *map)
 {
-    // Free the grid array (rows of the map)
-    for (int i = 0; i < map->height; i++)
-    {
-        free(map->grid[i]);
-    }
-    // Free the grid itself and then the map struct
-    free(map->grid);
-    free(map);
+	int i;
+
+	i = 0;
+	while (i < map->height)
+	{
+		free(map->grid[i]);
+		i ++;
+	}
+	free(map->grid);
+	free(map);
+	return (NULL);
 }
 
-
-// Function to free config
-void free_config(t_config *config)
+void	*free_config(t_config *config)
 {
-    if (config == NULL)
-        return;
-
-    // Free the map, textures, and player if they were allocated
-    free_map(config->map);        // Free the map structure
-    free_textures(config->textures); // Free the texture structures
-    free_player(config->player);  // Free the player structure
-
-    // Finally, free the config structure itself
-    free(config);
+	if (config->map)
+		free_map(config->map);
+	if (config->textures)
+		free_textures(config->textures);
+	if (config->floor_color)
+		free (config->floor_color);
+	if (config->ceiling_color)
+		free (config->ceiling_color);
+	if (config->player)
+		free_player(config->player); //not implemented
+	free (config);
+	return (NULL);
 }
 
-int	free_player(t_player *player)
+void	*free_player(t_player *player)
 {
 	if (player)
 	{
@@ -54,8 +60,30 @@ int	free_player(t_player *player)
 		if (player->pos)
 			free(player->pos);
 		free(player);
-		return (0);
 	}
-	return (1);
+	return (NULL);
 }
 
+void	*free_game(t_game *game)
+{
+	if (game->mlx)
+		free(game->mlx); //is it like that?
+	if (game->win)
+		free(game->win); //same?
+	if (game->config)
+		free_config(game->config);
+	if (game->player)
+		free_player(game->player);
+	if (game->map)
+		free_map(game->map);
+	if (game->floor_color)
+		free(game->floor_color);
+	if (game->ceiling_color)
+		free(game->ceiling_color);
+	if (game->textures)
+		free_textures(game->textures);
+	if (game->screen_data)
+		free(game->screen_data);
+	free (game);
+	return (NULL);
+}

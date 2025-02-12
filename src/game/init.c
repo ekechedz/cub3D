@@ -1,8 +1,10 @@
 #include "../../include/cub3d.h"
 
-t_vector *init_vector(double x, double y)
+t_vector	*init_vector(double x, double y)
 {
-	t_vector *vector = (t_vector *)malloc(sizeof(t_vector));
+	t_vector	*vector;
+	
+	vector = (t_vector *)malloc(sizeof(t_vector));
 	if (!vector)
 		return (NULL);
 	vector->x = x;
@@ -10,32 +12,24 @@ t_vector *init_vector(double x, double y)
 	return (vector);
 }
 
-t_player *init_player(double x, double y, char NSEW)
+t_player *init_player(double x, double y)
 {
-	t_player *player = (t_player *)malloc(sizeof(t_player));
+	t_player	*player;
+	
+	player = (t_player *)malloc(sizeof(t_player));
 	if (!player)
 		return (NULL);
-
-	// if (!init_pos_dir_plane(player, NSEW, x, y))
-	// {
-	// 	free(player); // Free `player` before returning NULL
-	// 	return (NULL);
-	// }
-	(void) x;
-	(void) y;
-	(void) NSEW;
+	player->pos = init_vector(x + 0.5, y + 0.5);
+	if (!player->pos)
+		return (free_player(player)); // Return failure if `player->pos` allocation fails
 	player->move_speed = 0.1;
 	player->rot_speed = 0.1;
 	player->health = 100;
 	return (player);
 }
 
-int init_pos_dir_plane(t_player *player, char NSEW, double x, double y)
+int	init_pos_dir_plane(t_player *player, char NSEW)
 {
-	player->pos = init_vector(x + 0.5, y + 0.5);
-	if (!player->pos)
-		return (0); // Return failure if `player->pos` allocation fails
-
 	if (NSEW == 'E')
 	{
 		player->dir = init_vector(1.0, 0.0);
@@ -83,30 +77,20 @@ t_map *init_map(int width, int height)
 	t_map *map = (t_map *)malloc(sizeof(t_map));
 	if (map == NULL)
 		return NULL;
-	map->width = width;
-	map->height = height;
+	map->width = width; //this is always zero, why do we bother then
+	map->height = height; //this is always zero, why do we bother then
 	map->grid = (char **)malloc(sizeof(char *) * height);
 	if (map->grid == NULL)
-	{
-		free(map);
-		return NULL;
-	}
+		return (free_map(map));
 	for (int i = 0; i < height; i++)
 	{
+		//i dont think this is necessary because you already get an allocated line from gnl
 		map->grid[i] = (char *)malloc(sizeof(char) * (width + 1));
 		if (map->grid[i] == NULL)
-		{
-			for (int j = 0; j < i; j++)
-			{
-				free(map->grid[j]);
-			}
-			free(map->grid);
-			free(map);
-			return NULL;
-		}
+			return (free_map(map));
 		ft_memset(map->grid[i], 0, sizeof(char) * (width + 1));
 	}
-	return map;
+	return (map);
 }
 
 t_image *init_t_image(void)
@@ -124,53 +108,44 @@ t_image *init_t_image(void)
 	return (new);
 }
 
-void init_textures(t_textures *textures)
+static t_textures	*init_textures(void)
 {
-	textures->north = init_t_image();
-	if (!textures->north)
-		exit_with_error("Error loading textures", 1);
-	textures->east = init_t_image();
-	if (!textures->east)
-		exit_with_error("Error loading textures", 1);
-	textures->south = init_t_image();
-	if (!textures->south)
-		exit_with_error("Error loading textures", 1);
-	textures->west = init_t_image();
-	if (!textures->west)
-		exit_with_error("Error loading textures", 1);
-	textures->floor = init_t_image();
-	if (!textures->floor)
-		exit_with_error("Error loading textures", 1);
-	textures->ceiling = init_t_image();
-	if (!textures->ceiling)
-		exit_with_error("Error loading textures", 1);
-	textures->door = init_t_image();
-	if (!textures->door)
-		exit_with_error("Error loading textures", 1);
-	textures->gameover = init_t_image();
-	if (!textures->gameover)
-		exit_with_error("Error loading textures", 1);
-	//improvements still to be made, in case one fails we need to free the others that were allocated before
+	t_textures	*t;
+
+	t = malloc(sizeof(t_textures));
+	if (!t)
+		return (NULL);
+	t->north = init_t_image();
+	t->east = init_t_image();
+	t->south = init_t_image();
+	t->west = init_t_image();
+	t->floor = init_t_image();
+	t->ceiling = init_t_image();
+	if (!t->north || !t->east || !t->south || !t->west || !t->floor || !t->ceiling)
+		return (free_textures(t));
+	return (t);
 }
 
 t_config *init_config(void)
 {
-	t_config *config;
+	t_config	*config;
 
 	config = (t_config *)malloc(sizeof(t_config));
 	if (!config)
 		return (NULL);
-	config->map = (t_map *)malloc(sizeof(t_map));
-	config->textures = (t_textures *)malloc(sizeof(t_textures));
-	config->player = init_player(0, 0, 'N');
-
-	init_textures(config->textures);
+	config->map = init_map(0, 0);
+	if (!config->map)
+		return (free_config(config)); 
+	config->textures = init_textures();
+	if (!config->textures)
+		return (free_config(config));
+	//config->player = init_player(0, 0, 'N'); //hm
 	config->ceiling_color = malloc(3 * sizeof(int));
 	if (!config->ceiling_color)
-		exit_with_error("Memory allocation failed", 0);
+		return (free_config(config));
 	config->floor_color = malloc(3 * sizeof(int));
 	if (!config->floor_color)
-		exit_with_error("Memory allocation failed", 0);
+		return (free_config(config));
 	return (config);
 }
 

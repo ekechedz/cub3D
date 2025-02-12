@@ -97,7 +97,7 @@ static int key_already_used(const char *key, char *used_keys[MAX_KEYS])
 	int i;
 
 	i = 0;
-	while(i < MAX_KEYS)
+	while (i < MAX_KEYS)
 	{
 		if (used_keys[i] && strcmp(used_keys[i], key) == 0)
 			return 1;
@@ -111,7 +111,7 @@ static void add_used_key(const char *key, char *used_keys[MAX_KEYS])
 	int i;
 
 	i = 0;
-	while(i < MAX_KEYS)
+	while (i < MAX_KEYS)
 	{
 		if (!used_keys[i])
 		{
@@ -186,25 +186,30 @@ static void parse_line(t_config *config, const char *line)
 	}
 }
 
-t_config *parse_cub_file(const char *file_path, t_config *config)
+t_config	*parse_cub_file(const char *file_path, t_config *config)
 {
-	char *line = NULL;
-	int fd = open(file_path, O_RDONLY);
+	char	*line;
+	int		fd;
 
+	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		exit_with_error("Failed to open .cub file", 0);
-
-	while ((line = get_next_line(fd)))
+		return (free_config(config));
+	line = "";
+	while (line)
 	{
-		parse_line(config, line);
-		free(line);
+		line = get_next_line(fd);
+		if (line)
+		{
+			parse_line(config, line);
+			free(line);
+		}
 	}
 	close(fd);
-	validate_map(config->map, config);
+	validate_map(config->map, config); //why not pass only config
 	if (!config->map || config->map->width <= 0 || config->map->height <= 0)
 	{
 		fprintf(stderr, "Error: Invalid map in .cub file\n");
-		return NULL;
+		return (free_config(config));
 	}
-	return config;
+	return (config);
 }

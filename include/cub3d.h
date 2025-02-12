@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "/home/ekechedz/minilibx/mlx.h"
-//include "/home/natalia/Repositories/minilibx/mlx.h"
+//#include "/home/ekechedz/minilibx/mlx.h"
+#include "/home/natalia/Repositories/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -94,8 +94,6 @@ typedef struct s_textures
 	t_image *west;
 	t_image *floor;
 	t_image *ceiling;
-	t_image *door;
-	t_image *gameover;
 } t_textures;
 
 
@@ -108,11 +106,11 @@ typedef struct s_map
 } t_map;
 
 typedef struct s_config {
-    t_map       *map;        // Map structure
-    t_textures  *textures;    // Textures for walls, floor, ceiling
-    int         *floor_color; // Floor color (RGB)
-    int         *ceiling_color; // Ceiling color (RGB)
-    t_player    *player;      // Player settings (position, direction, etc.)
+	t_map		*map;        // Map structure
+	t_textures  *textures;    // Textures for walls, floor, ceiling
+	int         *floor_color; // Floor color (RGB)
+	int         *ceiling_color; // Ceiling color (RGB)
+	t_player    *player;      // Player settings (position, direction, etc.)
 } t_config;
 
 
@@ -128,41 +126,39 @@ typedef struct s_game {
 	t_textures  *textures;    // Game textures (walls, etc.)
 	int *screen_data;  // Make sure it's modifiable
 	void		*img;
-	void		*addr;
 	int     bpp;
 	int     line_length;
 	int     endian;
 	struct timeval last_time;
 	int      key_st[KEY_COUNT];  // Array to store key states (now inside the game struct)
-
 } t_game;
 
 typedef struct s_ray
 {
-    double dist;          // Distance to the wall
-    t_vector *hit;        // Exact hit position on the wall
-    int side;             // Which side of the wall was hit (0 = vertical, 1 = horizontal)
-    int tex_x;            // X-coordinate on the texture
-    int lineHeight;    // Height of the line to draw (based on distance to the wall)
-    int drawStart;        // Y-coordinate to start drawing (top of the wall)
-    int drawEnd;          // Y-coordinate to end drawing (bottom of the wall)
-    double dirX;          // Direction vector X component
-    double dirY;          // Direction vector Y component
-    double deltaDistX;    // Change in distance for each step along the X axis
-    double deltaDistY;    // Change in distance for each step along the Y axis
-    double stepX;         // Step along the X axis (either 1 or -1, depending on direction)
-    double stepY;         // Step along the Y axis (either 1 or -1, depending on direction)
-    double sideDistX;     // Distance to the next vertical grid line
-    double sideDistY;     // Distance to the next horizontal grid line
-    double posX;          // Ray's starting X position
-    double posY;          // Ray's starting Y position
-    double perpWallDist;  // Perpendicular distance to the wall
-    double cameraX;       // X-coordinate of the ray's camera position (for screen mapping)
-    double texPos;        // Position of the texture on the wall for texture mapping
-    double step;          // Amount to move through the texture
+	double dist;          // Distance to the wall
+	t_vector *hit;        // Exact hit position on the wall
+	int side;             // Which side of the wall was hit (0 = vertical, 1 = horizontal)
+	int tex_x;            // X-coordinate on the texture
+	int lineHeight;    // Height of the line to draw (based on distance to the wall)
+	int drawStart;        // Y-coordinate to start drawing (top of the wall)
+	int drawEnd;          // Y-coordinate to end drawing (bottom of the wall)
+	double dirX;          // Direction vector X component
+	double dirY;          // Direction vector Y component
+	double deltaDistX;    // Change in distance for each step along the X axis
+	double deltaDistY;    // Change in distance for each step along the Y axis
+	double stepX;         // Step along the X axis (either 1 or -1, depending on direction)
+	double stepY;         // Step along the Y axis (either 1 or -1, depending on direction)
+	double sideDistX;     // Distance to the next vertical grid line
+	double sideDistY;     // Distance to the next horizontal grid line
+	double posX;          // Ray's starting X position
+	double posY;          // Ray's starting Y position
+	double perpWallDist;  // Perpendicular distance to the wall
+	double cameraX;       // X-coordinate of the ray's camera position (for screen mapping)
+	double texPos;        // Position of the texture on the wall for texture mapping
+	double step;          // Amount to move through the texture
 	int texX;
 	double rayDirX;   // Ray's X direction component
-    double rayDirY;   // Ray's Y direction component
+	double rayDirY;   // Ray's Y direction component
 } t_ray;
 
 
@@ -176,9 +172,9 @@ void strafe_player(t_game *game, int direction, double delta_time);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);
-int			init_pos_dir_plane(t_player *player, char NSEW, double x, double y);
+int			init_pos_dir_plane(t_player *player, char NSEW);
 t_map		*init_map(int width, int height);
-t_player	*init_player(double x, double i, char NSEW);
+t_player	*init_player(double x, double y);
 t_game *init_game(t_config *config);
 t_ray	*init_ray(void);
 void	render(t_game *game);
@@ -206,8 +202,11 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char *ft_strncpy(char *dest, const char *src, size_t n);
 
 // free
-void	free_config(t_config *config);
-int		free_player(t_player *player);
+void	*free_config(t_config *config);
+void	*free_player(t_player *player);
+t_textures	*free_textures(t_textures *t);
+void	*free_map(t_map *map);
+void	*free_game(t_game *game);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);

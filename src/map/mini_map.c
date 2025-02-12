@@ -6,6 +6,7 @@
 #define PLAYER_COLOR 0xFF0000  // Red dot for player
 #define WALL_COLOR 0xFFFFFF    // White walls
 #define FLOOR_COLOR 0x000000   // Black for empty space
+#define EMPTY_COLOR		0xADD8E6
 #define RAY_COLOR 0xFFFF00     // Yellow for view direction
 
 // Draw a small square (used for walls & empty space)
@@ -39,8 +40,16 @@ void draw_line(t_game *game, int x0, int y0, int x1, int y1, int color)
             game->screen_data[y0 * WIN_WIDTH + x0] = color;
 
         int e2 = err * 2;
-        if (e2 > -dy) { err -= dy; x0 += sx; }
-        if (e2 < dx) { err += dx; y0 += sy; }
+        if (e2 > -dy)
+        {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx)
+        {
+            err += dx;
+            y0 += sy;
+        }
     }
 }
 
@@ -62,34 +71,67 @@ void draw_circle(t_game *game, int cx, int cy, int radius, int color)
     }
 }
 
-// Draw the minimap based on game->map
+// Normalize the player's direction vector
+void normalize_direction(t_game *game)
+{
+    float length = sqrt(game->player->dir->x * game->player->dir->x +
+        game->player->dir->y * game->player->dir->y);
+    if (length > 0)
+    {
+        game->player->dir->x /= length;
+		game->player->dir->y /= length;
+	}
+}
+
 void render_minimap(t_game *game)
 {
-	//printf("Rendering minimap for map size: %d x %d\n", game->map->width, game->map->height);
-    // Clear minimap area first
-    for (int y = 0; y < game->map->height; y++)
-    {
-        for (int x = 0; x < game->map->width; x++)
+    // Debug: Check map size
+    printf("Rendering minimap for map size: %d x %d\n", game->map->width, game->map->height);
+
+        // Clear minimap area first (draw background for grid)
+        for (int y = 0; y < game->map->height; y++)
         {
-            int pixel_x = MINIMAP_X_OFFSET + (x * MINIMAP_SCALE);
-            int pixel_y = MINIMAP_Y_OFFSET + ((game->map->height - y) * MINIMAP_SCALE);
-
-            if (game->map->grid[y][x] == '1')  // Walls
-                draw_square(game, pixel_x, pixel_y, WALL_COLOR);
-            else  // Empty space
-                draw_square(game, pixel_x, pixel_y, FLOOR_COLOR);
+            for (int x = 0; x < game->map->width; x++)
+            {
+                int pixel_x = MINIMAP_X_OFFSET + (x * MINIMAP_SCALE);
+                int pixel_y = MINIMAP_Y_OFFSET + (y * MINIMAP_SCALE);
+                // Drawing walls and floor
+                if (game->map->grid[y][x] == '1') // Walls
+                    draw_square(game, pixel_x, pixel_y, WALL_COLOR);
+                else if (game->map->grid[y][x] == '0') // Empty space
+                    draw_square(game, pixel_x, pixel_y, FLOOR_COLOR);
+                else // Empty tiles like doors or items
+                    draw_square(game, pixel_x, pixel_y, EMPTY_COLOR);
+            }
         }
-    }
-	//printf("Player position: (%.2f, %.2f)\n", game->player->pos->x, game->player->pos->y);
+        // Calculate player minimap position (scaled)
+        int player_x = MINIMAP_X_OFFSET + (int)(game->player->pos->x * MINIMAP_SCALE);
+        int player_y = MINIMAP_Y_OFFSET + (int)(game->player->pos->y * MINIMAP_SCALE);
+        // Ensure player stays within minimap bounds
+        if (player_x < MINIMAP_X_OFFSET) player_x = MINIMAP_X_OFFSET;
+        if (player_y < MINIMAP_Y_OFFSET) player_y = MINIMAP_Y_OFFSET;
+        if (player_x > MINIMAP_X_OFFSET + (game->map->width * MINIMAP_SCALE))
+            player_x = MINIMAP_X_OFFSET + (game->map->width * MINIMAP_SCALE);
+        if (player_y > MINIMAP_Y_OFFSET + (game->map->height * MINIMAP_SCALE))
+            player_y = MINIMAP_Y_OFFSET + (game->map->height * MINIMAP_SCALE);
+        // Draw player as red circle on minimap
+        draw_circle(game, player_x, player_y, 3, PLAYER_COLOR);
+        // Normalize player direction vector
+        normalize_direction(game);
+        // Calculate ray endpoint
+        int ray_length = 30; // Scale the ray length as needed for your minimap
+        int end_x = player_x - (int)(game->player->dir->x * ray_length);
+        int end_y = player_y + (int)(game->player->dir->y * ray_length);
 
-    // Draw player position on minimap (scaled position)
-    int player_x = MINIMAP_X_OFFSET + (int)(game->player->pos->x * MINIMAP_SCALE);
-    int player_y = MINIMAP_Y_OFFSET + (int)((game->map->height - game->player->pos->y) * MINIMAP_SCALE);
-	//printf("Player minimap position: (%d, %d)\n", player_x, player_y);
-    draw_circle(game, player_x, player_y, 3, PLAYER_COLOR);
-
-    // Draw player view direction (ray)
-    int end_x = player_x + game->player->dir->x * 10 * MINIMAP_SCALE;
-    int end_y = player_y - game->player->dir->y * 10 * MINIMAP_SCALE;
+    	    // Clamp the ray end position within the minimap bounds
+    if (end_x < MINIMAP_X_OFFSET) end_x = MINIMAP_X_OFFSET;
+    if (end_y < MINIMAP_Y_OFFSET) end_y = MINIMAP_Y_OFFSET;
+    if (end_x > MINIMAP_X_OFFSET + (game->map->width * MINIMAP_SCALE))
+        end_x = MINIMAP_X_OFFSET + (game->map->width * MINIMAP_SCALE);
+    if (end_y > MINIMAP_Y_OFFSET + (game->map->height * MINIMAP_SCALE))
+        end_y = MINIMAP_Y_OFFSET + (game->map->height * MINIMAP_SCALE);
+            // Debug: Print ray end position
+    printf("Ray end position: (%d, %d)\n", end_x, end_y);
+   // Draw ray (player's view direction) in yellow
     draw_line(game, player_x, player_y, end_x, end_y, RAY_COLOR);
 }
