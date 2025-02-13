@@ -64,7 +64,6 @@ int perform_dda(t_game *game, t_ray *ray)
 		if (game->map->grid[hity][hitx] == WALL)
 			hit = 1;
 	}
-	printf("Checking grid[%d][%d] = %c\n", hity, hitx, game->map->grid[hity][hitx]);
 	ray->hit->x = hitx;
 	ray->hit->y = hity;
 	return (hit);
@@ -112,7 +111,5 @@ int	main_loop(t_game *game)
 	if (game->key_st[XK_Right])
 		rotate_player(game->player, 1, delta_time);
 	render(game);
-	//render_minimap(game->mlx, game->win, game->config);
-	printf("player dir: (%lf, %lf), player pos: (%lf, %lf)\n", game->player->dir->x, game->player->dir->y, game->player->pos->y, game->player->pos->x);
 	return (0);
 }

@@ -42,38 +42,6 @@ int close_window(void *param)
 	return (0);
 }
 
-void print_config(t_config *config)
-{
-	printf("Config Data:\n");
-
-	// Print the map data
-	printf("Map Height: %d\n", config->map->height);
-	printf("Map Width: %d\n", config->map->width);
-
-
-
-	// Print the floor and ceiling color values
-	printf("Floor Color: %ls\n", config->floor_color);
-	printf("Ceiling Color: %ls\n", config->ceiling_color);
-
-}
-
-void print_game(t_game *game)
-{
-	printf("\nGame Data:\n");
-
-	// Print the map data
-	printf("Map Height: %d\n", game->config->map->height);
-	printf("Map Width: %d\n", game->config->map->width);
-
-	// Print the floor and ceiling color values
-	printf("Floor Color: %ls\n", game->config->floor_color);
-	printf("Ceiling Color: %ls\n", game->config->ceiling_color);
-	printf("Floor color: 0x%06X\n", *game->floor_color); // Dereferencing to get the color value
-	printf("Ceiling color: 0x%06X\n", *game->ceiling_color);
-}
-
-
 int	main(int argc, char **argv)
 {
 	t_game		*game;
@@ -89,10 +57,9 @@ int	main(int argc, char **argv)
 	}
 	if (!parse_cub_file(argv[1], config)) //in case of error, i already free config inside
 	{
-		write(2, "Failed to parse .cub file\n", 26); 
+		write(2, "Failed to parse .cub file\n", 26);
 		return (1);
 	}
-	print_config(config);
 	game = init_game(config);
 	if (!game)
 	{
@@ -100,7 +67,6 @@ int	main(int argc, char **argv)
 		free_game(game);
 		return (1);
 	}
-	print_game(game);
 	if (load_textures(game, config) < 0)
 	{
 		fprintf(stderr, "Error: Failed to load textures\n");
@@ -127,10 +93,10 @@ void	init_events(t_game *game)
 {
 	mlx_clear_window(game->mlx, game->win);
 	memset(game->key_st, 0, sizeof(game->key_st)); //maybe in init_game is better
-	
+
 	mlx_hook(game->win, 2, 1L << 0, key_hook, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release_hook, game);
-	//then theres a mlx_hook with a handle_close function 
+	//then theres a mlx_hook with a handle_close function
 	//then a mlx_hook with a handle_mouse_move that im not sure we need for mandatory
 	//then a mlx_hook with a handle_mouse_click
 	mlx_loop_hook(game->mlx, main_loop, game);

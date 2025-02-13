@@ -30,7 +30,6 @@ int load_image(void *mlx_ptr, t_image *img, char *fname)
 	trim_whitespace(fname);
 	img->img_ptr = mlx_xpm_file_to_image(mlx_ptr, fname, &img->width,
 										 &img->height);
-	printf("Config: Trying to load texture from: %p (File: %s)\n", img->img_ptr, fname);
 	if (img->img_ptr == NULL)
 		return (-1);
 	img->buff = mlx_get_data_addr(img->img_ptr, &img->bpp, &img->lstsize,

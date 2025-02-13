@@ -66,9 +66,6 @@ int	init_pos_dir_plane(t_player *player, char NSEW)
 			free(player->plane);
 		return (0);
 	}
-	printf("Player initialized at (%.2f, %.2f) facing dir(%.2f, %.2f) with plane(%.2f, %.2f)\n",
-    player->pos->x, player->pos->y, player->dir->x, player->dir->y, player->plane->x, player->plane->y);
-
 	return (1);
 }
 
