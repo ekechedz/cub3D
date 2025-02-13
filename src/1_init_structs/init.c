@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:42 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:47:43 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:21:10 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ t_config	*init_config(void)
 	config->floor_color = malloc(3 * sizeof(int));
 	if (!config->floor_color)
 		return (free_config(config));
+	ft_memset(config->used_keys, 0, sizeof(config->used_keys));
 	return (config);
 }

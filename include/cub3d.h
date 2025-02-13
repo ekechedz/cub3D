@@ -92,17 +92,17 @@ typedef struct s_image
 	int width;
 	int height;
 	int line_length;
-} t_image;
+}	t_image;
 
 typedef struct s_textures
 {
-	t_image *north;
-	t_image *east;
-	t_image *south;
-	t_image *west;
-	t_image *floor;
-	t_image *ceiling;
-} t_textures;
+	t_image	*north;
+	t_image	*east;
+	t_image	*south;
+	t_image	*west;
+	t_image	*floor;
+	t_image	*ceiling;
+}	t_textures;
 
 
 
@@ -119,25 +119,27 @@ typedef struct s_config {
 	int         *floor_color; // Floor color (RGB)
 	int         *ceiling_color; // Ceiling color (RGB)
 	t_player    *player;      // Player settings (position, direction, etc.)
+	char	*used_keys[MAX_KEYS];
 } t_config;
 
 
 
 typedef struct s_game {
-	void        *mlx;        // MiniLibX connection
-	void        *win;        // MiniLibX window
-	t_player    *player;     // Pointer to the player data
-	t_map       *map;        // Pointer to the map structure
-	int         *floor_color; // Floor color (RGB)
-	int         *ceiling_color; // Ceiling color (RGB)
-	t_textures  *textures;    // Game textures (walls, etc.)
-	int *screen_data;  // Make sure it's modifiable
-	void		*img;
+	void	*mlx;
+	void	*win;
+	t_player    *player;
+	t_map       *map;
+	int         *floor_color;
+	int         *ceiling_color;
+	t_textures  *textures;
+	int *screen_data;
+	void			*img;
 	int     bpp;
 	int     line_length;
 	int     endian;
 	struct timeval last_time;
-	int      key_st[KEY_COUNT];  // Array to store key states (now inside the game struct)
+	int		key_st[KEY_COUNT];
+
 } t_game;
 
 typedef struct s_ray
@@ -188,9 +190,9 @@ typedef struct s_circle_params
 int main_loop(t_game *game);
 int key_hook(int keycode, t_game *game);
 int key_release_hook(int keycode, t_game *game);
-void rotate_player(t_player *player, int direction, double delta_time);
-void move_player(t_game *game, int direction, double delta_time);
-void strafe_player(t_game *game, int direction, double delta_time);
+void	 rotate_player(t_player *player, int direction, double delta_time);
+void	 move_player(t_game *game, int direction, double delta_time);
+void	 strafe_player(t_game *game, int direction, double delta_time);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);
@@ -211,8 +213,8 @@ void	add_used_key(const char *key, char *used_keys[MAX_KEYS]);
 int	key_already_used(const char *key, char *used_keys[MAX_KEYS]);
 char	*trim_trailing_spaces(const char *line);
 int is_empty_or_map_started(const char *line, int map_started);
-void parse_color_line(t_config *config, const char *line, char *used_keys[MAX_KEYS]);
-void	parse_texture_line(t_config *config, const char *line, char *used_keys[MAX_KEYS]);
+void	parse_color_line(t_config *config, const char *line);
+void	parse_texture_line(t_config *config, const char *line);
 void	parse_color(const char *str, int *color);
 
 
@@ -233,6 +235,8 @@ void	*free_map(t_map *map);
 void	*free_game(t_game *game);
 void	*cleanup_all(t_game	*game, t_config *config);
 void	*free_ray(t_ray *ray);
+
+void	free_used_keys(char *used_keys[MAX_KEYS]);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);

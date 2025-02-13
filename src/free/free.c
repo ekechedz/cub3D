@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:38:55 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:58:25 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:11:17 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	*free_config(t_config *config)
 		free (config->ceiling_color);
 	if (config->player)
 		free_player(config->player);
+	if(config->used_keys)
+		free_used_keys(config->used_keys);
 	free (config);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:53:44 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 17:01:44 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:19:45 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,21 @@ void	parse_map_line(t_config *config, const char *line)
 
 static void	parse_line(t_config *config, const char *line)
 {
-	static char	*used_keys[MAX_KEYS] = {0};
 	static int	map_started;
 
 	if (is_empty_or_map_started(line, map_started))
 		return ;
 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0 \
 	|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
-		parse_texture_line(config, line, used_keys);
+		parse_texture_line(config, line);
 	else if (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0)
-		parse_color_line(config, line, used_keys);
+		parse_color_line(config, line);
 	else
 	{
 		map_started = 1;
 		parse_map_line(config, line);
 	}
+
 }
 
 t_config	*parse_cub_file(const char *file_path, t_config *config)
@@ -102,6 +102,7 @@ t_config	*parse_cub_file(const char *file_path, t_config *config)
 			free(line);
 		}
 	}
+	free(line);
 	close(fd);
 	validate_map(config->map, config);
 	if (!config->map || config->map->width <= 0 || config->map->height <= 0)
