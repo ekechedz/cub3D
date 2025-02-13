@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 //#include "/home/ekechedz/minilibx/mlx.h"
-#include "/home/natalia/Repositories/minilibx/mlx.h"
+#include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -69,9 +69,6 @@ typedef struct s_player {
 	t_vector    *pos;
 	t_vector    *dir;
 	t_vector    *plane;
-	double      move_speed;  // Movement speed -- why do we need this if you already defined it it line 20
-	double      rot_speed;   // Rotation speed -- same
-	int         health;      // Player health
 } t_player;
 
 typedef struct s_image
@@ -118,7 +115,6 @@ typedef struct s_config {
 typedef struct s_game {
 	void        *mlx;        // MiniLibX connection
 	void        *win;        // MiniLibX window
-	t_config    *config;     // Pointer to the game's configuration
 	t_player    *player;     // Pointer to the player data
 	t_map       *map;        // Pointer to the map structure
 	int         *floor_color; // Floor color (RGB)
@@ -172,14 +168,15 @@ void strafe_player(t_game *game, int direction, double delta_time);
 t_config	*init_config(void);
 t_image		*init_t_image(void);
 t_vector	*init_vector(double x, double y);
-int			init_pos_dir_plane(t_player *player, char NSEW);
-t_map		*init_map(int width, int height);
+void		*init_pos_dir_plane(t_player *player, char NSEW);
+t_map		*init_map(void);
 t_player	*init_player(double x, double y);
 t_game *init_game(t_config *config);
 t_ray	*init_ray(void);
 void	render(t_game *game);
 void render_minimap(t_game *game);
 void	init_events(t_game *game);
+t_textures	*init_textures(t_config	*config);
 
 
 // Function Prototypes
@@ -194,7 +191,7 @@ int		handle_input_wrapper(int key, void *param);
 
 //void validate_map(t_config *config);
 void validate_map(t_map *map, t_config *config);
-void exit_with_error(const char *message, int use_perror);
+int	error(const char *message, int use_perror);
 t_config *parse_cub_file(const char *file_path, t_config *config);
 
 // Utils
@@ -207,6 +204,7 @@ void	*free_player(t_player *player);
 t_textures	*free_textures(t_textures *t);
 void	*free_map(t_map *map);
 void	*free_game(t_game *game);
+void	*cleanup_all(t_game	*game, t_config *config);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);

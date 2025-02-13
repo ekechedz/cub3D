@@ -46,7 +46,7 @@ void	validate_map(t_map *map, t_config *config)
 		while (j < map->width)
 		{
 			if (map->grid[i][j] == '0' && is_open_to_space(map, i, j))
-				exit_with_error("Walkable area next to open space!", 0);
+				error("Walkable area next to open space!", 0);
 			if (map->grid[i][j] && ft_strchr("NSEW", map->grid[i][j]))
 			{
 				config->player = init_player(i, j);

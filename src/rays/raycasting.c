@@ -112,7 +112,6 @@ int	main_loop(t_game *game)
 	if (game->key_st[XK_Right])
 		rotate_player(game->player, 1, delta_time);
 	render(game);
-	//render_minimap(game->mlx, game->win, game->config);
 	printf("player dir: (%lf, %lf), player pos: (%lf, %lf)\n", game->player->dir->x, game->player->dir->y, game->player->pos->y, game->player->pos->x);
 	return (0);
 }

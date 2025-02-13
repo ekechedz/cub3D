@@ -1,6 +1,6 @@
 #include "../../include/cub3d.h"
 
-t_textures	*free_textures(t_textures *t) 
+t_textures	*free_textures(t_textures *t)
 {
 	if (t->north)
 		free (t->north);
@@ -66,12 +66,6 @@ void	*free_player(t_player *player)
 
 void	*free_game(t_game *game)
 {
-	if (game->mlx)
-		free(game->mlx); //is it like that?
-	if (game->win)
-		free(game->win); //same?
-	if (game->config)
-		free_config(game->config);
 	if (game->player)
 		free_player(game->player);
 	if (game->map)
@@ -83,7 +77,25 @@ void	*free_game(t_game *game)
 	if (game->textures)
 		free_textures(game->textures);
 	if (game->screen_data)
-		free(game->screen_data);
+		free(game->screen_data); //maybe theres an mlx function
+	if (game->img)
+		mlx_destroy_image(game->mlx, game->img); //do i have to free it still?
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win); //same
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
 	free (game);
+	return (NULL);
+}
+
+void	*cleanup_all(t_game	*game, t_config *config)
+{
+	if (game)
+		free_game(game);
+	if (config)
+		free_config(config);
 	return (NULL);
 }
