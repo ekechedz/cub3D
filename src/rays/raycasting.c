@@ -1,17 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 16:17:04 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 16:17:06 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
-void initialize_ray(t_game *game, t_ray *ray, double cameraX)
+void	initialize_ray(t_game *game, t_ray *ray, double cameraX)
 {
-	ray->posX = game->player->pos->x;
-	ray->posY = game->player->pos->y;
 	ray->dirX = game->player->dir->x + game->player->plane->x * cameraX;
 	ray->dirY = game->player->dir->y + game->player->plane->y * cameraX;
 	ray->deltaDistX = fabs(1.0 / ray->dirX);
 	ray->deltaDistY = fabs(1.0 / ray->dirY);
-
-	ray->hit = (t_vector *)malloc(sizeof(t_vector));
-	ray->hit->x = ray->posX;
-	ray->hit->y = ray->posY;
+	ray->hit = init_vector(ray->posX, ray->posY);
 	if (ray->dirX < 0)
 	{
 		ray->stepX = -1;
@@ -22,7 +29,6 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 		ray->stepX = 1;
 		ray->sideDistX = ((int)ray->posX + 1.0 - ray->posX) * ray->deltaDistX;
 	}
-
 	if (ray->dirY < 0)
 	{
 		ray->stepY = -1;
@@ -35,14 +41,9 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 	}
 }
 
-
-int perform_dda(t_game *game, t_ray *ray)
+int	perform_dda(t_game *game, t_ray *ray, int hitx, int hity)
 {
-	int hit = 0;
-	int hitx = (int)game->player->pos->x;
-	int hity = (int)game->player->pos->y;
-
-	while (hit == 0)
+	while (1)
 	{
 		if (ray->sideDistX < ray->sideDistY)
 		{
@@ -56,30 +57,30 @@ int perform_dda(t_game *game, t_ray *ray)
 			hity += ray->stepY;
 			ray->side = 1;
 		}
-		if (hity < 0 || hitx >= game->map->width || hitx < 0 || hity >= game->map->height)
-			return -1;
+		if (hity < 0 || hitx >= game->map->width || hitx < 0 || \
+			hity >= game->map->height)
+			return (0);
 		if (game->map->grid[hity][hitx] == WALL)
-			hit = 1;
+			break ;
 	}
 	ray->hit->x = hitx;
 	ray->hit->y = hity;
-	return (hit);
+	return (1);
 }
 
-
-t_ray *cast_rays(t_game *game)
+t_ray	*cast_rays(t_game *game)
 {
 	int		x;
 	t_ray	*ray;
-	double	cameraX;
+	double	camerax;
 
 	x = 0;
-	ray = init_ray();
+	ray = init_ray(game->player->pos->x, game->player->pos->y);
 	while (x < WIN_WIDTH)
 	{
-		cameraX = 2 * x / (double)WIN_WIDTH - 1;
-		initialize_ray(game, ray, cameraX);
-		if (perform_dda(game, ray))
+		camerax = 2 * x / (double)WIN_WIDTH - 1;
+		initialize_ray(game, ray, camerax);
+		if (perform_dda(game, ray, game->player->pos->x, game->player->pos->y))
 			render_texture(game, ray, x);
 		x ++;
 	}

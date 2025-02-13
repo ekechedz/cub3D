@@ -142,30 +142,25 @@ typedef struct s_game {
 
 typedef struct s_ray
 {
-	double dist;          // Distance to the wall
-	t_vector *hit;        // Exact hit position on the wall
-	int side;             // Which side of the wall was hit (0 = vertical, 1 = horizontal)
-	int tex_x;            // X-coordinate on the texture
-	int lineHeight;    // Height of the line to draw (based on distance to the wall)
-	int drawStart;        // Y-coordinate to start drawing (top of the wall)
-	int drawEnd;          // Y-coordinate to end drawing (bottom of the wall)
-	double dirX;          // Direction vector X component
-	double dirY;          // Direction vector Y component
-	double deltaDistX;    // Change in distance for each step along the X axis
-	double deltaDistY;    // Change in distance for each step along the Y axis
-	double stepX;         // Step along the X axis (either 1 or -1, depending on direction)
-	double stepY;         // Step along the Y axis (either 1 or -1, depending on direction)
-	double sideDistX;     // Distance to the next vertical grid line
-	double sideDistY;     // Distance to the next horizontal grid line
-	double posX;          // Ray's starting X position
-	double posY;          // Ray's starting Y position
-	double perpWallDist;  // Perpendicular distance to the wall
-	double cameraX;       // X-coordinate of the ray's camera position (for screen mapping)
-	double texPos;        // Position of the texture on the wall for texture mapping
-	double step;          // Amount to move through the texture
+	double dist;
+	t_vector *hit;
+	int side;
+	int lineHeight; //needed
+	int drawStart;
+	int drawEnd;
+	double dirX;
+	double dirY;
+	double deltaDistX;
+	double deltaDistY;
+	double stepX;
+	double stepY;
+	double sideDistX;
+	double sideDistY;
+	double posX;
+	double posY;
 	int texX;
-	double rayDirX;   // Ray's X direction component
-	double rayDirY;   // Ray's Y direction component
+	double rayDirX;
+	double rayDirY;
 } t_ray;
 
 typedef struct s_line_params
@@ -203,7 +198,7 @@ void		*init_pos_dir_plane(t_player *player, char NSEW);
 t_map		*init_map(void);
 t_player	*init_player(double x, double y);
 t_game *init_game(t_config *config);
-t_ray	*init_ray(void);
+t_ray	*init_ray(double x, double y);
 void	render(t_game *game);
 void render_minimap(t_game *game);
 void	init_events(t_game *game);
@@ -245,14 +240,10 @@ t_image	*choose_texture(t_ray *ray, t_game *game);
 int	get_txt_color(t_image *txt, int x, int y);
 
 //render
-
-int	render_slice(t_ray *ray, int texX, int x, t_game *game);
 void render_texture(t_game *game, t_ray *ray, int x);
 
 //rays
-
 t_ray	*cast_rays(t_game *game);
-
 int	close_window(void *param);
 
 //mini map

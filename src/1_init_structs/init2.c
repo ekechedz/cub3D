@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:49 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 14:37:29 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:10:41 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,18 @@ t_game	*init_game(t_config *config)
 	return (game);
 }
 
-t_ray	*init_ray(void)
+t_ray	*init_ray(double x, double y)
 {
 	t_ray	*ray;
 
 	ray = malloc(sizeof(t_ray));
 	if (!ray)
 		return (NULL);
+	ray->posX = x;
+	ray->posY = y;
 	ray->dist = 0.0;
 	ray->hit = NULL;
 	ray->side = 0;
-	ray->tex_x = 0;
 	ray->lineHeight = 0.0;
 	return (ray);
 }
