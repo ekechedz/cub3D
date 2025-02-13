@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:01:20 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 15:40:37 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:28:28 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	process_map_line(t_config *config, const char *clean_line)
 	size_t	old_size;
 	size_t	new_size;
 
+	if (config->map->height == 0)
+		config->map->height = 0;
+	if (!config->map->grid)
+		config->map->grid = NULL;
 	old_size = sizeof(char *) * config->map->height;
 	new_size = sizeof(char *) * (config->map->height + 1);
 	new_grid = ft_realloc(config->map->grid, old_size, new_size);

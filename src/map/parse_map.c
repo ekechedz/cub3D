@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:53:44 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:32:18 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:01:44 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	parse_map_line(t_config *config, const char *line)
 	clean_line = trim_trailing_spaces(line);
 	validate_line(clean_line);
 	process_map_line(config, clean_line);
+	free(clean_line);
 }
 
 static void	parse_line(t_config *config, const char *line)

@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:42 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 14:35:44 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:47:43 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ t_map	*init_map(void)
 	map->grid = (char **)malloc(sizeof(char *));
 	if (map->grid == NULL)
 		return (free_map(map));
+	map->height = 0;
+	map->width = 0;
 	return (map);
 }
 

@@ -6,27 +6,37 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:38:55 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 14:38:57 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:58:25 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-t_textures	*free_textures(t_textures *t)
+void free_image(t_image *img)
 {
-	if (t->north)
-		free (t->north);
-	if (t->south)
-		free (t->south);
-	if (t->east)
-		free (t->east);
-	if (t->west)
-		free (t->west);
-	if (t->floor)
-		free (t->floor);
-	if (t->ceiling)
-		free (t->ceiling);
-	free (t);
+	if (img)
+	{
+		if (img->img_ptr)
+			free(img->img_ptr);
+		if (img->buff)
+			free(img->buff);
+		free(img);
+	}
+}
+
+t_textures *free_textures(t_textures *t)
+{
+	if (t)
+	{
+		free_image(t->north);
+		free_image(t->south);
+		free_image(t->east);
+		free_image(t->west);
+		free_image(t->floor);
+		free_image(t->ceiling);
+		free(t);
+	}
+
 	return (NULL);
 }
 
