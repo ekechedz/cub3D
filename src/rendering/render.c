@@ -31,13 +31,14 @@ void render_texture(t_game *game, t_ray *ray, int x)
 	if (ray->drawEnd >= WIN_HEIGHT)
 		ray->drawEnd = WIN_HEIGHT;
 	if (ray->side == 0)
-		wallX = ray->posY + ray->perpWallDist * ray->dirY;
+		wallX = (ray->posY + ray->perpWallDist * ray->dirY);
 	else
-		wallX = ray->posX + ray->perpWallDist * ray->dirX;
+		wallX = (ray->posX + ray->perpWallDist * ray->dirX);
 	wallX -= floor(wallX);
 	texX = (int)(wallX * (double)TEXTURE_WIDTH);
-	if ((ray->side == 0 && ray->dirX > 0) || (ray->side == 1 && ray->dirY < 0))
-		texX = TEXTURE_WIDTH - texX - 1;
+	if ((ray->side == 0 && ray->dirX < 0) || (ray->side == 1 && ray->dirY > 0))
+    texX = TEXTURE_WIDTH - texX - 1;
+
 	render_slice(ray, texX, x, game);
 }
 

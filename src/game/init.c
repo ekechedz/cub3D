@@ -3,7 +3,7 @@
 t_vector	*init_vector(double x, double y)
 {
 	t_vector	*vector;
-	
+
 	vector = (t_vector *)malloc(sizeof(t_vector));
 	if (!vector)
 		return (NULL);
@@ -15,11 +15,11 @@ t_vector	*init_vector(double x, double y)
 t_player *init_player(double x, double y)
 {
 	t_player	*player;
-	
+
 	player = (t_player *)malloc(sizeof(t_player));
 	if (!player)
 		return (NULL);
-	player->pos = init_vector(x + 0.5, y + 0.5);
+	player->pos = init_vector(y + 0.5, x + 0.5);
 	if (!player->pos)
 		return (free_player(player)); // Return failure if `player->pos` allocation fails
 	player->move_speed = 0.1;
@@ -35,12 +35,12 @@ int	init_pos_dir_plane(t_player *player, char NSEW)
 		player->dir = init_vector(1.0, 0.0);
 		player->plane = init_vector(0.0, 0.66);
 	}
-	else if (NSEW == 'N')
+	else if (NSEW == 'W') //N
 	{
 		player->dir = init_vector(-1.0, 0.0);
 		player->plane = init_vector(0.0, -0.66);
 	}
-	else if (NSEW == 'W')
+	else if (NSEW == 'N')
 	{
 		player->dir = init_vector(0.0, -1.0);
 		player->plane = init_vector(0.66, 0.0);
@@ -135,7 +135,7 @@ t_config *init_config(void)
 		return (NULL);
 	config->map = init_map(0, 0);
 	if (!config->map)
-		return (free_config(config)); 
+		return (free_config(config));
 	config->textures = init_textures();
 	if (!config->textures)
 		return (free_config(config));

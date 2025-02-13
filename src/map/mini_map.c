@@ -120,7 +120,7 @@ void render_minimap(t_game *game)
         normalize_direction(game);
         // Calculate ray endpoint
         int ray_length = 30; // Scale the ray length as needed for your minimap
-        int end_x = player_x - (int)(game->player->dir->x * ray_length);
+        int end_x = player_x + (int)(game->player->dir->x * ray_length);
         int end_y = player_y + (int)(game->player->dir->y * ray_length);
 
     	    // Clamp the ray end position within the minimap bounds
