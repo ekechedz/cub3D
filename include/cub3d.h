@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-#include "/home/ekechedz/minilibx/mlx.h"
-//#include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
+//#include "/home/ekechedz/minilibx/mlx.h"
+#include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -205,7 +205,7 @@ void	init_events(t_game *game);
 t_textures	*init_textures(t_config	*config);
 
 // Validating map and parse
-void	validate_line(const char *line);
+int	validate_line(const char *line);
 void	process_map_line(t_config *config, const char *clean_line);
 void	add_used_key(const char *key, char *used_keys[MAX_KEYS]);
 int	key_already_used(const char *key, char *used_keys[MAX_KEYS]);
@@ -218,7 +218,7 @@ void	parse_color(const char *str, int *color);
 
 //void validate_map(t_config *config);
 void validate_map(t_map *map, t_config *config);
-int	error(const char *message, int use_perror);
+int	error(const char *message, int use_perror, t_game *g, t_config *c);
 t_config *parse_cub_file(const char *file_path, t_config *config);
 
 // Utils
@@ -231,7 +231,7 @@ void	*free_player(t_player *player);
 t_textures	*free_textures(t_textures *t);
 void	*free_map(t_map *map);
 void	*free_game(t_game *game);
-void	*cleanup_all(t_game	*game, t_config *config);
+int	cleanup_all(t_game	*game, t_config *config);
 void	*free_ray(t_ray *ray);
 
 // textures

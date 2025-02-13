@@ -1,32 +1,37 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:01:20 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 17:28:28 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:31:44 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/cub3d.h"
 
-void	validate_line(const char *line)
+int	validate_line(const char *line)
 {
 	int	i;
 
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] != '0' && line[i] != '1' && line[i] != 'N' \
-			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W'
-			&& line[i] != ' ')
-			error("Error: Invalid character in the map", 1);
+		if (!ft_strchr("01NSEW ", line[i]))
+		{
+			write(2, "Error: Invalid character in the map\n", 37);
+			return (0);
+		}
 		if (line[i] == '\n')
-			error("New line in the map", 0);
+		{
+			write(2, "New line in the map\n", 21);
+			return (0);
+		}
 		i++;
 	}
+	return (1);
 }
 
 void	process_map_line(t_config *config, const char *clean_line)
@@ -44,14 +49,14 @@ void	process_map_line(t_config *config, const char *clean_line)
 	new_size = sizeof(char *) * (config->map->height + 1);
 	new_grid = ft_realloc(config->map->grid, old_size, new_size);
 	if (!new_grid)
-		error("Failed to reallocate memory for map grid", 1);
+		error("Failed to reallocate memory for map grid", 1, NULL, config);
 	config->map->grid = new_grid;
 	line_length = ft_strlen(clean_line);
 	if (line_length > config->map->width)
 		config->map->width = line_length;
 	config->map->grid[config->map->height] = ft_strdup(clean_line);
 	if (!config->map->grid[config->map->height])
-		error("Failed to allocate memory for map line", 1);
+		error("Failed to allocate memory for map line", 1, NULL, config);
 	config->map->height++;
 }
 
@@ -93,7 +98,7 @@ char	*trim_trailing_spaces(const char *line)
 	len = ft_strlen(line);
 	start = 0;
 	if (line[0] == '\n')
-		error("Error: Line contains only whitespace or newline.", 1);
+		perror("Error: Line contains only whitespace or newline."); //check
 	while (len > 0 && (line[len - 1] == ' ' || line[len - 1] == '\n'))
 		len--;
 	if (start == len)

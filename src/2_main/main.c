@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:37:37 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 14:37:41 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:32:10 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../libft/libft.h"
 #include "../../include/cub3d.h"
@@ -43,19 +43,20 @@ int	main(int argc, char **argv)
 	check_input(argc, argv);
 	config = init_config();
 	if (!config)
-		error("Failed to initialize configuration\n", 1);
+		error("Failed to initialize configuration\n", 1, NULL, config);
 	if (!parse_cub_file(argv[1], config))
-		error("Failed to parse .cub file\n", 1);
+		error("Failed to parse .cub file\n", 1, NULL, config);
 	game = init_game(config);
 	if (!game)
-		error("Failed to initialize game\n", 1);
+		error("Failed to initialize game\n", 1, game, config);
 	if (load_textures(game, config) < 0)
 	{
-		error("Failed to load wall textures\n", 1);
+		error("Failed to load wall textures\n", 1, game, config);
 		return (1);
 	}
+	free (config);
 	init_events(game);
 	mlx_loop(game->mlx);
-	cleanup_all(game, config);
+	cleanup_all(game, NULL);
 	return (0);
 }

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:38:55 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:58:25 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:33:44 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/cub3d.h"
 
@@ -113,11 +113,11 @@ void	*free_game(t_game *game)
 	return (NULL);
 }
 
-void	*cleanup_all(t_game	*game, t_config *config)
+int	cleanup_all(t_game	*game, t_config *config)
 {
 	if (game)
 		free_game(game);
 	if (config)
 		free_config(config);
-	return (NULL);
+	exit(1);
 }

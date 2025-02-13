@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   init2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:49 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:10:41 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:38:09 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/cub3d.h"
 
@@ -77,14 +77,14 @@ t_game	*init_game(t_config *config)
 		return (NULL);
 	game->mlx = mlx_init();
 	if (game->mlx == NULL)
-		return (cleanup_all(game, config));
+		error("Failure\n", 0, game, config);
 	game->img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
 	if (!game->img)
-		return (cleanup_all(game, config));
+		error("Failure\n", 0, game, config);
 	game->screen_data = (int *)mlx_get_data_addr(game->img, &game->bpp, \
 		&game->line_length, &game->endian);
 	if (!game->screen_data)
-		return (cleanup_all(game, config));
+		error("Failure\n", 0, game, config);
 	game->player = config->player;
 	game->map = config->map;
 	game->textures = config->textures;

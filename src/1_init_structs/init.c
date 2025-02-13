@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:42 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:47:43 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:37:05 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/cub3d.h"
 
@@ -55,7 +55,7 @@ t_textures	*init_textures(t_config	*config)
 	t->ceiling = init_t_image();
 	if (!t->north || !t->east || !t->south || !t->west \
 		|| !t->floor || !t->ceiling)
-		return (cleanup_all(NULL, config));
+		error("Failure on init_textures\n", 0, NULL, config);
 	return (t);
 }
 
