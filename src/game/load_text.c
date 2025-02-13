@@ -1,25 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_text.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:39:06 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 14:56:01 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 #include <ctype.h>
-
-void	trim_whitespace(char *str)
-{
-	int	start;
-	int	end;
-	int	i;
-
-	if (str == NULL)
-		return;
-	start = 0;
-	end = ft_strlen(str) - 1;
-	while (isspace((unsigned char)str[start])) //change to ft
-		start++;
-	while (end > start && isspace((unsigned char)str[end])) //change to ft
-		end--;
-	i = 0;
-	while (start <= end)
-		str[i++] = str[start++];
-	str[i] = '\0';
-}
 
 int	load_image(void *mlx_ptr, t_image *img, char *fname)
 {
@@ -40,9 +32,9 @@ int	load_textures(t_game *game, t_config *config)
 	trim_whitespace(config->textures->east->img_ptr);
 	trim_whitespace(config->textures->west->img_ptr);
 	if (load_image(game->mlx, game->textures->north, \
-		config->textures->north->img_ptr) == -1 || load_image(game->mlx,\
-			 game->textures->east, config->textures->east->img_ptr) == -1 \
-			 || load_image(game->mlx, game->textures->west, \
+		config->textures->north->img_ptr) == -1 || load_image(game->mlx, \
+			game->textures->east, config->textures->east->img_ptr) == -1 \
+			|| load_image(game->mlx, game->textures->west, \
 				config->textures->west->img_ptr) == -1 || \
 				load_image(game->mlx, game->textures->south, \
 					config->textures->south->img_ptr) == -1)

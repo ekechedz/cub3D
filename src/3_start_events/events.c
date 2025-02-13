@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:37:53 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 14:38:18 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 void	init_events(t_game *game)
@@ -7,10 +19,10 @@ void	init_events(t_game *game)
 	{
 		write(2, "Window creation failed\n", 23);
 		free_game(game);
-		return;
+		return ;
 	}
 	mlx_clear_window(game->mlx, game->win);
-	memset(game->key_st, 0, sizeof(game->key_st)); //maybe in init_game is better
+	ft_memset(game->key_st, 0, sizeof(game->key_st));
 	mlx_hook(game->win, 2, 1L << 0, key_hook, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release_hook, game);
 	mlx_loop_hook(game->mlx, main_loop, game);
@@ -25,7 +37,7 @@ int	key_hook(int keycode, t_game *game)
 	return (0);
 }
 
-int key_release_hook(int keycode, t_game *game)
+int	key_release_hook(int keycode, t_game *game)
 {
 	game->key_st[keycode] = 0;
 	return (0);

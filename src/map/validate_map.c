@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_map.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 15:34:22 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 15:34:57 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
-int is_open_to_space(t_map *map, int x, int y)
+int	is_open_to_space(t_map *map, int x, int y)
 {
-	int directions[4][2];
-	int nx;
-	int ny;
-	int d;
+	int	directions[4][2];
+	int	nx;
+	int	ny;
+	int	d;
 
 	directions[0][0] = 1;
 	directions[0][1] = 0;
@@ -20,7 +32,8 @@ int is_open_to_space(t_map *map, int x, int y)
 	{
 		nx = x + directions[d][0];
 		ny = y + directions[d][1];
-		if (nx >= 0 && nx < map->height && ny >= 0 && ny < map->width && map->grid[nx][ny] == ' ')
+		if (nx >= 0 && nx < map->height && ny >= 0 \
+			&& ny < map->width && map->grid[nx][ny] == ' ')
 			return (1);
 		d++;
 	}
@@ -45,7 +58,7 @@ void	validate_map(t_map *map, t_config *config)
 				config->player = init_player(i, j);
 				if (!init_pos_dir_plane(config->player, map->grid[i][j]))
 				{
-					//free(player); // Free `player` before returning NULL
+					free_player(config->player);
 					return ;
 				}
 			}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:38:55 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 14:38:57 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
 
 t_textures	*free_textures(t_textures *t)
@@ -20,7 +32,7 @@ t_textures	*free_textures(t_textures *t)
 
 void	*free_map(t_map *map)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < map->height)
@@ -44,7 +56,7 @@ void	*free_config(t_config *config)
 	if (config->ceiling_color)
 		free (config->ceiling_color);
 	if (config->player)
-		free_player(config->player); //not implemented
+		free_player(config->player);
 	free (config);
 	return (NULL);
 }

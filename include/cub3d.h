@@ -209,16 +209,17 @@ void render_minimap(t_game *game);
 void	init_events(t_game *game);
 t_textures	*init_textures(t_config	*config);
 
+// Validating map and parse
+void	validate_line(const char *line);
+void	process_map_line(t_config *config, const char *clean_line);
+void	add_used_key(const char *key, char *used_keys[MAX_KEYS]);
+int	key_already_used(const char *key, char *used_keys[MAX_KEYS]);
+char	*trim_trailing_spaces(const char *line);
+int is_empty_or_map_started(const char *line, int map_started);
+void parse_color_line(t_config *config, const char *line, char *used_keys[MAX_KEYS]);
+void	parse_texture_line(t_config *config, const char *line, char *used_keys[MAX_KEYS]);
+void	parse_color(const char *str, int *color);
 
-// Function Prototypes
-void	parse_map(const char *file, t_game *game);
-int render_frame(t_game *game);
-void	handle_input(int key, t_game *game);
-void	cleanup(t_game *game);
-int		render_frame_wrapper(void *param);
-int		handle_input_wrapper(int key, void *param);
-
-// Validating map
 
 //void validate_map(t_config *config);
 void validate_map(t_map *map, t_config *config);
@@ -263,5 +264,8 @@ void calculate_line_parameters(t_line_params *params);
 int check_for_wall_collision(t_game *game, int x0, int y0);
 void draw_square(t_game *game, int x, int y, int color);
 int apply_shading(int i, int j, int color);
+
+//utils
+int	ft_isspace(char c);
 
 #endif

@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:43:12 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 14:53:00 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3d.h"
+#include <stddef.h>
 
-#include <stddef.h> // For size_t
-
-char *ft_strncpy(char *dest, const char *src, size_t n)
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < n && src[i] != '\0')
@@ -17,53 +28,68 @@ char *ft_strncpy(char *dest, const char *src, size_t n)
 		dest[i] = '\0';
 		i++;
 	}
-	return dest;
+	return (dest);
 }
 
-#include <stdlib.h>
-#include <stdio.h>
-
-void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
+void	*ft_malloc(size_t size)
 {
-	void *new_ptr;
+	void	*ptr;
 
-	if (new_size == 0)
-	{
-		free(ptr);
-		return NULL;
-	}
+	ptr = malloc(size);
 	if (!ptr)
 	{
-		new_ptr = malloc(new_size);
-		if (!new_ptr)
-		{
-			perror("Failed to allocate memory");
-			return NULL;
-		}
-		return new_ptr;
-	}
-	if (new_size <= old_size)
-	{
-		new_ptr = realloc(ptr, new_size);
-		if (!new_ptr)
-		{
-			perror("Failed to reallocate memory");
-			return NULL;
-		}
-		return new_ptr;
-	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-	{
 		perror("Failed to allocate memory");
-		return NULL;
+		return (NULL);
 	}
-	size_t i = 0;
+	return (ptr);
+}
+
+void	*ft_resize(void *ptr, size_t new_size)
+{
+	void	*new_ptr;
+	size_t	i;
+
+	new_ptr = ft_malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	i = 0;
+	while (i < new_size)
+	{
+		((char *)new_ptr)[i] = ((char *)ptr)[i];
+		i++;
+	}
+	free(ptr);
+	return (new_ptr);
+}
+
+void	*ft_expand(void *ptr, size_t old_size, size_t new_size)
+{
+	void	*new_ptr;
+	size_t	i;
+
+	new_ptr = ft_malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	i = 0;
 	while (i < old_size)
 	{
 		((char *)new_ptr)[i] = ((char *)ptr)[i];
 		i++;
 	}
 	free(ptr);
-	return new_ptr;
+	return (new_ptr);
+}
+
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+{
+	if (new_size == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+	if (!ptr)
+		return (ft_malloc(new_size));
+	if (new_size <= old_size)
+		return (ft_resize(ptr, new_size));
+	return (ft_expand(ptr, old_size, new_size));
 }

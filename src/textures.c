@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   textures.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 15:39:43 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/13 15:39:45 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	get_txt_color(t_image *txt, int x, int y)
 {
 	int	color;
 	int	i;
-	
+
 	color = 0;
 	if (!txt || x < 0 || y < 0 || x >= txt->width || y >= txt->height)
 		return (0);

@@ -1,11 +1,10 @@
 NO textures/brick_dark.xpm
-EA     textures/brick_grey.xpm
+EA textures/brick_grey.xpm
 SO textures/brick_red.xpm
 WE textures/brick_black.xpm
 F 19,109,21
+
 C 160,217,239
-
-
 
     1111111111111111111111111111
         1111000000000100100011111
