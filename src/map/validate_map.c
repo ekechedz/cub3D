@@ -27,18 +27,11 @@ int is_open_to_space(t_map *map, int x, int y)
 	return (0);
 }
 
-void	print_map(char **grid, int height)
-{
-	for (int i = 0; i < height; i++)
-		printf("[%d]: %s\n", i, grid[i]);
-}
-
 void	validate_map(t_map *map, t_config *config)
 {
 	int	i;
 	int	j;
 
-	print_map(map->grid, map->height);
 	i = 0;
 	while (i < map->height)
 	{

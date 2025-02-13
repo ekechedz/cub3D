@@ -7,8 +7,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-//#include "/home/ekechedz/minilibx/mlx.h"
-#include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
+#include "/home/ekechedz/minilibx/mlx.h"
+//#include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include "X11/Xlib.h"
@@ -29,7 +29,7 @@
 #define CUBE_SIZE 64
 #define TEXTURE_WIDTH 64
 #define TEXTURE_HEIGHT 64
-#define MINI_MAP_SCALE 1
+
 
 //move
 #define KEY_W 13
@@ -41,6 +41,17 @@
 #define KEY_ESC 53
 #define KEY_COUNT 65536
 
+// Mini map
+#define MINIMAP_SCALE 10	// Scale for minimap (1 map unit = 10 pixels)
+#define MINIMAP_X_OFFSET 20 // Minimap position on screen
+#define MINIMAP_Y_OFFSET 20
+#define PLAYER_COLOR 0xFF4500 // Red dot for player
+#define WALL_COLOR 0x444444
+#define FLOOR_COLOR 0x222222
+#define EMPTY_COLOR 0x888888
+#define RAY_COLOR 0x00FFAA // Yellow for view direction
+#define PLAYER_RADIUS 3	   // Player indicator radius
+#define RAY_LENGTH 100	   // Player's view ray length
 
 // Map Characters
 #define EMPTY '0'
@@ -157,6 +168,26 @@ typedef struct s_ray
 	double rayDirY;   // Ray's Y direction component
 } t_ray;
 
+typedef struct s_line_params
+{
+	int x0;
+	int y0;
+	int x1;
+	int y1;
+	int dx;
+	int dy;
+	int sx;
+	int sy;
+	int err;
+} t_line_params;
+
+typedef struct s_circle_params
+{
+	int cx;
+	int cy;
+	int radius;
+	int color;
+} t_circle_params;
 
 //Init functions
 int main_loop(t_game *game);
@@ -222,5 +253,15 @@ void render_texture(t_game *game, t_ray *ray, int x);
 t_ray	*cast_rays(t_game *game);
 
 int	close_window(void *param);
+
+//mini map
+void normalize_direction(t_game *game);
+void draw_circle(t_game *game, t_circle_params *params);
+void draw_line(t_game *game, t_line_params *params, int color);
+void update_line_coordinates(int *x0, int *y0, t_line_params *params);
+void calculate_line_parameters(t_line_params *params);
+int check_for_wall_collision(t_game *game, int x0, int y0);
+void draw_square(t_game *game, int x, int y, int color);
+int apply_shading(int i, int j, int color);
 
 #endif
