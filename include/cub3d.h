@@ -221,4 +221,6 @@ void render_texture(t_game *game, t_ray *ray, int x);
 
 t_ray	*cast_rays(t_game *game);
 
+int	close_window(void *param);
+
 #endif

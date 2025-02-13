@@ -32,15 +32,14 @@ int	main(int argc, char **argv)
 	config = init_config();
 	if (!config)
 		error("Failed to initialize configuration\n", 1);
-	if (!parse_cub_file(argv[1], config)) //in case of error, i already free config inside
+	if (!parse_cub_file(argv[1], config))
 		error("Failed to parse .cub file\n", 1);
 	game = init_game(config);
 	if (!game)
 		error("Failed to initialize game\n", 1);
 	if (load_textures(game, config) < 0)
 	{
-		fprintf(stderr, "Error: Failed to load textures\n");
-		free_game(game);
+		error("Failed to load wall textures\n", 1);
 		return (1);
 	}
 	init_events(game);

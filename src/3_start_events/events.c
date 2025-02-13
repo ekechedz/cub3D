@@ -14,23 +14,24 @@ void	init_events(t_game *game)
 	mlx_hook(game->win, 2, 1L << 0, key_hook, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release_hook, game);
 	mlx_loop_hook(game->mlx, main_loop, game);
-	//mlx_loop_hook(game->mlx, handle_close, game); a ver
+	mlx_hook(game->win, 17, 0, close_window, &game);
 }
 
-int	handle_key_press(int keycode, t_game *game) //is it used
+int	key_hook(int keycode, t_game *game)
 {
+	game->key_st[keycode] = 1;
 	if (keycode == XK_Escape)
-		mlx_loop_end(game->mlx);
-	return 0;
-}
-
-int	handle_close(t_game *game) //is it used
-{
-	mlx_loop_end(game->mlx);
+		exit(0);
 	return (0);
 }
 
-int	close_window(void *param) //is it used at all
+int key_release_hook(int keycode, t_game *game)
+{
+	game->key_st[keycode] = 0;
+	return (0);
+}
+
+int	close_window(void *param)
 {
 	mlx_destroy_window(param, param);
 	exit(0);

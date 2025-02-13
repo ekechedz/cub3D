@@ -39,8 +39,8 @@ void initialize_ray(t_game *game, t_ray *ray, double cameraX)
 int perform_dda(t_game *game, t_ray *ray)
 {
 	int hit = 0;
-	int hitx = (int)game->player->pos->x;  // Corrected: X (column)
-	int hity = (int)game->player->pos->y;  // Corrected: Y (row)
+	int hitx = (int)game->player->pos->x;
+	int hity = (int)game->player->pos->y;
 
 	while (hit == 0)
 	{
@@ -57,14 +57,10 @@ int perform_dda(t_game *game, t_ray *ray)
 			ray->side = 1;
 		}
 		if (hity < 0 || hitx >= game->map->width || hitx < 0 || hity >= game->map->height)
-		{
-			//printf("Error: Ray hit out of bounds! (hity=%d, hitx=%d)\n", hity, hitx);
-			return -1;  // Handle error
-		}
+			return -1;
 		if (game->map->grid[hity][hitx] == WALL)
 			hit = 1;
 	}
-	printf("Checking grid[%d][%d] = %c\n", hity, hitx, game->map->grid[hity][hitx]);
 	ray->hit->x = hitx;
 	ray->hit->y = hity;
 	return (hit);
@@ -96,8 +92,8 @@ int	main_loop(t_game *game)
 	double			delta_time;
 
 	gettimeofday(&current_time, NULL);
-	delta_time = (current_time.tv_sec - game->last_time.tv_sec) +
-						(current_time.tv_usec - game->last_time.tv_usec) / 1000000.0;
+	delta_time = (current_time.tv_sec - game->last_time.tv_sec) + \
+	(current_time.tv_usec - game->last_time.tv_usec) / 1000000.0;
 	game->last_time = current_time;
 	if (game->key_st[XK_W] || game->key_st[XK_w])
 		move_player(game, 1, delta_time);
@@ -112,6 +108,5 @@ int	main_loop(t_game *game)
 	if (game->key_st[XK_Right])
 		rotate_player(game->player, 1, delta_time);
 	render(game);
-	printf("player dir: (%lf, %lf), player pos: (%lf, %lf)\n", game->player->dir->x, game->player->dir->y, game->player->pos->y, game->player->pos->x);
 	return (0);
 }
