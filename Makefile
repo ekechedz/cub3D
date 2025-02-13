@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 # Source files and object files
-SRCS = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c src/game/init.c src/utils/*.c src/map/finalize_map.c src/map/validate_map.c src/map/parse_map.c src/error/*.c src/free/*.c src/game/load_text.c src/rays/raycasting.c src/rendering/render.c src/map/mini_map.c src/move/player_move.c src/textures.c
+SRCS = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c src/game/init.c src/utils/utils.c src/utils/map_utils.c src/utils/map_utils1.c src/map/validate_map.c src/map/parse_map.c src/error/*.c src/free/*.c src/game/load_text.c src/rays/raycasting.c src/rendering/render.c src/map/mini_map.c src/move/player_move.c src/textures.c
 OBJS = $(SRCS:.c=.o)
 
 # Include directories
