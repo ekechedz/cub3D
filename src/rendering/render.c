@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:14:04 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:14:07 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:32:47 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 static double	set_draw_info(t_ray *ray, double dist);
 static int		render_slice(t_ray *ray, int texx, int x, t_game *game);
 
-void	render(t_game *game)
+void	*render(t_game *game)
 {
 	ft_memset(game->screen_data, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-	cast_rays(game);
-	render_minimap(game);
+	if (!cast_rays(game))
+		return (NULL);
+	if (!render_minimap(game))
+		return (NULL);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	return (game);
 }
 
 static double	set_draw_info(t_ray *ray, double dist)

@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 # Source files and object files
-SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c src/1_init_structs/init.c src/1_init_structs/init2.c src/2_main/main.c src/utils/utils.c src/utils/parse_utils.c src/utils/map_utils.c src/utils/map_utils1.c src/map/validate_map.c src/map/parse_map.c src/0_error/exit_erro.c src/free/*.c src/game/load_text.c src/rays/raycasting.c src/rendering/render.c src/map/mini_map.c src/move/player_move.c src/textures.c src/3_start_events/events.c src/map/parse_line.c
+SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c src/1_init_structs/init.c src/1_init_structs/init2.c src/2_main/main.c src/utils/utils.c src/utils/parse_utils.c src/utils/map_utils.c src/utils/map_utils1.c src/map/validate_map.c src/map/parse_map.c src/0_error/exit_erro.c src/free/free.c src/free/free2.c src/game/load_text.c src/rays/raycasting.c src/rendering/render.c src/map/mini_map.c src/move/player_move.c src/textures.c src/3_start_events/events.c src/map/parse_line.c
 OBJS = $(SRCS:.c=.o)
 
 # Include directories

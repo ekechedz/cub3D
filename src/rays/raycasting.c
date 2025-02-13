@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:17:04 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 16:17:06 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:32:22 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ t_ray	*cast_rays(t_game *game)
 	double	camerax;
 
 	x = 0;
-	ray = init_ray(game->player->pos->x, game->player->pos->y);
 	while (x < WIN_WIDTH)
 	{
+		ray = init_ray(game->player->pos->x, game->player->pos->y);
 		camerax = 2 * x / (double)WIN_WIDTH - 1;
 		initialize_ray(game, ray, camerax);
 		if (perform_dda(game, ray, game->player->pos->x, game->player->pos->y))
 			render_texture(game, ray, x);
 		x ++;
+		free_ray(ray);
 	}
 	return (ray);
 }
@@ -108,6 +109,7 @@ int	main_loop(t_game *game)
 		rotate_player(game->player, -1, delta_time);
 	if (game->key_st[XK_Right])
 		rotate_player(game->player, 1, delta_time);
-	render(game);
+	if (!render(game))
+		return (1);
 	return (0);
 }

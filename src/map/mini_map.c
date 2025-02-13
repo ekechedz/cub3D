@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:42:49 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 14:42:51 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:31:12 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,12 @@ void	render_player_direction(t_game *game)
 	draw_line(game, &params, RAY_COLOR);
 }
 
-void	render_minimap(t_game *game)
+void	*render_minimap(t_game *game)
 {
+	if (!game || !game->map || !game->map->height || !game->map->width)
+		return (NULL) ;
 	render_map_tiles(game);
 	render_player_position(game);
 	render_player_direction(game);
+	return (game);
 }

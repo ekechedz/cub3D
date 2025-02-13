@@ -199,8 +199,8 @@ t_map		*init_map(void);
 t_player	*init_player(double x, double y);
 t_game *init_game(t_config *config);
 t_ray	*init_ray(double x, double y);
-void	render(t_game *game);
-void render_minimap(t_game *game);
+void	*render(t_game *game);
+void	*render_minimap(t_game *game);
 void	init_events(t_game *game);
 t_textures	*init_textures(t_config	*config);
 
@@ -232,6 +232,7 @@ t_textures	*free_textures(t_textures *t);
 void	*free_map(t_map *map);
 void	*free_game(t_game *game);
 void	*cleanup_all(t_game	*game, t_config *config);
+void	*free_ray(t_ray *ray);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);
