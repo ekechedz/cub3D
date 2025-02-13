@@ -1,7 +1,7 @@
-NO             textures/wall.xpm
-EA     textures/wall.xpm
-SO textures/wall.xpm
-WE textures/wall.xpm
+NO textures/brick_dark.xpm
+EA     textures/brick_grey.xpm
+SO textures/brick_red.xpm
+WE textures/brick_black.xpm
 F 19,109,21
 C 160,217,239
 

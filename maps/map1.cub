@@ -1,12 +1,12 @@
-NO textures/wall.xpm
-EA     textures/wall.xpm
-SO textures/wall.xpm
-WE textures/wall.xpm
+NO textures/brick_dark.xpm
+EA     textures/brick_grey.xpm
+SO textures/brick_red.xpm
+WE textures/brick_black.xpm
 F 0,0,1
 C 128,128,128
 
 1111111111
 1000000001
 1000000001
-100E100001
+100W100001
 1111111111
