@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:53:44 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 15:33:56 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:32:18 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ static void	parse_line(t_config *config, const char *line)
 	static char	*used_keys[MAX_KEYS] = {0};
 	static int	map_started;
 
-	map_started = 0;
 	if (is_empty_or_map_started(line, map_started))
 		return ;
 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0 \
