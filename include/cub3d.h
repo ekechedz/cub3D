@@ -119,6 +119,7 @@ typedef struct s_config {
 	int         *floor_color; // Floor color (RGB)
 	int         *ceiling_color; // Ceiling color (RGB)
 	t_player    *player;      // Player settings (position, direction, etc.)
+	char	*used_keys[MAX_KEYS];
 } t_config;
 
 
@@ -137,7 +138,8 @@ typedef struct s_game {
 	int     line_length;
 	int     endian;
 	struct timeval last_time;
-	int      key_st[KEY_COUNT];  // Array to store key states (now inside the game struct)
+	int      key_st[KEY_COUNT];
+	t_config	*config;
 } t_game;
 
 typedef struct s_ray
@@ -211,9 +213,9 @@ void	add_used_key(const char *key, char *used_keys[MAX_KEYS]);
 int	key_already_used(const char *key, char *used_keys[MAX_KEYS]);
 char	*trim_trailing_spaces(const char *line);
 int is_empty_or_map_started(const char *line, int map_started);
-void parse_color_line(t_config *config, const char *line, char *used_keys[MAX_KEYS]);
-void	parse_texture_line(t_config *config, const char *line, char *used_keys[MAX_KEYS]);
-void	parse_color(const char *str, int *color);
+void	parse_color_line(t_config *config, const char *line);
+void	parse_texture_line(t_config *config, const char *line);
+int	parse_color(const char *str, int *color);
 
 
 //void validate_map(t_config *config);
@@ -226,13 +228,14 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char *ft_strncpy(char *dest, const char *src, size_t n);
 
 // free
-void	*free_config(t_config *config);
-void	*free_player(t_player *player);
-t_textures	*free_textures(t_textures *t);
-void	*free_map(t_map *map);
-void	*free_game(t_game *game);
-int	cleanup_all(t_game	*game, t_config *config);
-void	*free_ray(t_ray *ray);
+void		*free_config(t_config *config);
+void		*free_player(t_player *player);
+t_textures	*free_textures(t_textures *t, void *mlx);
+void		*free_map(t_map *map);
+void		*free_game(t_game *game);
+int			cleanup_all(t_game	*game, t_config *config);
+void		*free_ray(t_ray *ray);
+void		free_used_keys(char **used_keys);
 
 // textures
 int load_textures(t_game *game, t_config *cfg);

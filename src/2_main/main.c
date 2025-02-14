@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:37:37 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 18:32:10 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:40:14 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -50,13 +50,10 @@ int	main(int argc, char **argv)
 	if (!game)
 		error("Failed to initialize game\n", 1, game, config);
 	if (load_textures(game, config) < 0)
-	{
 		error("Failed to load wall textures\n", 1, game, config);
-		return (1);
-	}
-	free (config);
+	//free(config);
 	init_events(game);
 	mlx_loop(game->mlx);
-	cleanup_all(game, NULL);
+	cleanup_all(game, config);
 	return (0);
 }

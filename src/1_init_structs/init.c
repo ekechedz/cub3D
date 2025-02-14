@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:42 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 18:37:05 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:57:43 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -68,15 +68,17 @@ t_config	*init_config(void)
 		return (NULL);
 	config->map = init_map();
 	if (!config->map)
-		return (free_config(config));
+		return (NULL);
 	config->textures = init_textures(config);
 	if (!config->textures)
-		return (free_config(config));
+		return (NULL);
 	config->ceiling_color = malloc(3 * sizeof(int));
 	if (!config->ceiling_color)
-		return (free_config(config));
+		return (NULL);
 	config->floor_color = malloc(3 * sizeof(int));
 	if (!config->floor_color)
-		return (free_config(config));
+		return (NULL);
+	config->player = NULL;
+	ft_memset(config->used_keys, 0, sizeof(config->used_keys));
 	return (config);
 }

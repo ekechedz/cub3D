@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:01:20 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 18:31:44 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:19:11 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -17,18 +17,14 @@ int	validate_line(const char *line)
 	int	i;
 
 	i = 0;
+	if (!line)
+		return (0);
 	while (line[i] != '\0')
 	{
 		if (!ft_strchr("01NSEW ", line[i]))
-		{
-			write(2, "Error: Invalid character in the map\n", 37);
 			return (0);
-		}
 		if (line[i] == '\n')
-		{
-			write(2, "New line in the map\n", 21);
 			return (0);
-		}
 		i++;
 	}
 	return (1);
@@ -98,7 +94,7 @@ char	*trim_trailing_spaces(const char *line)
 	len = ft_strlen(line);
 	start = 0;
 	if (line[0] == '\n')
-		perror("Error: Line contains only whitespace or newline."); //check
+		return (NULL);
 	while (len > 0 && (line[len - 1] == ' ' || line[len - 1] == '\n'))
 		len--;
 	if (start == len)

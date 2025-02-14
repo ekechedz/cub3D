@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:37:53 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 17:51:40 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:21:04 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -33,7 +33,7 @@ int	key_hook(int keycode, t_game *game)
 {
 	game->key_st[keycode] = 1;
 	if (keycode == XK_Escape)
-		exit(0);
+		error("test", 0, game, game->config);
 	return (0);
 }
 
