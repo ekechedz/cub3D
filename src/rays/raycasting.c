@@ -12,32 +12,32 @@
 
 #include "../../include/cub3d.h"
 
-void	initialize_ray(t_game *game, t_ray *ray, double cameraX)
+void	initialize_ray(t_game *game, t_ray *r, double cameraX)
 {
-	ray->dirX = game->player->dir->x + game->player->plane->x * cameraX;
-	ray->dirY = game->player->dir->y + game->player->plane->y * cameraX;
-	ray->deltaDistX = fabs(1.0 / ray->dirX);
-	ray->deltaDistY = fabs(1.0 / ray->dirY);
-	ray->hit = init_vector(ray->posX, ray->posY);
-	if (ray->dirX < 0)
+	r->dir_x = game->player->dir->x + game->player->plane->x * cameraX;
+	r->dir_y = game->player->dir->y + game->player->plane->y * cameraX;
+	r->delta_dist_x = fabs(1.0 / r->dir_x);
+	r->delta_dist_y = fabs(1.0 / r->dir_y);
+	r->hit = init_vector(r->pos_x, r->pos_y);
+	if (r->dir_x < 0)
 	{
-		ray->stepX = -1;
-		ray->sideDistX = (ray->posX - (int)ray->posX) * ray->deltaDistX;
+		r->step_x = -1;
+		r->side_dist_x = (r->pos_x - (int)r->pos_x) * r->delta_dist_x;
 	}
 	else
 	{
-		ray->stepX = 1;
-		ray->sideDistX = ((int)ray->posX + 1.0 - ray->posX) * ray->deltaDistX;
+		r->step_x = 1;
+		r->side_dist_x = ((int)r->pos_x + 1.0 - r->pos_x) * r->delta_dist_x;
 	}
-	if (ray->dirY < 0)
+	if (r->dir_y < 0)
 	{
-		ray->stepY = -1;
-		ray->sideDistY = (ray->posY - (int)ray->posY) * ray->deltaDistY;
+		r->step_y = -1;
+		r->side_dist_y = (r->pos_y - (int)r->pos_y) * r->delta_dist_y;
 	}
 	else
 	{
-		ray->stepY = 1;
-		ray->sideDistY = ((int)ray->posY + 1.0 - ray->posY) * ray->deltaDistY;
+		r->step_y = 1;
+		r->side_dist_y = ((int)r->pos_y + 1.0 - r->pos_y) * r->delta_dist_y;
 	}
 }
 
@@ -45,16 +45,16 @@ int	perform_dda(t_game *game, t_ray *ray, int hitx, int hity)
 {
 	while (1)
 	{
-		if (ray->sideDistX < ray->sideDistY)
+		if (ray->side_dist_x < ray->side_dist_y)
 		{
-			ray->sideDistX += ray->deltaDistX;
-			hitx += ray->stepX;
+			ray->side_dist_x += ray->delta_dist_x;
+			hitx += ray->step_x;
 			ray->side = 0;
 		}
 		else
 		{
-			ray->sideDistY += ray->deltaDistY;
-			hity += ray->stepY;
+			ray->side_dist_y += ray->delta_dist_y;
+			hity += ray->step_y;
 			ray->side = 1;
 		}
 		if (hity < 0 || hitx >= game->map->width || hitx < 0 || \

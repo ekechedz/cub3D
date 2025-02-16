@@ -51,7 +51,6 @@ int	main(int argc, char **argv)
 		error("Failed to initialize game\n", 1, game, config);
 	if (load_textures(game, config) < 0)
 		error("Failed to load wall textures\n", 1, game, config);
-	//free(config);
 	init_events(game);
 	mlx_loop(game->mlx);
 	cleanup_all(game, config);

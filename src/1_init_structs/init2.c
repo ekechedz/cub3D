@@ -20,7 +20,7 @@ t_image	*init_t_image(void)
 	if (!new)
 		return (NULL);
 	new->img_ptr = NULL;
-	new->file_path = NULL;
+	new->fp = NULL;
 	new->buff = NULL;
 	new->lstsize = 0;
 	new->width = 0;
@@ -78,14 +78,8 @@ t_game	*init_game(t_config *config)
 		return (NULL);
 	memset(game, 0, sizeof(t_game));
 	game->mlx = mlx_init();
-
 	if (!game->mlx)
-	{
-	    perror("mlx_init() failed");
-	    free(game);
-	    return (NULL);
-	}
-
+		error("Failure\n", 0, game, config);
 	game->img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
 	if (!game->img)
 		error("Failure\n", 0, game, config);
@@ -110,11 +104,11 @@ t_ray	*init_ray(double x, double y)
 	ray = malloc(sizeof(t_ray));
 	if (!ray)
 		return (NULL);
-	ray->posX = x;
-	ray->posY = y;
+	ray->pos_x = x;
+	ray->pos_y = y;
 	ray->dist = 0.0;
 	ray->hit = NULL;
 	ray->side = 0;
-	ray->lineHeight = 0.0;
+	ray->line_height = 0.0;
 	return (ray);
 }

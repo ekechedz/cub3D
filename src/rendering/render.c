@@ -30,17 +30,17 @@ static double	set_draw_info(t_ray *ray, double dist)
 {
 	double	wallx;
 
-	ray->lineHeight = (int)(WIN_HEIGHT / dist);
-	ray->drawStart = -ray->lineHeight / 2 + WIN_HEIGHT / 2;
-	if (ray->drawStart < 0)
-		ray->drawStart = 0;
-	ray->drawEnd = ray->lineHeight / 2 + WIN_HEIGHT / 2;
-	if (ray->drawEnd >= WIN_HEIGHT)
-		ray->drawEnd = WIN_HEIGHT;
+	ray->line_height = (int)(WIN_HEIGHT / dist);
+	ray->draw_start = -ray->line_height / 2 + WIN_HEIGHT / 2;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	ray->draw_end = ray->line_height / 2 + WIN_HEIGHT / 2;
+	if (ray->draw_end >= WIN_HEIGHT)
+		ray->draw_end = WIN_HEIGHT;
 	if (ray->side == 0)
-		wallx = (ray->posY + dist * ray->dirY);
+		wallx = (ray->pos_y + dist * ray->dir_y);
 	else
-		wallx = (ray->posX + dist * ray->dirX);
+		wallx = (ray->pos_x + dist * ray->dir_x);
 	wallx -= floor(wallx);
 	return (wallx);
 }
@@ -52,14 +52,15 @@ void	render_texture(t_game *game, t_ray *ray, int x)
 	double	wallx;
 
 	if (ray->side == 0)
-		dist = (ray->hit->x - ray->posX + (1 - ray->stepX) / 2) / ray->dirX;
+		dist = (ray->hit->x - ray->pos_x + (1 - ray->step_x) / 2) / ray->dir_x;
 	else
-		dist = (ray->hit->y - ray->posY + (1 - ray->stepY) / 2) / ray->dirY;
+		dist = (ray->hit->y - ray->pos_y + (1 - ray->step_y) / 2) / ray->dir_y;
 	if (dist <= 0)
 		dist = 0.1;
 	wallx = set_draw_info(ray, dist);
 	texx = (int)(wallx * (double)TEXTURE_WIDTH);
-	if ((ray->side == 0 && ray->dirX < 0) || (ray->side == 1 && ray->dirY > 0))
+	if ((ray->side == 0 && ray->dir_x < 0) \
+	|| (ray->side == 1 && ray->dir_y > 0))
 		texx = TEXTURE_WIDTH - texx - 1;
 	render_slice(ray, texx, x, game);
 }
@@ -73,12 +74,12 @@ static int	render_slice(t_ray *ray, int texx, int x, t_game *game)
 
 	y = 0;
 	texture = choose_texture(ray, game);
-	while (y++ < ray->drawStart)
+	while (y++ < ray->draw_start)
 		game->screen_data[y * WIN_WIDTH + x] = *game->ceiling_color;
-	while (y < ray->drawEnd)
+	while (y < ray->draw_end)
 	{
-		texy = (((y - WIN_HEIGHT / 2 + ray->lineHeight / 2) * TEXTURE_HEIGHT) \
-		/ ray->lineHeight);
+		texy = (((y - WIN_HEIGHT / 2 + ray->line_height / 2) * TEXTURE_HEIGHT) \
+		/ ray->line_height);
 		if (texy < 0)
 			texy = 0;
 		if (texy >= TEXTURE_HEIGHT)

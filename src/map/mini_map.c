@@ -92,7 +92,7 @@ void	render_player_direction(t_game *game)
 void	*render_minimap(t_game *game)
 {
 	if (!game || !game->map || !game->map->height || !game->map->width)
-		return (NULL) ;
+		return (NULL);
 	render_map_tiles(game);
 	render_player_position(game);
 	render_player_direction(game);

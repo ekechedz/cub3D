@@ -45,47 +45,45 @@ void	parse_color_line(t_config *config, const char *line)
 			error("Error: Couldn't parse color", 1, NULL, config);
 		add_used_key("C", config->used_keys);
 	}
-
 }
 
-void parse_north_south_texture(t_config *config, const char *line)
+void	parse_north_south_texture(t_config *config, const char *line)
 {
-    if (ft_strncmp(line, "NO ", 3) == 0)
-    {
-        if (key_already_used("NO", config->used_keys))
-            error("Error: Duplicate 'NO' texture", 1, NULL, config);
-		if (config->textures->north->file_path)
-			free(config->textures->north->file_path);
-		config->textures->north->file_path = ft_strdup(line + 3);
-        add_used_key("NO", config->used_keys);
-    }
-    else if (ft_strncmp(line, "SO ", 3) == 0)
-    {
-        if (key_already_used("SO", config->used_keys))
-            error("Error: Duplicate 'SO' texture", 1, NULL, config);
-		config->textures->south->file_path = ft_strdup(line + 3);
-        add_used_key("SO", config->used_keys);
-    }
-}
-
-void parse_west_east_texture(t_config *config, const char *line)
-{
-    if (ft_strncmp(line, "WE ", 3) == 0)
-    {
-        if (key_already_used("WE", config->used_keys))
-            error("Error: Duplicate 'WE' texture", 1, NULL, config);
-		config->textures->west->file_path = ft_strdup(line + 3);
+	if (ft_strncmp(line, "NO ", 3) == 0)
+	{
+		if (key_already_used("NO", config->used_keys))
+			error("Error: Duplicate 'NO' texture", 1, NULL, config);
+		if (config->textures->north->fp)
+			free(config->textures->north->fp);
+		config->textures->north->fp = ft_strdup(line + 3);
 		add_used_key("NO", config->used_keys);
-    }
-    else if (ft_strncmp(line, "EA ", 3) == 0)
-    {
-        if (key_already_used("EA", config->used_keys))
-            error("Error: Duplicate 'EA' texture", 1, NULL, config);
-		config->textures->east->file_path = ft_strdup(line + 3);
-        add_used_key("EA", config->used_keys);
-    }
+	}
+	else if (ft_strncmp(line, "SO ", 3) == 0)
+	{
+		if (key_already_used("SO", config->used_keys))
+			error("Error: Duplicate 'SO' texture", 1, NULL, config);
+		config->textures->south->fp = ft_strdup(line + 3);
+		add_used_key("SO", config->used_keys);
+	}
 }
 
+void	parse_west_east_texture(t_config *config, const char *line)
+{
+	if (ft_strncmp(line, "WE ", 3) == 0)
+	{
+		if (key_already_used("WE", config->used_keys))
+			error("Error: Duplicate 'WE' texture", 1, NULL, config);
+		config->textures->west->fp = ft_strdup(line + 3);
+		add_used_key("NO", config->used_keys);
+	}
+	else if (ft_strncmp(line, "EA ", 3) == 0)
+	{
+		if (key_already_used("EA", config->used_keys))
+			error("Error: Duplicate 'EA' texture", 1, NULL, config);
+		config->textures->east->fp = ft_strdup(line + 3);
+		add_used_key("EA", config->used_keys);
+	}
+}
 
 void	parse_texture_line(t_config *config, const char *line)
 {

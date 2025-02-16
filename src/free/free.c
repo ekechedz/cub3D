@@ -12,23 +12,22 @@
 
 #include "../../include/cub3d.h"
 
-void free_image(t_image *img, void *mlx)
+void	free_image(t_image *img, void *mlx)
 {
 	if (img)
 	{
 		if (img->img_ptr)
 			mlx_destroy_image(mlx, img->img_ptr);
-		if (img->file_path)
+		if (img->fp)
 		{
-			free(img->file_path);
-			img->file_path = NULL;
+			free(img->fp);
+			img->fp = NULL;
 		}
-		
 		free(img);
 	}
 }
 
-t_textures *free_textures(t_textures *t, void *mlx)
+t_textures	*free_textures(t_textures *t, void *mlx)
 {
 	if (t && mlx)
 	{
@@ -49,7 +48,7 @@ void	*free_map(t_map *map)
 
 	i = 0;
 	if (!map && !map->height)
-		return NULL;
+		return (NULL);
 	while (i < map->height)
 	{
 		free(map->grid[i]);
@@ -67,8 +66,6 @@ void	*free_config(t_config *config)
 		return (NULL);
 	if (config->map)
 		free_map(config->map);
-	// if (config->textures)
-	// 	free_textures(config->textures, NULL);
 	if (config->floor_color)
 		free (config->floor_color);
 	if (config->ceiling_color)
@@ -82,60 +79,15 @@ void	*free_config(t_config *config)
 
 void	*free_player(t_player *player)
 {
-    if (player)
-    {
-        if (player->dir)
-            free(player->dir);
-        if (player->plane)
-            free(player->plane);
-        if (player->pos)
-            free(player->pos);
-        free(player);
-    }
-	return (NULL);
-}
-
-void	*free_game(t_game *game)
-{
-	if (game->textures)
-		free_textures(game->textures, game->mlx);
-	if (game->img)
-		mlx_destroy_image(game->mlx, game->img);
-	if (game->win)
-		mlx_destroy_window(game->mlx, game->win);
-	if (game->mlx)
+	if (player)
 	{
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-		game->mlx = NULL;
+		if (player->dir)
+			free(player->dir);
+		if (player->plane)
+			free(player->plane);
+		if (player->pos)
+			free(player->pos);
+		free(player);
 	}
-	free (game);
 	return (NULL);
-}
-
-int	cleanup_all(t_game	*game, t_config *config)
-{
-	if (game)
-		free_game(game);
-	if (config)
-		free_config(config);
-	exit(1);
-}
-
-void	free_used_keys(char **used_keys)
-{
-	int	i;
-
-	i = 0;
-	if (!used_keys)
-		return;
-	while (i < MAX_KEYS)
-	{
-		if (used_keys[i])
-		{
-			free(used_keys[i]);
-			used_keys[i] = NULL;
-		}
-		i++;
-	}
 }

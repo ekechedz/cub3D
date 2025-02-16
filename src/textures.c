@@ -31,14 +31,14 @@ t_image	*choose_texture(t_ray *ray, t_game *game)
 {
 	if (ray->side == 0)
 	{
-		if (ray->dirX > 0)
+		if (ray->dir_x > 0)
 			return (game->textures->east);
 		else
 			return (game->textures->west);
 	}
 	else
 	{
-		if (ray->dirY > 0)
+		if (ray->dir_y > 0)
 			return (game->textures->south);
 		else
 			return (game->textures->north);

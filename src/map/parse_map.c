@@ -84,7 +84,6 @@ static void	parse_line(t_config *config, const char *line)
 		map_started = 1;
 		parse_map_line(config, line);
 	}
-
 }
 
 t_config	*parse_cub_file(const char *file_path, t_config *config)
