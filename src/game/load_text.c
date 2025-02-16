@@ -15,13 +15,9 @@
 
 int	load_image(void *mlx_ptr, t_image *img, char *fname)
 {
-	trim_whitespace(fname);
-	if (img->img_ptr)
-	{
-		free(img->img_ptr);
-		img->img_ptr = NULL;
-	}
-	img->img_ptr = mlx_xpm_file_to_image(mlx_ptr, fname, &img->width, \
+	if (!mlx_ptr || !img || !fname)
+        return (-1); // Avoid null pointer crashes
+    img->img_ptr = mlx_xpm_file_to_image(mlx_ptr, fname, &img->width, \
 		&img->height);
 	if (img->img_ptr == NULL)
 		return (-1);
@@ -30,21 +26,29 @@ int	load_image(void *mlx_ptr, t_image *img, char *fname)
 	return (0);
 }
 
-int	load_textures(t_game *game, t_config *config)
+int load_textures(t_game *game, t_config *config)
 {
-	trim_whitespace(config->textures->north->img_ptr);
-	trim_whitespace(config->textures->south->img_ptr);
-	trim_whitespace(config->textures->east->img_ptr);
-	trim_whitespace(config->textures->west->img_ptr);
-	if (load_image(game->mlx, game->textures->north, \
-		config->textures->north->img_ptr) == -1 || load_image(game->mlx, \
-			game->textures->east, config->textures->east->img_ptr) == -1 \
-			|| load_image(game->mlx, game->textures->west, \
-				config->textures->west->img_ptr) == -1 || \
-				load_image(game->mlx, game->textures->south, \
-					config->textures->south->img_ptr) == -1)
-		return -1;
-	game->floor_color = config->floor_color;
-	game->ceiling_color = config->ceiling_color;
-	return (0);
+    if (!game || !config || !config->textures)
+        return (-1); // Prevent null pointer crashes
+
+    // Trim and validate texture file paths before loading
+    if (config->textures->north && config->textures->north->file_path)
+        trim_whitespace(config->textures->north->file_path);
+    if (config->textures->south && config->textures->south->file_path)
+        trim_whitespace(config->textures->south->file_path);
+    if (config->textures->east && config->textures->east->file_path)
+        trim_whitespace(config->textures->east->file_path);
+    if (config->textures->west && config->textures->west->file_path)
+        trim_whitespace(config->textures->west->file_path);
+
+    // Load images while checking for errors
+    if (load_image(game->mlx, game->textures->north, config->textures->north->file_path) == -1 ||
+        load_image(game->mlx, game->textures->east, config->textures->east->file_path) == -1 ||
+        load_image(game->mlx, game->textures->west, config->textures->west->file_path) == -1 ||
+        load_image(game->mlx, game->textures->south, config->textures->south->file_path) == -1)
+        return (-1);
+    game->floor_color = config->floor_color;
+    game->ceiling_color = config->ceiling_color;
+
+    return (0);
 }

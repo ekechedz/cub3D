@@ -18,8 +18,12 @@ void free_image(t_image *img, void *mlx)
 	{
 		if (img->img_ptr)
 			mlx_destroy_image(mlx, img->img_ptr);
-		// if (img->buff)
-		// 	free(img->buff);
+		if (img->file_path)
+		{
+			free(img->file_path);
+			img->file_path = NULL;
+		}
+		
 		free(img);
 	}
 }
@@ -93,26 +97,17 @@ void	*free_player(t_player *player)
 
 void	*free_game(t_game *game)
 {
-	// if (game->player)
-	// 	free_player(game->player);
-	// if (game->map)
-	// 	free_map(game->map);
-	// if (game->floor_color)
-	// 	free(game->floor_color);
-	// if (game->ceiling_color)
-	// 	free(game->ceiling_color);
 	if (game->textures)
 		free_textures(game->textures, game->mlx);
-	// if (game->screen_data)
-	// 	free(game->screen_data); //maybe theres an mlx function
 	if (game->img)
-		mlx_destroy_image(game->mlx, game->img); //do i have to free it still?
+		mlx_destroy_image(game->mlx, game->img);
 	if (game->win)
-		mlx_destroy_window(game->mlx, game->win); //same
+		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
 	{
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
+		game->mlx = NULL;
 	}
 	free (game);
 	return (NULL);
@@ -130,6 +125,7 @@ int	cleanup_all(t_game	*game, t_config *config)
 void	free_used_keys(char **used_keys)
 {
 	int	i;
+
 	i = 0;
 	if (!used_keys)
 		return;
@@ -142,5 +138,4 @@ void	free_used_keys(char **used_keys)
 		}
 		i++;
 	}
-	//free(used_keys);
 }

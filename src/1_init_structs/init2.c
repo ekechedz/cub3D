@@ -20,6 +20,7 @@ t_image	*init_t_image(void)
 	if (!new)
 		return (NULL);
 	new->img_ptr = NULL;
+	new->file_path = NULL;
 	new->buff = NULL;
 	new->lstsize = 0;
 	new->width = 0;
@@ -75,9 +76,16 @@ t_game	*init_game(t_config *config)
 	game = (t_game *)malloc(sizeof(t_game));
 	if (!game)
 		return (NULL);
+	memset(game, 0, sizeof(t_game));
 	game->mlx = mlx_init();
-	if (game->mlx == NULL)
-		error("Failure\n", 0, game, config);
+
+	if (!game->mlx)
+	{
+	    perror("mlx_init() failed");
+	    free(game);
+	    return (NULL);
+	}
+
 	game->img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
 	if (!game->img)
 		error("Failure\n", 0, game, config);
@@ -85,6 +93,7 @@ t_game	*init_game(t_config *config)
 		&game->line_length, &game->endian);
 	if (!game->screen_data)
 		error("Failure\n", 0, game, config);
+	game->win = NULL;
 	game->player = config->player;
 	game->map = config->map;
 	game->textures = config->textures;

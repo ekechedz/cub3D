@@ -13,7 +13,12 @@
 #include "../../include/cub3d.h"
 
 void	init_events(t_game *game)
-{
+{  
+	if (!game || !game->mlx)
+    {
+        write(2, "Invalid game structure\n", 23);
+        return;
+    }
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3D");
 	if (!game->win)
 	{
@@ -33,7 +38,7 @@ int	key_hook(int keycode, t_game *game)
 {
 	game->key_st[keycode] = 1;
 	if (keycode == XK_Escape)
-		error("test", 0, game, game->config);
+		error(NULL, 0, game, game->config);
 	return (0);
 }
 
