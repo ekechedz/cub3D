@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:49 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/14 16:03:45 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:09:27 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -94,6 +94,7 @@ t_game	*init_game(t_config *config)
 	game->floor_color = config->floor_color;
 	game->ceiling_color = config->ceiling_color;
 	game->config = config;
+	config->mlx = game->mlx;
 	return (game);
 }
 

@@ -2,21 +2,39 @@ NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-# Source files and object files
-SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c src/1_init_structs/init.c src/1_init_structs/init2.c src/2_main/main.c src/utils/utils.c src/utils/parse_utils.c src/utils/map_utils.c src/utils/map_utils1.c src/map/validate_map.c src/map/parse_map.c src/0_error/exit_erro.c src/free/free.c src/free/free2.c src/game/load_text.c src/rays/raycasting.c src/rendering/render.c src/map/mini_map.c src/move/player_move.c src/textures.c src/3_start_events/events.c src/map/parse_line.c
+GNL_D = get_next_line
+GNL_S = $(GNL_D)/get_next_line.c $(GNL_D)/get_next_line_utils.c
+UTILS_D = src/1_utils
+UTILS_S = $(UTILS_D)/map_utils.c $(UTILS_D)/map_utils1.c $(UTILS_D)/parse_utils.c $(UTILS_D)/utils.c
+INIT_D = src/2_init
+INIT_S = $(INIT_D)/init.c $(INIT_D)/init2.c
+MAIN_D = src/3_main
+MAIN_S = $(MAIN_D)/main.c
+EVENT_D = src/3_start_events
+EVENT_S = $(EVENT_D)/events.c
+MAP_D = src/4_map
+MAP_S = $(MAP_D)/mini_map.c $(MAP_D)/parse_line.c $(MAP_D)/parse_map.c $(MAP_D)/validate_map.c
+TXT_D = src/5_textures
+TXT_S = $(TXT_D)/load_text.c $(TXT_D)/textures.c
+RAY_D = src/6_rays
+RAY_S = $(RAY_D)/raycasting.c
+RENDER_D = src/7_rendering
+RENDER_S = $(RENDER_D)/render.c
+MOVE_D = src/8_move
+MOVE_S = $(MOVE_D)/player_move.c
+FREE_D = src/9_free
+FREE_S = $(FREE_D)/free.c $(FREE_D)/free2.c
+
+SRCS = $(GNL_S) $(UTILS_S) $(INIT_S) $(MAIN_S) $(EVENT_S) $(MAP_S) $(TXT_S) $(RAY_S) $(RENDER_S) $(MOVE_S) $(FREE_S)
 OBJS = $(SRCS:.c=.o)
 
-# Include directories
 INCLUDE_DIR = include
 
-# Libraries
 LIBFT = libft/libft.a
 #MLX_DIR = /home/ekechedz/minilibx
-#MLX_DIR = /home/natalia/Repositories/minilibx #for home
 MLX_DIR = /home/nleite-s/Repositories/cub3d/minilibx
 MLX = $(MLX_DIR)/libmlx.a
 
-# Linker flags for MiniLibX
 LDFLAGS = -L$(MLX_DIR) -lmlx -lX11 -lXext -lm
 
 all: $(NAME)
@@ -24,24 +42,19 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBFT) $(MLX)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX) $(LDFLAGS)
 
-# Build libft
 $(LIBFT):
 	make -C libft
 
-# Build MiniLibX
 $(MLX):
 	make -C $(MLX_DIR)
 
-# Clean object files
 clean:
 	rm -f $(OBJS)
 	make -C libft clean
 	make -C $(MLX_DIR) clean
 
-# Clean everything
 fclean: clean
 	rm -f $(NAME)
 	make -C libft fclean
 
-# Rebuild everything
 re: fclean all

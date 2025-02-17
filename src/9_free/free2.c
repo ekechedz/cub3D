@@ -12,8 +12,6 @@ void	*free_ray(t_ray *ray)
 
 void	*free_game(t_game *game)
 {
-	if (game->textures)
-		free_textures(game->textures, game->mlx);
 	if (game->img)
 		mlx_destroy_image(game->mlx, game->img);
 	if (game->win)
@@ -30,10 +28,10 @@ void	*free_game(t_game *game)
 
 int	cleanup_all(t_game	*game, t_config *config)
 {
-	if (game)
-		free_game(game);
 	if (config)
 		free_config(config);
+	if (game)
+		free_game(game);
 	exit(1);
 }
 
@@ -53,4 +51,15 @@ void	free_used_keys(char **used_keys)
 		}
 		i++;
 	}
+}
+
+int	error(const char *message, int use_perror, t_game *g, t_config *c)
+{
+	if (use_perror && message)
+		perror(message);
+	else if (message)
+		fprintf(stderr, "Error: %s\n", message);
+	if (g || c)
+		cleanup_all(g, c);
+	exit(EXIT_FAILURE);
 }

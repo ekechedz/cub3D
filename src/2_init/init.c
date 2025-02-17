@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:35:42 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/14 15:57:43 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:09:07 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -79,6 +79,7 @@ t_config	*init_config(void)
 	if (!config->floor_color)
 		return (NULL);
 	config->player = NULL;
+	config->mlx = NULL;
 	ft_memset(config->used_keys, 0, sizeof(config->used_keys));
 	return (config);
 }

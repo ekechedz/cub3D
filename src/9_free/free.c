@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:38:55 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/14 16:36:36 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:15:12 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,7 +29,7 @@ void	free_image(t_image *img, void *mlx)
 
 t_textures	*free_textures(t_textures *t, void *mlx)
 {
-	if (t && mlx)
+	if (t)
 	{
 		free_image(t->north, mlx);
 		free_image(t->south, mlx);
@@ -72,6 +72,8 @@ void	*free_config(t_config *config)
 		free (config->ceiling_color);
 	if (config->player)
 		free_player(config->player);
+	if (config->textures)
+		free_textures(config->textures, config->mlx);
 	free_used_keys((char **)config->used_keys);
 	free (config);
 	return (NULL);

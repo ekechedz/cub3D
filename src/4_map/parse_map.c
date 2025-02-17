@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:53:44 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/14 15:56:12 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:36:12 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -56,24 +56,25 @@ int	parse_color(const char *str, int *color)
 	return (1);
 }
 
-void	parse_map_line(t_config *config, const char *line)
+void	*parse_map_line(t_config *config, char *line)
 {
 	char	*clean_line;
 
 	clean_line = trim_trailing_spaces(line);
 	if (!clean_line)
-		error("Error parsing map line", 0, NULL, config);
+		return (NULL);
 	validate_line(clean_line);
 	process_map_line(config, clean_line);
 	free(clean_line);
+	return (config);
 }
 
-static void	parse_line(t_config *config, const char *line)
+static int	parse_line(t_config *config, char *line)
 {
 	static int	map_started;
 
 	if (is_empty_or_map_started(line, map_started))
-		return ;
+		return (1);
 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0 \
 	|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
 		parse_texture_line(config, line);
@@ -82,8 +83,10 @@ static void	parse_line(t_config *config, const char *line)
 	else
 	{
 		map_started = 1;
-		parse_map_line(config, line);
+		if (!parse_map_line(config, line))
+			return (0);
 	}
+	return (1);
 }
 
 t_config	*parse_cub_file(const char *file_path, t_config *config)
@@ -100,16 +103,17 @@ t_config	*parse_cub_file(const char *file_path, t_config *config)
 		line = get_next_line(fd);
 		if (line)
 		{
-			parse_line(config, line);
+			if (!parse_line(config, line))
+			{
+				free(line);
+				error("Error parsing map line", 0, NULL, config);
+			}
 			free(line);
 		}
 	}
 	close(fd);
 	validate_map(config->map, config);
 	if (!config->map || config->map->width <= 0 || config->map->height <= 0)
-	{
-		fprintf(stderr, "Error: Invalid map in .cub file\n");
-		return (NULL);
-	}
+		error("Invalid map in .cub file", 0, NULL, config);
 	return (config);
 }

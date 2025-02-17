@@ -9,7 +9,7 @@
 # include <string.h>
 //# include "../minilibx/mlx.h"
 //# include "/home/ekechedz/minilibx/mlx.h"
-//# include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
+# include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
 # include "../libft/libft.h"
 # include "../get_next_line/get_next_line.h"
 # include "X11/Xlib.h"
@@ -120,6 +120,7 @@ typedef struct s_config
 	int			*ceiling_color;
 	t_player	*player;
 	char		*used_keys[MAX_KEYS];
+	void		*mlx;
 }	t_config;
 
 typedef struct s_game
