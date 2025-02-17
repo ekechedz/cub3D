@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:34:22 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 11:01:15 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 11:14:59 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -66,25 +66,25 @@ void	initialize_player(t_map *map, t_config *config)
 	int	count;
 
 	count = 0;
-	i = 0;
-	while (i < map->height)
+	i = -1;
+	while (++i < map->height)
 	{
-		j = 0;
-		while (j < map->width)
+		j = -1;
+		while (++j < map->width)
 		{
 			if (map->grid[i][j] && ft_strchr("NSEW", map->grid[i][j]))
 			{
-				count++;
+				if (count == 1)
+					error("You need to one player", 0, NULL, config);
+				count ++;
 				config->player = init_player(i, j);
 				if (!init_pos_dir_plane(config->player, map->grid[i][j]))
 					error("Failure initializing vectors", 0, NULL, config);
 			}
-			j++;
 		}
-		i++;
 	}
 	if (count != 1)
-		error("You need to have one player", 0, NULL, config);
+		error("You need at least one player", 0, NULL, config);
 }
 
 void	validate_map(t_map *map, t_config *config)
