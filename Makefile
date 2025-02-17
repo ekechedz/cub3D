@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 GNL_D = get_next_line
 GNL_S = $(GNL_D)/get_next_line.c $(GNL_D)/get_next_line_utils.c
 UTILS_D = src/1_utils
-UTILS_S = $(UTILS_D)/map_utils.c $(UTILS_D)/map_utils1.c $(UTILS_D)/parse_utils.c $(UTILS_D)/utils.c
+UTILS_S = $(UTILS_D)/map_utils.c $(UTILS_D)/map_utils1.c $(UTILS_D)/parse_utils.c $(UTILS_D)/utils.c $(UTILS_D)/map_utils2.c
 INIT_D = src/2_init
 INIT_S = $(INIT_D)/init.c $(INIT_D)/init2.c
 MAIN_D = src/3_main
@@ -31,8 +31,8 @@ OBJS = $(SRCS:.c=.o)
 INCLUDE_DIR = include
 
 LIBFT = libft/libft.a
-#MLX_DIR = /home/ekechedz/minilibx
-MLX_DIR = /home/nleite-s/Repositories/cub3d/minilibx
+MLX_DIR = /home/ekechedz/minilibx
+#MLX_DIR = /home/nleite-s/Repositories/cub3d/minilibx
 MLX = $(MLX_DIR)/libmlx.a
 
 LDFLAGS = -L$(MLX_DIR) -lmlx -lX11 -lXext -lm

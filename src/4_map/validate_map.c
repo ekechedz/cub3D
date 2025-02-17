@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:34:22 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 11:34:16 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:16:18 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	validate_open_spaces(t_map *map, t_config *config)
 		j = 0;
 		while (j < map->width)
 		{
-			if (ft_strchr("NSEW", map->grid[i][j]))
-				map->grid[i][j] = '0';
 			if (map->grid[i][j] == '0' && is_open_to_space(map, i, j))
 				error("Walkable area next to open space!", 0, NULL, config);
 			j++;
@@ -82,6 +80,7 @@ void	initialize_player(t_map *map, t_config *config)
 				config->player = init_player(i, j);
 				if (!init_pos_dir_plane(config->player, map->grid[i][j]))
 					error("Failure initializing vectors", 0, NULL, config);
+				map->grid[i][j] = '0';
 			}
 		}
 	}
@@ -93,4 +92,22 @@ void	validate_map(t_map *map, t_config *config)
 {
 	initialize_player(map, config);
 	validate_open_spaces(map, config);
+	if (!all_keys_used(config->used_keys))
+		error("Not all keys are used in the map", 0, NULL, config);
+}
+
+void	handle_color_line(t_config *config, char *line, \
+	char *key, int *color_field)
+{
+	if (key_already_used(key, config->used_keys))
+	{
+		free(line);
+		error("Error: Duplicate color", 1, NULL, config);
+	}
+	if (!parse_color(line + 2, color_field))
+	{
+		free(line);
+		error("Error: Couldn't parse color", 1, NULL, config);
+	}
+	add_used_key(key, config->used_keys);
 }

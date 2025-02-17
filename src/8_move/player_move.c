@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:36:04 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 15:38:47 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:21:38 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	strafe_player(t_game *game, int dir, double delta_time)
 	strafe_speed = MOVE_SPEED * delta_time * dir;
 	new_x = game->player->pos->x + game->player->plane->x * strafe_speed;
 	new_y = game->player->pos->y + game->player->plane->y * strafe_speed;
-	if (game->map->grid[(int)new_y][(int)new_x] == WALL)
+	if (game->map->grid[(int)new_y][(int)new_x] == '1')
 	{
 		new_x = game->player->pos->x - game->player->plane->x * strafe_speed;
 		new_y = game->player->pos->y - game->player->plane->y * strafe_speed;
@@ -56,7 +56,7 @@ void	move_player(t_game *game, int dir, double delta_time)
 	move_speed = MOVE_SPEED * delta_time;
 	new_x = game->player->pos->x + game->player->dir->x * move_speed * dir;
 	new_y = game->player->pos->y + game->player->dir->y * move_speed * dir;
-	if (game->map->grid[(int)new_y][(int)new_x] == WALL)
+	if (game->map->grid[(int)new_y][(int)new_x] == '1')
 	{
 		new_x = game->player->pos->x - game->player->dir->x * move_speed * dir;
 		new_y = game->player->pos->y - game->player->dir->y * move_speed * dir;

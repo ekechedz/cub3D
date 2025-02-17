@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:43:05 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 12:12:22 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:08:42 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,4 @@ void	trim_whitespace(char *str)
 	while (start <= end)
 		str[i++] = str[start++];
 	str[i] = '\0';
-}
-
-int all_keys_used(char *used_keys[MAX_KEYS])
-{
-	int count = 0;
-	int i = 0;
-
-	while (i < MAX_KEYS)
-	{
-		if (used_keys[i] != NULL)
-			count++;
-		i++;
-	}
-	return (count == 6);
 }

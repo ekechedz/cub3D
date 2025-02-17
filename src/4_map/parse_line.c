@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:27:28 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 12:15:15 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:10:27 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,11 @@ void	parse_color_line(t_config *config, char *line)
 {
 	if (ft_strncmp(line, "F ", 2) == 0)
 	{
-		if (key_already_used("F", config->used_keys))
-		{
-			free(line);
-			error("Error: Duplicate 'F' floor color", 1, NULL, config);
-		}
-		if (!parse_color(line + 2, config->floor_color))
-			error("Error: Couldn't parse color", 1, NULL, config);
-		add_used_key("F", config->used_keys);
+		handle_color_line(config, line, "F", config->floor_color);
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0)
 	{
-		if (key_already_used("C", config->used_keys))
-		{
-			free(line);
-			error("Error: Duplicate 'C' ceiling color", 1, NULL, config);
-		}
-		if (!parse_color(line + 2, config->ceiling_color))
-			error("Error: Couldn't parse color", 1, NULL, config);
-		add_used_key("C", config->used_keys);
+		handle_color_line(config, line, "C", config->ceiling_color);
 	}
 }
 
@@ -103,14 +89,8 @@ void	parse_west_east_texture(t_config *config, char *line)
 	}
 }
 
-
 void	parse_texture_line(t_config *config, char *line)
 {
-	// if (!all_keys_used(config->used_keys))
-	// {
-	// 	free(line);
-	// 	error("Not all keys are used in the map", 0, NULL, config);
-	// } // check this its need to be something like this 
 	parse_north_south_texture(config, line);
 	parse_west_east_texture(config, line);
 }

@@ -6,7 +6,7 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:17:04 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/13 17:32:22 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:21:21 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	perform_dda(t_game *game, t_ray *ray, int hitx, int hity)
 		if (hity < 0 || hitx >= game->map->width || hitx < 0 || \
 			hity >= game->map->height)
 			return (0);
-		if (game->map->grid[hity][hitx] == WALL)
+		if (game->map->grid[hity][hitx] == '1')
 			break ;
 	}
 	ray->hit->x = hitx;

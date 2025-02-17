@@ -6,13 +6,13 @@
 /*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:53:44 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 11:55:15 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:31:58 by ekechedz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-static int	parse_int(const char **str)
+int	parse_int(const char **str)
 {
 	int	num;
 
@@ -32,26 +32,26 @@ static int	parse_int(const char **str)
 int	parse_color(const char *str, int *color)
 {
 	int	i;
+	int	component;
 
 	i = 0;
 	if (!color)
 		error("Null color pointer", 0, NULL, NULL);
 	while (*str && i < 3)
 	{
-		while (*str == ' ')
-			str++;
-		if (!ft_isdigit(*str))
+		component = parse_single_color_component(&str);
+		if (component == -1)
 			return (0);
-		color[i] = parse_int(&str);
-		if (color[i] < 0 || color[i] > 255)
-			return (0);
+		color[i] = component;
 		i++;
-		while (*str == ' ')
-			str++;
-		if (*str == ',')
-			str++;
+		if (!check_and_skip_comma(&str))
+			break ;
 	}
 	if (i != 3)
+		return (0);
+	while (*str == ' ')
+		str++;
+	if (*str != '\0' && *str != '\n')
 		return (0);
 	return (1);
 }
@@ -63,7 +63,7 @@ void	*parse_map_line(t_config *config, char *line)
 	clean_line = trim_trailing_spaces(line);
 	if (!clean_line)
 		return (NULL);
-	if(validate_line(clean_line) == 0)
+	if (validate_line(clean_line) == 0)
 	{
 		free(clean_line);
 		free(line);

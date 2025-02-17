@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/17 14:19:29 by ekechedz          #+#    #+#             */
+/*   Updated: 2025/02/17 14:21:06 by ekechedz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -53,20 +65,12 @@
 # define RAY_LENGTH 100
 
 // Map Characters
-# define EMPTY '0'
-# define WALL '1'
-# define PLAYER_N 'N'
-# define PLAYER_S 'S'
-# define PLAYER_E 'E'
-# define PLAYER_W 'W'
+
 # define MAX_KEYS 6
 
 //Draw constants
 # define CEILING 1
 # define FLOOR 2
-
-# define ERROR "Memory problem"
-# define M_ERROR "Map problem"
 
 // Structs
 typedef struct s_vector
@@ -213,10 +217,15 @@ int			all_keys_used(char *used_keys[MAX_KEYS]);
 char		*trim_trailing_spaces(const char *line);
 int			is_empty_or_map_started(const char *line, int map_started);
 void		parse_color_line(t_config *config, char *line);
-void		parse_texture_line(t_config *config,  char *line);
+void		parse_texture_line(t_config *config, char *line);
 int			parse_color(const char *str, int *color);
 void		validate_map(t_map *map, t_config *config);
 t_config	*parse_cub_file(const char *file_path, t_config *config);
+void		handle_color_line(t_config *config, char *line, \
+	char *key, int *color_field);
+int			check_and_skip_comma(const char **str);
+int			parse_single_color_component(const char **str);
+int			parse_int(const char **str);
 
 // Utils
 void		*ft_realloc(void *ptr, size_t old_size, size_t new_size);
