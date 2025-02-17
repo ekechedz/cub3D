@@ -1,93 +1,88 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:09:59 by ekechedz          #+#    #+#             */
-/*   Updated: 2024/05/27 16:35:48 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:31:46 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "get_next_line.h"
 
-char	*gnl_strchr(const char *s, int c)
+char	*getmyline(char *line, char *buffer, int fd, int *linelen)
 {
-	if (s == NULL)
-		return (NULL);
-	while (*s)
+	int	b;
+
+	b = read(fd, buffer, BUFFER_SIZE);
+	while (b > 0)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		(buffer)[b] = '\0';
+		line = ft_rrealloc(line, (*linelen) + BUFFER_SIZE + 1);
+		line = append_buffer(buffer, line, linelen);
+		if (line && line[*linelen - 1] == '\n')
+			return (line);
+		b = read(fd, buffer, BUFFER_SIZE);
 	}
-	if (c == '\0')
-		return ((char *)s);
+	if (b == 0 && *linelen > 0)
+	{
+		return (line);
+	}
+	free(line);
 	return (NULL);
 }
 
-size_t	gnl_strlen(const char *s)
+char	*append_buffer(char *buffer, char *line, int *linelen)
 {
-	size_t	len;
+	int	i;
+	int	j;
 
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
+	i = 0;
+	j = 0;
+	while ((buffer)[i] != '\0')
+	{
+		line[*linelen] = (buffer)[i];
+		i++;
+		(*linelen)++;
+		if (line[*linelen - 1] == '\n')
+		{
+			while ((buffer)[j + i] != '\0')
+			{
+				(buffer)[j] = (buffer)[j + i];
+				j++;
+			}
+			buffer[j] = '\0';
+			line[*linelen] = '\0';
+			return (line);
+		}
+	}
+	buffer[0] = '\0';
+	line[*linelen] = '\0';
+	return (line);
 }
 
-void	*gnl_memmove(void *dest, const void *src, size_t n)
+char	*ft_rrealloc(char *ptr, size_t size)
 {
-	unsigned char		*d;
-	const unsigned char	*s;
-	const unsigned char	*lasts;
-	unsigned char		*lastd;
-
-	d = dest;
-	s = src;
-	if (d < s)
-	{
-		while (n--)
-			*d++ = *s++;
-	}
-	else
-	{
-		lasts = s + (n - 1);
-		lastd = d + (n - 1);
-		while (n--)
-			*lastd-- = *lasts--;
-	}
-	return (dest);
-}
-
-char	*gnl_strncpy(char *dest, const char *src, size_t n)
-{
+	char	*newptr;
 	size_t	i;
 
-	if (dest == NULL || src == NULL)
+	newptr = (char *)malloc(size);
+	if (!newptr)
+	{
+		free(ptr);
 		return (NULL);
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
 	}
-	while (i < n)
+	if (ptr)
 	{
-		dest[i++] = '\0';
+		i = 0;
+		while (i < size - 1 && ptr[i] != '\0')
+		{
+			newptr[i] = ptr[i];
+			i++;
+		}
+		free(ptr);
 	}
-	return (dest);
-}
-
-char	*gnl_strdup(const char *s1)
-{
-	size_t	len;
-	char	*copy;
-
-	len = gnl_strlen(s1) + 1;
-	copy = malloc(len);
-	if (copy)
-		gnl_strncpy(copy, s1, len);
-	return (copy);
+	return (newptr);
 }

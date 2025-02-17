@@ -1,29 +1,30 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:53:08 by ekechedz          #+#    #+#             */
-/*   Updated: 2024/05/27 16:22:24 by ekechedz         ###   ########.fr       */
+/*   Updated: 2025/02/17 10:31:59 by nleite-s         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <fcntl.h>
+
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 1
 # endif
 
-# include <stdlib.h>
-# include <unistd.h>
-
-char		*get_next_line(int fd);
-size_t		gnl_strlen(const char *str);
-char		*gnl_strchr(const char *s, int c);
-void		*gnl_memmove(void *dest, const void *src, size_t n);
-char		*gnl_strncpy(char *dest, const char *src, size_t n);
+char	*get_next_line(int fd);
+char	*ft_rrealloc(char *ptr, size_t size);
+char	*getmyline(char *line, char *buffer, int fd, int *linelen);
+char	*append_buffer(char *buffer, char *line, int *linelen);
 
 #endif
