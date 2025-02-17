@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:53:44 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 10:36:12 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 11:55:15 by ekechedz         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
@@ -63,7 +63,12 @@ void	*parse_map_line(t_config *config, char *line)
 	clean_line = trim_trailing_spaces(line);
 	if (!clean_line)
 		return (NULL);
-	validate_line(clean_line);
+	if(validate_line(clean_line) == 0)
+	{
+		free(clean_line);
+		free(line);
+		error("Unexpected char in the map", 0, NULL, config);
+	}
 	process_map_line(config, clean_line);
 	free(clean_line);
 	return (config);

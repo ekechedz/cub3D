@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:27:28 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/14 15:15:30 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:15:15 by ekechedz         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
@@ -27,12 +27,15 @@ int	is_empty_or_map_started(const char *line, int map_started)
 	return (0);
 }
 
-void	parse_color_line(t_config *config, const char *line)
+void	parse_color_line(t_config *config, char *line)
 {
 	if (ft_strncmp(line, "F ", 2) == 0)
 	{
 		if (key_already_used("F", config->used_keys))
+		{
+			free(line);
 			error("Error: Duplicate 'F' floor color", 1, NULL, config);
+		}
 		if (!parse_color(line + 2, config->floor_color))
 			error("Error: Couldn't parse color", 1, NULL, config);
 		add_used_key("F", config->used_keys);
@@ -40,19 +43,25 @@ void	parse_color_line(t_config *config, const char *line)
 	else if (ft_strncmp(line, "C ", 2) == 0)
 	{
 		if (key_already_used("C", config->used_keys))
+		{
+			free(line);
 			error("Error: Duplicate 'C' ceiling color", 1, NULL, config);
+		}
 		if (!parse_color(line + 2, config->ceiling_color))
 			error("Error: Couldn't parse color", 1, NULL, config);
 		add_used_key("C", config->used_keys);
 	}
 }
 
-void	parse_north_south_texture(t_config *config, const char *line)
+void	parse_north_south_texture(t_config *config, char *line)
 {
 	if (ft_strncmp(line, "NO ", 3) == 0)
 	{
 		if (key_already_used("NO", config->used_keys))
+		{
+			free(line);
 			error("Error: Duplicate 'NO' texture", 1, NULL, config);
+		}
 		if (config->textures->north->fp)
 			free(config->textures->north->fp);
 		config->textures->north->fp = ft_strdup(line + 3);
@@ -61,32 +70,47 @@ void	parse_north_south_texture(t_config *config, const char *line)
 	else if (ft_strncmp(line, "SO ", 3) == 0)
 	{
 		if (key_already_used("SO", config->used_keys))
+		{
+			free(line);
 			error("Error: Duplicate 'SO' texture", 1, NULL, config);
+		}
 		config->textures->south->fp = ft_strdup(line + 3);
 		add_used_key("SO", config->used_keys);
 	}
 }
 
-void	parse_west_east_texture(t_config *config, const char *line)
+void	parse_west_east_texture(t_config *config, char *line)
 {
 	if (ft_strncmp(line, "WE ", 3) == 0)
 	{
 		if (key_already_used("WE", config->used_keys))
+		{
+			free(line);
 			error("Error: Duplicate 'WE' texture", 1, NULL, config);
+		}
 		config->textures->west->fp = ft_strdup(line + 3);
 		add_used_key("NO", config->used_keys);
 	}
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 	{
 		if (key_already_used("EA", config->used_keys))
+		{
+			free(line);
 			error("Error: Duplicate 'EA' texture", 1, NULL, config);
+		}
 		config->textures->east->fp = ft_strdup(line + 3);
 		add_used_key("EA", config->used_keys);
 	}
 }
 
-void	parse_texture_line(t_config *config, const char *line)
+
+void	parse_texture_line(t_config *config, char *line)
 {
+	// if (!all_keys_used(config->used_keys))
+	// {
+	// 	free(line);
+	// 	error("Not all keys are used in the map", 0, NULL, config);
+	// } // check this its need to be something like this 
 	parse_north_south_texture(config, line);
 	parse_west_east_texture(config, line);
 }

@@ -8,8 +8,8 @@
 # include <unistd.h>
 # include <string.h>
 //# include "../minilibx/mlx.h"
-//# include "/home/ekechedz/minilibx/mlx.h"
-# include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
+# include "/home/ekechedz/minilibx/mlx.h"
+//# include "/home/nleite-s/Repositories/cub3d/minilibx/mlx.h"
 # include "../libft/libft.h"
 # include "../get_next_line/get_next_line.h"
 # include "X11/Xlib.h"
@@ -209,10 +209,11 @@ int			validate_line(const char *line);
 void		process_map_line(t_config *config, const char *clean_line);
 void		add_used_key(const char *key, char *used_keys[MAX_KEYS]);
 int			key_already_used(const char *key, char *used_keys[MAX_KEYS]);
+int			all_keys_used(char *used_keys[MAX_KEYS]);
 char		*trim_trailing_spaces(const char *line);
 int			is_empty_or_map_started(const char *line, int map_started);
-void		parse_color_line(t_config *config, const char *line);
-void		parse_texture_line(t_config *config, const char *line);
+void		parse_color_line(t_config *config, char *line);
+void		parse_texture_line(t_config *config,  char *line);
 int			parse_color(const char *str, int *color);
 void		validate_map(t_map *map, t_config *config);
 t_config	*parse_cub_file(const char *file_path, t_config *config);
