@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   validate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekechedz <ekechedz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:34:22 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/17 11:14:59 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 11:34:16 by ekechedz         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
@@ -32,8 +32,8 @@ int	is_open_to_space(t_map *map, int x, int y)
 	{
 		nx = x + directions[d][0];
 		ny = y + directions[d][1];
-		if (nx >= 0 && nx < map->height && ny >= 0 \
-			&& ny < (int)ft_strlen(map->grid[nx]) && map->grid[nx][ny] == ' ')
+		if (nx < 0 || nx >= map->height || ny < 0 \
+			|| ny >= (int)ft_strlen(map->grid[nx]) || map->grid[nx][ny] == ' ')
 			return (1);
 		d++;
 	}
@@ -51,6 +51,8 @@ void	validate_open_spaces(t_map *map, t_config *config)
 		j = 0;
 		while (j < map->width)
 		{
+			if (ft_strchr("NSEW", map->grid[i][j]))
+				map->grid[i][j] = '0';
 			if (map->grid[i][j] == '0' && is_open_to_space(map, i, j))
 				error("Walkable area next to open space!", 0, NULL, config);
 			j++;
@@ -89,6 +91,6 @@ void	initialize_player(t_map *map, t_config *config)
 
 void	validate_map(t_map *map, t_config *config)
 {
-	validate_open_spaces(map, config);
 	initialize_player(map, config);
+	validate_open_spaces(map, config);
 }
