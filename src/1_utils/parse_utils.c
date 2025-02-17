@@ -6,7 +6,7 @@
 /*   By: nleite-s <nleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:01:20 by ekechedz          #+#    #+#             */
-/*   Updated: 2025/02/14 14:19:11 by nleite-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 11:02:41 by nleite-s         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -50,9 +50,12 @@ void	process_map_line(t_config *config, const char *clean_line)
 	line_length = ft_strlen(clean_line);
 	if (line_length > config->map->width)
 		config->map->width = line_length;
-	config->map->grid[config->map->height] = ft_strdup(clean_line);
+	config->map->grid[config->map->height] = malloc(config->map->width + 1);
 	if (!config->map->grid[config->map->height])
 		error("Failed to allocate memory for map line", 1, NULL, config);
+	ft_memset(config->map->grid[config->map->height], ' ', config->map->width);
+	ft_memcpy(config->map->grid[config->map->height], clean_line, line_length);
+	config->map->grid[config->map->height][config->map->width] = '\0';
 	config->map->height++;
 }
 
